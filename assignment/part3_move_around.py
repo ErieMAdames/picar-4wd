@@ -8,6 +8,7 @@ us_step = pc4.STEP
 distances = []
 
 def scan():
+    global distances, current_angle, us_step
     current_angle = 90 if current_angle > 0 else -90
     us_step = -pc4.STEP if current_angle > 0 else pc4.STEP
     for _ in range(10):
@@ -80,6 +81,7 @@ def avoid():
     
 
 def main():
+    global distances, current_angle, us_step
     while True:
         current_angle += us_step
         if current_angle >= pc4.max_angle:
