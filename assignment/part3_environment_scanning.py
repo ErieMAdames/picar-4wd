@@ -36,7 +36,8 @@ def main():
                     if left:
                         pc4.turn_left(speed)
                     else:
-                        pc4.turn_right(speed)
+                        pc4.turn_right(speed)                
+                    time.sleep(.5)
                     reversed = False
                 else:
                     pc4.forward(speed)
