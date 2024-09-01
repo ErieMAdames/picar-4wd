@@ -51,6 +51,6 @@ if __name__ == "__main__":
     try: 
         main()
     except KeyboardInterrupt:
-        print('Stopping')
+        print('\nStopping')
     finally:
         pc4.stop()
