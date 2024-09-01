@@ -20,7 +20,7 @@ def main():
         # print(str(current_angle) + ' | ' + str(distance))
         distances.append(distance)
         distances_map = map(lambda x: x < 15 and x != -2, distances)
-        stop = reduce(lambda x, y: x and y, distances_map)
+        stop = reduce(lambda x, y: x or y, distances_map)
         print(distances)
         print(stop)
         # if distance < 15:
