@@ -33,5 +33,7 @@ def main():
 if __name__ == "__main__":
     try: 
         main()
-    finally: 
+    except KeyboardInterrupt:
+        print('Stopping')
+    finally:
         pc4.stop()
