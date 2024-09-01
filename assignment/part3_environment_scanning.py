@@ -34,14 +34,16 @@ def main():
                     left = random.random() > .5
             else:
                 if reversed:
+                    print(left)
                     if left:
                         pc4.turn_left(speed)
                     else:
                         pc4.turn_right(speed)
-                    if counter == 100:
+                    if counter == 50:
                         reversed = False
                         counter = 0
                     counter +=1
+                    print(counter)
                 else:
                     pc4.forward(speed)
         if current_angle == pc4.min_angle or current_angle == pc4.max_angle:
