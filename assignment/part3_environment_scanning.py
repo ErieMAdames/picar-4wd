@@ -1,6 +1,6 @@
 import picar_4wd as pc4
 
-speed = 30
+speed = 15
 
 def main():
     print('Starting Part 3: Environment Scanning')
@@ -18,16 +18,10 @@ def main():
             us_step = pc4.STEP
         distance = pc4.get_distance_at(current_angle)
         print(str(current_angle) + ' | ' + str(distance))
-        # print(str(pc4.current_angle) + ' | ' + str(pc4.get_distance_at(pc4.current_angle)))
-        # if not scan_list:
-        #     continue
-        # tmp = scan_list[3:7]
-        # print(scan_list)
-        # print(tmp)
-        # if tmp != [2,2,2,2]:
-        #     pc4.turn_right(speed)
-        # else:
-        #     pc4.forward(speed)
+        if distance < 15:
+            pc4.stop()
+        else:
+            pc4.forward(speed)
 
 
 if __name__ == "__main__":
