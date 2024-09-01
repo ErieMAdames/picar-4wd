@@ -27,7 +27,7 @@ def main():
             stop = reduce(lambda x, y: x or y, distances_map)
             if stop:
                 pc4.backward(speed)
-                time.sleep(1)
+                    time.sleep(.5)
                 if not reversed:
                     reversed = True
                     left = random.random() > .5
@@ -36,7 +36,7 @@ def main():
                     if left:
                         pc4.turn_left(speed)
                     else:
-                        pc4.turn_right(speed)                
+                        pc4.turn_right(speed)
                     time.sleep(.5)
                     reversed = False
                 else:
