@@ -1,4 +1,5 @@
 import picar_4wd as pc4
+import time
 from functools import reduce
 import random
 
@@ -11,7 +12,6 @@ def main():
     distances = []
     reversed = False
     left = True
-    counter = 0
     while True:
         current_angle += us_step
         if current_angle >= pc4.max_angle:
@@ -23,13 +23,13 @@ def main():
         distance = pc4.get_distance_at(current_angle)
         distances.append(distance)
         if len(distances) == 10:
-            distances_map = map(lambda x: x < 15 and x != -2, distances)
+            distances_map = map(lambda x: x < 20 and x != -2, distances)
             stop = reduce(lambda x, y: x or y, distances_map)
             if stop:
                 pc4.backward(speed)
+                time.sleep(1)
                 if not reversed:
                     reversed = True
-                    r = random.random()
                     left = random.random() > .5
             else:
                 if reversed:
@@ -37,10 +37,7 @@ def main():
                         pc4.turn_left(speed)
                     else:
                         pc4.turn_right(speed)
-                    if counter == 5:
-                        reversed = False
-                        counter = 0
-                    counter +=1
+                    reversed = False
                 else:
                     pc4.forward(speed)
         if current_angle == pc4.min_angle or current_angle == pc4.max_angle:
