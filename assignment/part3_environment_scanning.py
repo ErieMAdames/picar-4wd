@@ -23,7 +23,7 @@ def main():
         distance = pc4.get_distance_at(current_angle)
         distances.append(distance)
         if len(distances) == 10:
-            distances_map = map(lambda x: x < 20 and x != -2, distances[3:7])
+            distances_map = map(lambda x: x < 35 and x != -2, distances[3:7])
             stop = reduce(lambda x, y: x or y, distances_map)
             if stop:
                 pc4.backward(speed)
