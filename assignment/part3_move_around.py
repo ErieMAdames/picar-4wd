@@ -51,7 +51,7 @@ def avoid():
             if not scan():
                 pc4.forward(speed)
                 time.sleep(1.5)
-                pc4.turn_right(speed)
+                pc4.turn_left(speed)
                 print('f 4')
                 time.sleep(1.5)
                 if not scan():
@@ -80,7 +80,7 @@ def avoid():
                 if not scan():
                     pc4.forward(speed)
                     time.sleep(1.5)
-                    pc4.turn_left(speed)
+                    pc4.turn_right(speed)
                     print('l 4')
                     time.sleep(1.5)
                     if not scan():
