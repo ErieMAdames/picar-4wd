@@ -6,12 +6,12 @@ def main():
     print('Starting Part 3: Environment Scanning')
     while True:
         scan_list = pc4.scan_step(35)
+        print(pc4.current_angle)
         if not scan_list:
             continue
         tmp = scan_list[3:7]
         print(scan_list)
         print(tmp)
-        print(pc4.current_angle)
         # if tmp != [2,2,2,2]:
         #     pc4.turn_right(speed)
         # else:
