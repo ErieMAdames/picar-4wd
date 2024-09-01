@@ -27,64 +27,65 @@ def scan():
     return stop
 
 def avoid():
+    print('start avoiding')
     pc4.turn_left(speed)
-    print('turn_left')
-    time.sleep(1)
+    print('f 1')
+    time.sleep(2)
     pc4.stop()
     if not scan():
         pc4.forward(speed)
-        time.sleep(1)
+        time.sleep(2)
         pc4.stop()
         pc4.turn_right(speed)
-        print('turn_right 1')
-        time.sleep(1)
-        pc4.stop()
-        if not scan():
-            pc4.forward(speed)
-            time.sleep(1)
-            pc4.stop()
-            pc4.turn_right(speed)
-            print('turn_right 1')
-            time.sleep(1)
-            pc4.stop()
-            if not scan():
-                pc4.forward(speed)
-                time.sleep(1)
-                pc4.turn_right(speed)
-                print('turn_right 1')
-                time.sleep(1)
-                if not scan():
-                    pc4.forward(speed)
-    else:
-        pc4.turn_right(speed)
-        print('turn_right 2')
+        print('f 2')
         time.sleep(2)
         pc4.stop()
         if not scan():
             pc4.forward(speed)
-            time.sleep(1)
+            time.sleep(2)
             pc4.stop()
-            pc4.turn_left(speed)
-            print('turn_left 2')
-            time.sleep(1)
+            pc4.turn_right(speed)
+            print('f 3')
+            time.sleep(2)
             pc4.stop()
             if not scan():
                 pc4.forward(speed)
-                time.sleep(1)
+                time.sleep(2)
+                pc4.turn_right(speed)
+                print('f 4')
+                time.sleep(2)
+                if not scan():
+                    pc4.forward(speed)
+    else:
+        pc4.turn_right(speed)
+        print('l 1')
+        time.sleep(4)
+        pc4.stop()
+        if not scan():
+            pc4.forward(speed)
+            time.sleep(2)
+            pc4.stop()
+            pc4.turn_left(speed)
+            print('l 2')
+            time.sleep(2)
+            pc4.stop()
+            if not scan():
+                pc4.forward(speed)
+                time.sleep(2)
                 pc4.stop()
                 pc4.turn_left(speed)
-                print('turn_left 2')
-                time.sleep(1)
+                print('l 3')
+                time.sleep(2)
                 pc4.stop()
                 if not scan():
                     pc4.forward(speed)
-                    time.sleep(1)
+                    time.sleep(2)
                     pc4.turn_left(speed)
-                    print('turn_left 2')
-                    time.sleep(1)
+                    print('l 4')
+                    time.sleep(2)
                     if not scan():
                         pc4.forward(speed)
-
+    print('done avoiding')
 
     
 
