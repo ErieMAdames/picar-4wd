@@ -2,7 +2,7 @@ import picar_4wd as pc4
 from functools import reduce
 import random
 
-speed = 15
+speed = 25
 
 def main():
     print('Starting Part 3: Environment Scanning')
