@@ -1,2 +1,6 @@
 .vscode/*
 *.DS_Store
+/build/
+/dist/
+/picar_4wd.egg-info/
+/picar_4wd/__pycache__/
