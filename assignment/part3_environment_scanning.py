@@ -19,14 +19,15 @@ def main():
         distance = pc4.get_distance_at(current_angle)
         # print(str(current_angle) + ' | ' + str(distance))
         distances.append(distance)
-        distances_map = map(lambda x: x < 15 and x != -2, distances)
-        stop = reduce(lambda x, y: x or y, distances_map)
-        print(distances)
-        print(stop)
-        # if distance < 15:
-        #     pc4.stop()
-        # else:
-        #     pc4.forward(speed)
+        if len(distances) == 10:
+            distances_map = map(lambda x: x < 15 and x != -2, distances)
+            stop = reduce(lambda x, y: x or y, distances_map)
+            print(distances)
+            print(stop)
+            if stop:
+                pc4.stop()
+            else:
+                pc4.forward(speed)
         if current_angle == pc4.min_angle or current_angle == pc4.max_angle:
             distances = []
 
