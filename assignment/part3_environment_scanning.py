@@ -1,5 +1,5 @@
 import picar_4wd as pc4
-from functools import reduce, map
+from functools import reduce
 speed = 15
 
 def main():
@@ -17,10 +17,11 @@ def main():
             current_angle = pc4.min_angle
             us_step = pc4.STEP
         distance = pc4.get_distance_at(current_angle)
-        print(str(current_angle) + ' | ' + str(distance))
+        # print(str(current_angle) + ' | ' + str(distance))
         distances.append(distance)
         distances_map = map(lambda x: x < 15 and x != -2)
         stop = reduce(lambda x, y: x and y, distances_map)
+        print(distances)
         print(stop)
         # if distance < 15:
         #     pc4.stop()
