@@ -6,7 +6,7 @@ def main():
     print('Starting Part 3: Environment Scanning')
     while True:
         scan_list = pc4.scan_step(35)
-        print(str(pc4.current_angle) + ' | ' + str(pc4.get_distance_at(pc4.current_angle)))
+        # print(str(pc4.current_angle) + ' | ' + str(pc4.get_distance_at(pc4.current_angle)))
         # if not scan_list:
         #     continue
         # tmp = scan_list[3:7]
