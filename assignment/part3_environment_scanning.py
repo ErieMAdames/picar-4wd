@@ -31,7 +31,10 @@ def main():
                 pc4.backward(speed)
                 if not reversed:
                     reversed = True
-                    left = random.random() > .5
+                    r = random.random()
+                    print(r)
+                    left = r > .5
+
             else:
                 if reversed:
                     print(left)
@@ -39,7 +42,7 @@ def main():
                         pc4.turn_left(speed)
                     else:
                         pc4.turn_right(speed)
-                    if counter == 50:
+                    if counter == 5:
                         reversed = False
                         counter = 0
                     counter +=1
