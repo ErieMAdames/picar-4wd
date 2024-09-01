@@ -25,19 +25,16 @@ def main():
         # print(str(current_angle) + ' | ' + str(distance))
         distances.append(distance)
         if len(distances) == 10:
-            distances_map = map(lambda x: x < 15 and x != -2, distances)
+            distances_map = map(lambda x: x < 30 and x != -2, distances)
             stop = reduce(lambda x, y: x or y, distances_map)
             if stop:
                 pc4.backward(speed)
                 if not reversed:
                     reversed = True
                     r = random.random()
-                    print(r)
-                    left = r > .5
-
+                    left = random.random() > .5
             else:
                 if reversed:
-                    print(left)
                     if left:
                         pc4.turn_left(speed)
                     else:
@@ -46,7 +43,6 @@ def main():
                         reversed = False
                         counter = 0
                     counter +=1
-                    print(counter)
                 else:
                     pc4.forward(speed)
         if current_angle == pc4.min_angle or current_angle == pc4.max_angle:
