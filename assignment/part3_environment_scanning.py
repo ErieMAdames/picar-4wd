@@ -1,12 +1,12 @@
 import picar_4wd as pc4
-
+from functools import reduce, map
 speed = 15
 
 def main():
     print('Starting Part 3: Environment Scanning')
     current_angle = 0
     us_step = pc4.STEP
-    scan_list = []
+    distances = []
     while True:
         # scan_list = pc4.scan_step(35)
         current_angle += us_step
@@ -18,10 +18,16 @@ def main():
             us_step = pc4.STEP
         distance = pc4.get_distance_at(current_angle)
         print(str(current_angle) + ' | ' + str(distance))
-        if distance < 15:
-            pc4.stop()
-        else:
-            pc4.forward(speed)
+        distances.append(distance)
+        distances_map = map(lambda x: x < 15 and x != -2)
+        stop = reduce(lambda x, y: x and y, distances_map)
+        print(stop)
+        # if distance < 15:
+        #     pc4.stop()
+        # else:
+        #     pc4.forward(speed)
+        if current_angle == pc4.min_angle or current_angle == pc4.max_angle:
+            distances = []
 
 
 if __name__ == "__main__":
