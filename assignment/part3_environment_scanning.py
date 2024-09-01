@@ -19,7 +19,7 @@ def main():
         distance = pc4.get_distance_at(current_angle)
         # print(str(current_angle) + ' | ' + str(distance))
         distances.append(distance)
-        distances_map = map(lambda x: x < 15 and x != -2)
+        distances_map = map(lambda x: x < 15 and x != -2, distances)
         stop = reduce(lambda x, y: x and y, distances_map)
         print(distances)
         print(stop)
