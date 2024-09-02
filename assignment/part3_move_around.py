@@ -5,6 +5,8 @@ from functools import reduce
 speed = 25
 current_angle = 0
 us_step = pc4.STEP
+min_angle = -36
+max_angle = 36
 distances = []
 
 def scan():
@@ -13,11 +15,11 @@ def scan():
     us_step = -pc4.STEP if current_angle > 0 else pc4.STEP
     for _ in range(10):
         current_angle += us_step
-        if current_angle >= pc4.max_angle:
-            current_angle = pc4.max_angle
+        if current_angle >= max_angle:
+            current_angle = max_angle
             us_step = -pc4.STEP
-        elif current_angle <= pc4.min_angle:
-            current_angle = pc4.min_angle
+        elif current_angle <= min_angle:
+            current_angle = min_angle
             us_step = pc4.STEP
         distance = pc4.get_distance_at(current_angle)
         distances.append(distance)
@@ -80,11 +82,11 @@ def main():
     angles = []
     while True:
         current_angle += us_step
-        if current_angle >= pc4.max_angle:
-            current_angle = pc4.max_angle
+        if current_angle >= max_angle:
+            current_angle = max_angle
             us_step = -pc4.STEP
-        elif current_angle <= pc4.min_angle:
-            current_angle = pc4.min_angle
+        elif current_angle <= min_angle:
+            current_angle = min_angle
             us_step = pc4.STEP
         distance = pc4.get_distance_at(current_angle)
         distances.append(distance)
@@ -101,7 +103,7 @@ def main():
                 avoid()
             else:
                 pc4.forward(speed)
-        if current_angle == pc4.min_angle or current_angle == pc4.max_angle:
+        if current_angle == min_angle or current_angle == max_angle:
             distances = []
             angles = []
 
