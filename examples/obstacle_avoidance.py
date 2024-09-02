@@ -7,6 +7,8 @@ def main():
         scan_list = fc.scan_step(35)
         if not scan_list:
             continue
+        print('len(scan_list)')
+        print(len(scan_list))
         tmp = scan_list[3:7]
         print(tmp)
         if tmp != [2,2,2,2]:
