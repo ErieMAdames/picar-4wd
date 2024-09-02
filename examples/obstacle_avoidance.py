@@ -11,6 +11,7 @@ def main():
         print(len(scan_list))
         tmp = scan_list[3:7]
         print(tmp)
+        break
         if tmp != [2,2,2,2]:
             fc.turn_right(speed)
         else:
