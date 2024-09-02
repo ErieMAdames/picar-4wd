@@ -21,6 +21,8 @@ def scan():
             us_step = pc4.STEP
         distance = pc4.get_distance_at(current_angle)
         distances.append(distance)
+    if us_step < 0:
+        distances.reverse()
     distances_map = map(lambda x: x < 35 and x != -2, distances[3:7])
     stop = reduce(lambda x, y: x or y, distances_map)
     distances = []
@@ -28,63 +30,47 @@ def scan():
 
 def avoid():
     print('start avoiding')
+    # if there is something in the way while avoiding, retrace stepts
+    retrace_steps = []
     pc4.turn_left(speed)
-    print('f 1')
     time.sleep(1.5)
     pc4.stop()
-    if not scan():
-        pc4.forward(speed)
-        time.sleep(1.5)
-        pc4.stop()
-        pc4.turn_right(speed)
-        print('f 2')
-        time.sleep(1.5)
-        pc4.stop()
-        if not scan():
-            pc4.forward(speed)
-            time.sleep(1.5)
-            pc4.stop()
-            pc4.turn_right(speed)
-            print('f 3')
-            time.sleep(1.5)
-            pc4.stop()
-            if not scan():
-                pc4.forward(speed)
-                time.sleep(1.5)
-                pc4.turn_left(speed)
-                print('f 4')
-                time.sleep(1.5)
-                if not scan():
-                    pc4.forward(speed)
-    else:
-        pc4.turn_right(speed)
-        print('l 1')
-        time.sleep(3)
-        pc4.stop()
-        if not scan():
-            pc4.forward(speed)
-            time.sleep(1.5)
-            pc4.stop()
-            pc4.turn_left(speed)
-            print('l 2')
-            time.sleep(1.5)
-            pc4.stop()
-            if not scan():
-                pc4.forward(speed)
-                time.sleep(1.5)
-                pc4.stop()
-                pc4.turn_left(speed)
-                print('l 3')
-                time.sleep(1.5)
-                pc4.stop()
-                if not scan():
-                    pc4.forward(speed)
-                    time.sleep(1.5)
-                    pc4.turn_right(speed)
-                    print('l 4')
-                    time.sleep(1.5)
-                    if not scan():
-                        pc4.forward(speed)
+    stop = scan()
+    if stop:
+        retrace_steps.append(('l', 1.5))
+        return retrace_steps
+    pc4.forward(speed)
+    time.sleep(1.5)
+    pc4.stop()
+    pc4.turn_right(speed)
+    time.sleep(1.5)
+    pc4.stop()
+    stop = scan()
+    if stop:
+        retrace_steps.append(('f', 1.5))
+        retrace_steps.append(('r', 1.5))
+        return retrace_steps
+    pc4.forward(speed)
+    time.sleep(1.5)
+    pc4.stop()
+    pc4.turn_right(speed)
+    time.sleep(1.5)
+    pc4.stop()
+    stop = scan()
+    if stop:
+        retrace_steps.append(('f', 1.5))
+        retrace_steps.append(('r', 1.5))
+        return retrace_steps
+    pc4.forward(speed)
+    time.sleep(1.5)
+    pc4.turn_left(speed)
+    time.sleep(1.5)
+    stop = scan()
+    if stop:
+        retrace_steps.append(('f', 1.5))
+        retrace_steps.append(('l', 1.5))
+        return retrace_steps
+    pc4.forward(speed)
     print('done avoiding')
 
     
@@ -101,6 +87,8 @@ def main():
             us_step = pc4.STEP
         distance = pc4.get_distance_at(current_angle)
         distances.append(distance)
+        if us_step < 0:
+            distances.reverse()
         if len(distances) == 10:
             distances_map = map(lambda x: x < 35 and x != -2, distances[3:7])
             stop = reduce(lambda x, y: x or y, distances_map)

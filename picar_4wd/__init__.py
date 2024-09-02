@@ -151,6 +151,7 @@ def scan_step(ref):
             scan_list.reverse()
         # print(scan_list)
         tmp = scan_list.copy()
+        print(len(scan_list))
         scan_list = []
         return tmp
     else:
