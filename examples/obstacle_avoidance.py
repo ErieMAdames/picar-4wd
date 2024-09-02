@@ -1,5 +1,5 @@
 import picar_4wd as fc
-
+import time
 speed = 30
 
 def main():
@@ -11,7 +11,7 @@ def main():
         print(len(scan_list))
         tmp = scan_list[3:7]
         print(tmp)
-        break
+        time.sleep(2)
         if tmp != [2,2,2,2]:
             fc.turn_right(speed)
         else:
