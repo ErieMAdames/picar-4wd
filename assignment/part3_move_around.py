@@ -13,7 +13,7 @@ def scan():
     global distances, current_angle, us_step
     current_angle = 90 if current_angle > 0 else -90
     us_step = -pc4.STEP if current_angle > 0 else pc4.STEP
-    for _ in range(10):
+    for _ in range(5):
         current_angle += us_step
         if current_angle >= max_angle:
             current_angle = max_angle
@@ -81,32 +81,12 @@ def main():
     global distances, current_angle, us_step
     angles = []
     while True:
-        current_angle += us_step
-        if current_angle >= max_angle:
-            current_angle = max_angle
-            us_step = -pc4.STEP
-        elif current_angle <= min_angle:
-            current_angle = min_angle
-            us_step = pc4.STEP
-        distance = pc4.get_distance_at(current_angle)
-        distances.append(distance)
-        angles.append(current_angle)
-        if us_step < 0:
-            distances.reverse()
-        if len(distances) == 10:
-            print(angles)
-            print(angles)
-            distances_map = map(lambda x: x < 35 and x != -2, distances)
-            stop = reduce(lambda x, y: x or y, distances_map)
-            if stop:
-                pc4.stop()
-                avoid()
-            else:
-                pc4.forward(speed)
-        if current_angle == min_angle or current_angle == max_angle:
-            distances = []
-            angles = []
-
+        stop = scan()
+        if stop:
+            pc4.stop()
+            avoid()
+        else:
+            pc4.forward(speed)
 
 if __name__ == "__main__":
     try:
