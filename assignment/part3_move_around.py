@@ -8,6 +8,7 @@ us_step = pc4.STEP
 min_angle = -36
 max_angle = 36
 distances = []
+turning_time = 1.5
 
 def scan():
     global distances, current_angle, us_step
@@ -30,52 +31,98 @@ def scan():
     distances = []
     return stop
 
-def avoid():
-    print('start avoiding')
+def avoid_left():
+    print('start avoiding left')
     # if there is something in the way while avoiding, retrace stepts
     retrace_steps = []
     pc4.turn_left(speed)
-    time.sleep(1.5)
+    time.sleep(turning_time)
     pc4.stop()
     stop = scan()
     if stop:
-        retrace_steps.append(('l', 1.5))
+        # turn right to retrace
+        retrace_steps.append('r')
         return retrace_steps
     pc4.forward(speed)
-    time.sleep(1.5)
+    time.sleep(turning_time)
     pc4.stop()
     pc4.turn_right(speed)
-    time.sleep(1.5)
+    time.sleep(turning_time)
     pc4.stop()
     stop = scan()
     if stop:
-        retrace_steps.append(('f', 1.5))
-        retrace_steps.append(('r', 1.5))
+        retrace_steps.append('b')
+        retrace_steps.append('l')
         return retrace_steps
     pc4.forward(speed)
-    time.sleep(1.5)
+    time.sleep(turning_time)
     pc4.stop()
     pc4.turn_right(speed)
-    time.sleep(1.5)
+    time.sleep(turning_time)
     pc4.stop()
     stop = scan()
     if stop:
-        retrace_steps.append(('f', 1.5))
-        retrace_steps.append(('r', 1.5))
+        retrace_steps.append('b')
+        retrace_steps.append('l')
         return retrace_steps
     pc4.forward(speed)
-    time.sleep(1.5)
+    time.sleep(turning_time)
     pc4.turn_left(speed)
-    time.sleep(1.5)
+    time.sleep(turning_time)
     stop = scan()
     if stop:
-        retrace_steps.append(('f', 1.5))
-        retrace_steps.append(('l', 1.5))
+        retrace_steps.append('b')
+        retrace_steps.append('r')
         return retrace_steps
     pc4.forward(speed)
-    print('done avoiding')
-
-    
+    return retrace_steps
+def avoid_right():
+    print('start avoiding right')
+    retrace_steps = []
+    pc4.turn_right(speed)
+    time.sleep(turning_time)
+    pc4.stop()
+    stop = scan()
+    if stop:
+        return True
+    pc4.forward(speed)
+    time.sleep(turning_time)
+    pc4.stop()
+    pc4.turn_left(speed)
+    time.sleep(turning_time)
+    pc4.stop()
+    stop = scan()
+    if stop:
+        return True
+    pc4.forward(speed)
+    time.sleep(turning_time)
+    pc4.stop()
+    pc4.turn_left(speed)
+    time.sleep(turning_time)
+    pc4.stop()
+    stop = scan()
+    if stop:
+        return True
+    pc4.forward(speed)
+    time.sleep(turning_time)
+    pc4.turn_right(speed)
+    time.sleep(turning_time)
+    stop = scan()
+    if stop:
+        return True
+    pc4.forward(speed)
+    return False
+def retrace(retrace_steps):
+    for step in reversed(retrace_steps):
+        if step == 'l':
+            pc4.turn_left(speed)
+            time.sleep(turning_time)
+        if step == 'r':
+            pc4.turn_right(speed)
+            time.sleep(turning_time)
+        if step == 'b':
+            pc4.backward(speed)
+            time.sleep(turning_time)
 
 def main():
     global distances, current_angle, us_step
@@ -84,7 +131,14 @@ def main():
         stop = scan()
         if stop:
             pc4.stop()
-            avoid()
+            retrace_steps = avoid_left()
+            retrace(retrace_steps)
+            if len(retrace_steps) > 0:
+                stop = avoid_right()
+                if stop:
+                    print('no path')
+                    break
+
         else:
             pc4.forward(speed)
 
