@@ -103,6 +103,7 @@ def main():
                 pc4.forward(speed)
         if current_angle == pc4.min_angle or current_angle == pc4.max_angle:
             distances = []
+            angles = []
 
 
 if __name__ == "__main__":
