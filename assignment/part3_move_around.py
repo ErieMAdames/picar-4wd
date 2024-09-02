@@ -25,7 +25,7 @@ def scan():
         distances.append(distance)
     if us_step < 0:
         distances.reverse()
-    distances_map = map(lambda x: x < 35 and x != -2, distances[3:7])
+    distances_map = map(lambda x: x < 35 and x != -2, distances)
     stop = reduce(lambda x, y: x or y, distances_map)
     distances = []
     return stop
@@ -95,8 +95,8 @@ def main():
             distances.reverse()
         if len(distances) == 10:
             print(angles)
-            print(angles[3:7])
-            distances_map = map(lambda x: x < 35 and x != -2, distances[3:7])
+            print(angles)
+            distances_map = map(lambda x: x < 35 and x != -2, distances)
             stop = reduce(lambda x, y: x or y, distances_map)
             if stop:
                 pc4.stop()
