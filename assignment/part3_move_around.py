@@ -8,7 +8,7 @@ us_step = pc4.STEP
 min_angle = -36
 max_angle = 36
 distances = []
-turning_time = 1.5
+turning_time = 1
 
 def scan():
     global distances, current_angle, us_step
@@ -26,8 +26,10 @@ def scan():
         distances.append(distance)
     if us_step < 0:
         distances.reverse()
-    distances_map = map(lambda x: x < 35 and x != -2, distances)
+    distances_map = map(lambda x: x < 30 and x != -2, distances)
     stop = reduce(lambda x, y: x or y, distances_map)
+    print(distances)
+    print(stop)
     distances = []
     return stop
 
@@ -78,7 +80,6 @@ def avoid_left():
     return retrace_steps
 def avoid_right():
     print('start avoiding right')
-    retrace_steps = []
     pc4.turn_right(speed)
     time.sleep(turning_time)
     pc4.stop()
