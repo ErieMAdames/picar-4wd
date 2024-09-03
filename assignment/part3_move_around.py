@@ -28,13 +28,10 @@ def scan():
         distances.reverse()
     distances_map = map(lambda x: x < 30 and x != -2, distances)
     stop = reduce(lambda x, y: x or y, distances_map)
-    print(distances)
-    print(stop)
     distances = []
     return stop
 
 def avoid_left():
-    print('start avoiding left')
     # if there is something in the way while avoiding, retrace stepts
     retrace_steps = []
     pc4.turn_left(speed)
@@ -79,7 +76,6 @@ def avoid_left():
     pc4.forward(speed)
     return retrace_steps
 def avoid_right():
-    print('start avoiding right')
     pc4.turn_right(speed)
     time.sleep(turning_time)
     pc4.stop()
