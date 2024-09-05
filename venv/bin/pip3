@@ -1,4 +1,4 @@
-#!/home/pi/picar-4wd/venv/bin/python
+#!/home/pi/picar-4wd/venv/bin/python3.9
 # -*- coding: utf-8 -*-
 import re
 import sys
