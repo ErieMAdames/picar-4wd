@@ -99,7 +99,7 @@ while True:
 
     # Run object detection estimation using the model.
     detection_result = detector.detect(input_tensor)
-    print('detection_result')
+    print('detection_result')   
 
 
     # Draw keypoints and edges on input image
@@ -126,7 +126,7 @@ while True:
     if cv2.waitKey(1) == 27:
       break
     print('imshow q')
-    cv2.imshow('object_detector', image)
+    # cv2.imshow('object_detector', image)
 
     print('imshow 2')
 
