@@ -64,8 +64,6 @@ picam2.start()
 
 picam2.start()
 time.sleep(2)
-
-array = picam2.capture_array("main")
 # # Variables to calculate FPS
 counter, fps = 0, 0
 start_time = time.time()
@@ -124,7 +122,7 @@ while True:
     print('putText')
 
     # Stop the program if the ESC key is pressed.
-    if cv2.waitKey(1) == 27:
+    if cv2.waitKey(25) == 27:
       break
     print('imshow q')
     print(image)
