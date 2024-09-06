@@ -68,6 +68,7 @@ time.sleep(2)
 array = picam2.capture_array("main")
 # # Variables to calculate FPS
 counter, fps = 0, 0
+start_time = time.time()
 
 width = 640
 height = 480
@@ -126,7 +127,8 @@ while True:
     if cv2.waitKey(1) == 27:
       break
     print('imshow q')
-    # cv2.imshow('object_detector', image)
+    print(image)
+    cv2.imshow('object_detector', image)
 
     print('imshow 2')
 
