@@ -96,7 +96,7 @@ while True:
     detection_result = detector.detect(input_tensor)
 
     # Draw keypoints and edges on input image
-    image = utils.visualize(image, detection_result)
+    image = visualize(image, detection_result)
 
     # Calculate the FPS
     if counter % fps_avg_frame_count == 0:
