@@ -81,6 +81,7 @@ fps_avg_frame_count = 10
 
 # Continuously capture images from the camera and run inference
 while True:
+    print('running')
     image = picam2.capture_array("main")
 
     counter += 1
