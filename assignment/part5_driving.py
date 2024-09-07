@@ -220,7 +220,6 @@ count = 0
 try:
     x = input()
     go_distance(int(x))
-    time.sleep(5)
     go_distance(int(x), False)
 
 except KeyboardInterrupt:
