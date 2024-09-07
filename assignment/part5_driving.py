@@ -188,6 +188,18 @@ try:
 except KeyboardInterrupt:
     pc4.stop()
     print("Program stopped by user")
+    WHEEL_DIAMETER = 0.0662  # Example wheel diameter in meters
+    PPR = 360  # Example pulses per revolution
 
+    def calculate_distance(counts):
+        wheel_circumference = WHEEL_DIAMETER * 3.14159
+        distance = (((left_encoder_count + right_encoder_count) / 2) / PPR) * wheel_circumference
+        return distance
+
+    left_distance = calculate_distance(left_encoder_count)
+    right_distance = calculate_distance(right_encoder_count)
+
+    print(f"Left Wheel Distance: {left_distance:.2f} meters")
+    print(f"Right Wheel Distance: {right_distance:.2f} meters")
 finally:
     GPIO.cleanup()  # Clean up GPIO on exit
