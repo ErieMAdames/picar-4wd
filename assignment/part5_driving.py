@@ -127,8 +127,8 @@ def main():
     speed = 50
     while True:
         print("Turning continuously. Press Ctrl+C to stop and measure time.")
-        pc4.left_rear(speed)  # Start turning right
-        pc4.right_rear(-speed)  # Start turning right
+        pc4.left_rear.set_power(speed)  # Start turning right
+        pc4.right_rear.set_power(-speed)  # Start turning right
         time.sleep(0.1)  # Adjust the sleep time to prevent excessive CPU usage
 
 
