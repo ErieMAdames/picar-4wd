@@ -126,7 +126,6 @@ while True:
     if cv2.waitKey(1) == 27:
       break
     print('imshow q')
-    print(image)
 
     # mpl.use('QtAgg')
     # plt.imshow(image)
