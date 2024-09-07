@@ -82,30 +82,23 @@ screen = pygame.display.set_mode((width, height))
 
 # Continuously capture images from the camera and run inference
 while True:
-    print('running')
     image = picam2.capture_array("main")
 
-    print('image')
     counter += 1
-    image = cv2.flip(image, 1)
-    print('flip')
+    # image = cv2.flip(image, 1)
 
     # Convert the image from BGR to RGB as required by the TFLite model.
     rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    print('cvtColor')
 
     # Create a TensorImage object from the RGB image.
     input_tensor = vision.TensorImage.create_from_array(rgb_image)
-    print('input_tensor')
 
     # Run object detection estimation using the model.
     detection_result = detector.detect(input_tensor)
-    print('detection_result')   
 
 
     # Draw keypoints and edges on input image
     image = visualize(image, detection_result)
-    print('visualize')
 
     # Calculate the FPS
     if counter % fps_avg_frame_count == 0:
@@ -113,31 +106,21 @@ while True:
       fps = fps_avg_frame_count / (end_time - start_time)
       start_time = time.time()
 
-    print('counter')
     # Show the FPS
     fps_text = 'FPS = {:.1f}'.format(fps)
     text_location = (left_margin, row_size)
 
-    print('fps_text')
     cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
                 font_size, text_color, font_thickness)
-    print('putText')
 
     # Stop the program if the ESC key is pressed.
     if cv2.waitKey(1) == 27:
       break
-    print('imshow q')
 
-    # mpl.use('QtAgg')
-    # plt.imshow(image)
-    # plt.show()
-    # exit()
-    # cv2.imshow('object_detector', image)
-    print(image.shape)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     frame_surface = pygame.surfarray.make_surface(image)
     frame_surface = pygame.transform.rotate(frame_surface, -90)
-    frame_surface = pygame.transform.flip(frame_surface, True, False)
+    # frame_surface = pygame.transform.flip(frame_surface, True, False)
 
     # Display the frame on the pygame window
     screen.blit(frame_surface, (0, 0))
@@ -147,5 +130,4 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    print('imshow 2')
 cv2.destroyAllWindows()
