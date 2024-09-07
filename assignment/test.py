@@ -135,8 +135,8 @@ while True:
     # cv2.imshow('object_detector', image)
     print(image.shape)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    image = pygame.transform.rotate(image, 90)
     frame_surface = pygame.surfarray.make_surface(image)
+    frame_surface = pygame.transform.rotate(frame_surface, 90)
 
     # Display the frame on the pygame window
     screen.blit(frame_surface, (0, 0))
