@@ -209,7 +209,7 @@ def calculate_distance(counts):
 
 def turn_continuous(speed=50):
     print("Turning continuously. Press Ctrl+C to stop and measure time.")
-    pc4.turn_right(speed)  # Start turning right
+    # pc4.turn_right(speed)  # Start turning right
     pc4.left_front.set_power(speed)
     pc4.left_rear.set_power(speed)
     # pc4.right_front.set_power(power)
