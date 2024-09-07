@@ -1,5 +1,6 @@
 import cv2
 import time
+import pyautogui
 from picamera2 import Picamera2
 import numpy as np
 from tflite_support.task import core
