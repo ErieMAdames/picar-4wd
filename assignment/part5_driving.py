@@ -252,7 +252,8 @@ async def receive_data():
             while True:
                 # Receive data from the server
                 data = await websocket.recv()
-                print(f"Received data: {data}")
+                print(f"Received data: {data['values']}")
+                time.sleep(1)
 
         except websockets.ConnectionClosed as e:
             print(f"Connection closed: {e}")
