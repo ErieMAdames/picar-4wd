@@ -218,8 +218,9 @@ def go_distance(dist, forward=True):
 # pc4.right_front.set_power(20)
 count = 0
 try:
-    go_distance(.5)
-    go_distance(.5, False)
+    x = input()
+    go_distance(int(x))
+    go_distance(int(x), False)
 
 except KeyboardInterrupt:
     print("Program stopped by user")
