@@ -212,10 +212,10 @@ def motor_rr_callback(channel):
 # Add event detection for rising edges
 GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.RISING, callback=left_encoder_callback)
 GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback)
-GPIO.add_event_detect(motor_lf, GPIO.RISING, callback=motor_lf_callback)
-GPIO.add_event_detect(motor_rf, GPIO.RISING, callback=motor_rf_callback)
-GPIO.add_event_detect(motor_lr, GPIO.RISING, callback=motor_lr_callback)
-GPIO.add_event_detect(motor_rr, GPIO.RISING, callback=motor_rr_callback)
+# GPIO.add_event_detect(motor_lf, GPIO.RISING, callback=motor_lf_callback)
+# GPIO.add_event_detect(motor_rf, GPIO.RISING, callback=motor_rf_callback)
+# GPIO.add_event_detect(motor_lr, GPIO.RISING, callback=motor_lr_callback)
+# GPIO.add_event_detect(motor_rr, GPIO.RISING, callback=motor_rr_callback)
 
 # pc4.forward(20)
 
