@@ -207,14 +207,13 @@ def calculate_distance(counts):
 #         pc4.stop()
 #         GPIO.cleanup()  # Clean up GPIO on exit
 
-def turn_continuous(power=50):
+def turn_continuous(speed=50):
     print("Turning continuously. Press Ctrl+C to stop and measure time.")
-    # pc4.turn_right(speed)  # Start turning right
-    
-    # pc4.left_front.set_power(power)
-    pc4.left_rear.set_power(power)
-    pc4.right_front.set_power(-power)
-    pc4.right_rear.set_power(-power)
+    pc4.turn_right(speed)  # Start turning right
+    # pc4.left_front.set_power(speed)
+    # pc4.left_rear.set_power(speed)
+    # pc4.right_front.set_power(power)
+    # pc4.right_rear.set_power(power)
     try:
         while True:
             time.sleep(0.1)  # Adjust the sleep time to prevent excessive CPU usage
@@ -225,7 +224,7 @@ def turn_continuous(power=50):
 
 # Start the calibration process
 start_time = time.time()
-turn_continuous(60)
+turn_continuous(speed=50)
 end_time = time.time()
 
 # Calculate and display the time taken
