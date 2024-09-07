@@ -10,7 +10,7 @@ import time
 import threading
 
 if geteuid() != 0:
-    print("Script must be run as root. Try 'sudo python3 setup.y install'")
+    print("Script must be run as root. Try ' python3 setup.y install'")
     sys.exit(1)
 
 sys.path.append("./picar_4wd")
@@ -168,11 +168,11 @@ def install():
         print("Install dependencies with apt-get:")
         # update apt-get
         do(msg="update apt-get",
-            cmd='sudo apt-get update')
+            cmd=' apt-get update')
         #
         for dep in APT_INSTALL_LIST:
             do(msg=f"install {dep}",
-                cmd=f'sudo apt-get install {dep} -y')
+                cmd=f' apt-get install {dep} -y')
 
         # =============================
         print("Install dependencies with pip3:")
@@ -189,31 +189,31 @@ def install():
         #
         for dep in PIP_INSTALL_LIST:
             do(msg=f"install {dep}",
-                cmd=f'sudo pip3 install {dep} {_is_bsps}')
+                cmd=f' pip3 install {dep} {_is_bsps}')
 
     # Setup interfaces
     # =============================
     print("Setup interfaces")
     do(msg="turn on I2C",
-        cmd='sudo raspi-config nonint do_i2c 0')
+        cmd=' raspi-config nonint do_i2c 0')
     do(msg="turn on SPI",
-        cmd='sudo raspi-config nonint do_spi 0')
+        cmd=' raspi-config nonint do_spi 0')
 
     # cp service file
     # =============================
     if ".picar-4wd" not in listdir(f"/home/{user_name}"):
         do(msg="create .picar-4wd directory",
-            cmd=f'sudo mkdir /home/{user_name}/.picar-4wd/') 
+            cmd=f' mkdir /home/{user_name}/.picar-4wd/') 
     do(msg="copy picar-4wd-config",
-        cmd=f'sudo cp ./data/config /home/{user_name}/.picar-4wd/config')
+        cmd=f' cp ./data/config /home/{user_name}/.picar-4wd/config')
     do(msg="change directory owner",
-        cmd=f'sudo chown -R {user_name}:{user_name} /home/{user_name}/.picar-4wd/')
+        cmd=f' chown -R {user_name}:{user_name} /home/{user_name}/.picar-4wd/')
 
     print("Setup picar-4wd web-example service")
     do(msg="copy picar-4wd web-example file",
-        cmd='sudo cp ./bin/picar-4wd-web-example /etc/init.d/picar-4wd-web-example')
+        cmd=' cp ./bin/picar-4wd-web-example /etc/init.d/picar-4wd-web-example')
     do(msg="add excutable mode for picar-4wd-web-example",
-        cmd='sudo chmod +x /etc/init.d/picar-4wd-web-example')
+        cmd=' chmod +x /etc/init.d/picar-4wd-web-example')
 
     # Report error
     # =============================
@@ -224,7 +224,7 @@ def install():
             key = input().lower()
             if key == 'y':
                 print("System reboot now")
-                run_command("sudo reboot")
+                run_command(" reboot")
             elif key == 'N' or key == 'n':
                 print("reboot cancel")
                 sys.exit(0)
