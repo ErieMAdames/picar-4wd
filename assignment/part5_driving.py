@@ -219,8 +219,8 @@ def go_distance(dist, forward=True):
 count = 0
 try:
     x = input()
-    go_distance(int(x))
-    go_distance(int(x), False)
+    go_distance(float(x))
+    go_distance(float(x), False)
 
 except KeyboardInterrupt:
     print("Program stopped by user")
