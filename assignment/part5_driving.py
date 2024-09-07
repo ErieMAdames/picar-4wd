@@ -124,7 +124,7 @@ from functools import reduce
 
 def main():
     global distances, current_angle, us_step
-    speed = 50
+    speed = 200
     while True:
         print("Turning continuously. Press Ctrl+C to stop and measure time.")
         pc4.left_rear.set_power(speed)  # Start turning right
