@@ -220,7 +220,7 @@ try:
     while True:
         # Print encoder counts every second
         print(f"Left Encoder Count: {left_encoder_count}, Right Encoder Count: {right_encoder_count}")
-        print(f"motor_lf_count : {motor_lf_count}")
+        print(f"motor_lf_count: {motor_lf_count}")
         print(f"motor_rf_count: {motor_rf_count}")
         print(f"motor_lr_count: {motor_lr_count}")
         print(f"motor_rr_count: {motor_rr_count}")
