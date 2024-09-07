@@ -227,7 +227,7 @@ def turn_continuous(speed=50):
 
 # Start the calibration process
 start_time = time.time()
-turn_continuous(speed=50)
+turn_continuous(30)
 end_time = time.time()
 
 # Calculate and display the time taken
