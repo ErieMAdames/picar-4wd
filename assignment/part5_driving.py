@@ -218,6 +218,7 @@ def turn_continuous(speed=50):
             pc4.stop()
             pc4.right_front.set_power(-speed)
             pc4.right_rear.set_power(-speed)
+            time.sleep(0.5) 
             pc4.stop() # Adjust the sleep time to prevent excessive CPU usage
     except KeyboardInterrupt:
         # Stop the car when interrupted (Ctrl+C)
