@@ -125,14 +125,12 @@ def main():
     global distances, current_angle, us_step
     while True:
         x = input()
-        if x == 'l':
-            pc4.turn_left(speed)
-            time.sleep(turning_time)
-            pc4.stop()
-        if x == 'r':
-            pc4.turn_right(speed)
-            time.sleep(turning_time)
-            pc4.stop()
+        s = x.split(',')
+        speed = int(s[0])
+        turning_time = float(s[1])
+        pc4.turn_left(speed)
+        time.sleep(turning_time)
+        pc4.stop()
         # stop = scan()
         # if stop:
         #     pc4.stop()
