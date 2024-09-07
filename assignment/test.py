@@ -8,12 +8,6 @@ from tflite_support.task import vision
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-img = cv2.imread("yts.jpg")
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-# mpl.use('QtAgg')
-plt.imshow(img)
-plt.show()
-exit()
 _MARGIN = 10  # pixels
 _ROW_SIZE = 10  # pixels
 _FONT_SIZE = 1
@@ -58,17 +52,17 @@ def visualize(
                 _FONT_SIZE, _TEXT_COLOR, _FONT_THICKNESS)
 
   return image
-# # Initialize the object detection model
-# base_options = core.BaseOptions(
-#     file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
-# detection_options = processor.DetectionOptions(
-#     max_results=3, score_threshold=0.3)
-# options = vision.ObjectDetectorOptions(
-#     base_options=base_options, detection_options=detection_options)
-# detector = vision.ObjectDetector.create_from_options(options)
-# picam2 = Picamera2()
-# picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
-# picam2.start()
+# Initialize the object detection model
+base_options = core.BaseOptions(
+    file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
+detection_options = processor.DetectionOptions(
+    max_results=3, score_threshold=0.3)
+options = vision.ObjectDetectorOptions(
+    base_options=base_options, detection_options=detection_options)
+detector = vision.ObjectDetector.create_from_options(options)
+picam2 = Picamera2()
+picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
+picam2.start()
 
 time.sleep(2)
 # # Variables to calculate FPS
@@ -86,77 +80,78 @@ font_thickness = 1
 fps_avg_frame_count = 10
 
 # Continuously capture images from the camera and run inference
-# while True:
-#     print('running')
-#     image = picam2.capture_array("main")
+while True:
+    print('running')
+    image = picam2.capture_array("main")
 
-#     print('image')
-#     counter += 1
-#     image = cv2.flip(image, 1)
-#     print('flip')
+    print('image')
+    counter += 1
+    image = cv2.flip(image, 1)
+    print('flip')
 
-#     # Convert the image from BGR to RGB as required by the TFLite model.
-#     rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-#     print('cvtColor')
+    # Convert the image from BGR to RGB as required by the TFLite model.
+    rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    print('cvtColor')
 
-#     # Create a TensorImage object from the RGB image.
-#     input_tensor = vision.TensorImage.create_from_array(rgb_image)
-#     print('input_tensor')
+    # Create a TensorImage object from the RGB image.
+    input_tensor = vision.TensorImage.create_from_array(rgb_image)
+    print('input_tensor')
 
-#     # Run object detection estimation using the model.
-#     detection_result = detector.detect(input_tensor)
-#     print('detection_result')   
+    # Run object detection estimation using the model.
+    detection_result = detector.detect(input_tensor)
+    print('detection_result')   
 
 
-#     # Draw keypoints and edges on input image
-#     image = visualize(image, detection_result)
-#     print('visualize')
+    # Draw keypoints and edges on input image
+    image = visualize(image, detection_result)
+    print('visualize')
 
-#     # Calculate the FPS
-#     if counter % fps_avg_frame_count == 0:
-#       end_time = time.time()
-#       fps = fps_avg_frame_count / (end_time - start_time)
-#       start_time = time.time()
+    # Calculate the FPS
+    if counter % fps_avg_frame_count == 0:
+      end_time = time.time()
+      fps = fps_avg_frame_count / (end_time - start_time)
+      start_time = time.time()
 
-#     print('counter')
-#     # Show the FPS
-#     fps_text = 'FPS = {:.1f}'.format(fps)
-#     text_location = (left_margin, row_size)
+    print('counter')
+    # Show the FPS
+    fps_text = 'FPS = {:.1f}'.format(fps)
+    text_location = (left_margin, row_size)
 
-#     print('fps_text')
-#     cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
-#                 font_size, text_color, font_thickness)
-#     print('putText')
+    print('fps_text')
+    cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
+                font_size, text_color, font_thickness)
+    print('putText')
 
-#     # Stop the program if the ESC key is pressed.
-#     if cv2.waitKey(1) == 27:
-#       break
-#     print('imshow q')
-#     print(image)
-#     cv2.imshow('object_detector', image)
+    # Stop the program if the ESC key is pressed.
+    if cv2.waitKey(1) == 27:
+      break
+    print('imshow q')
+    print(image)
 
-#     print('imshow 2')
-# face_detector = cv2.CascadeClassifier("/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml")
-# cv2.startWindowThread()
+    # mpl.use('QtAgg')
+    plt.imshow(image)
+    plt.show()
+    # exit()
+    # cv2.imshow('object_detector', image)
 
-# picam2 = Picamera2()
-# picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
-# picam2.start()
+    print('imshow 2')
+face_detector = cv2.CascadeClassifier("/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml")
+cv2.startWindowThread()
 
-# while True:
-#     im = picam2.capture_array()
+picam2 = Picamera2()
+picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
+picam2.start()
 
-#     # grey = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-#     # faces = face_detector.detectMultiScale(grey, 1.1, 5)
+while True:
+    im = picam2.capture_array()
 
-#     # for (x, y, w, h) in faces:
-#     #     cv2.rectangle(im, (x, y), (x + w, y + h), (0, 255, 0))
-#     print('show')
-#     cv2.imshow("Camera", im)
-#     print('shown')
-#     cv2.waitKey(1)
-# cv2.destroyAllWindows()
-img = cv2.imread("yts.jpg")
-print(f'image size {img.shape}')
-cv2.imshow("Display window", img)
-k = cv2.waitKey(0)
+    # grey = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    # faces = face_detector.detectMultiScale(grey, 1.1, 5)
+
+    # for (x, y, w, h) in faces:
+    #     cv2.rectangle(im, (x, y), (x + w, y + h), (0, 255, 0))
+    print('show')
+    cv2.imshow("Camera", im)
+    print('shown')
+    cv2.waitKey(1)
+cv2.destroyAllWindows()
