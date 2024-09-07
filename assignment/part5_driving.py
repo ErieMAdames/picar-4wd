@@ -194,7 +194,7 @@ def go_distance(dist, forward=True):
     PPR = 20  # Example pulses per revolution
     def calculate_distance(counts):
         wheel_circumference = WHEEL_DIAMETER * 3.14159
-        distance = (((left_encoder_count + right_encoder_count) / 2) / PPR) * wheel_circumference
+        distance = (counts / PPR) * wheel_circumference
         return distance
 
     left_distance = calculate_distance(left_encoder_count)
