@@ -6,8 +6,6 @@ import numpy as np
 from tflite_support.task import core
 from tflite_support.task import processor
 from tflite_support.task import vision
-import matplotlib.pyplot as plt
-import matplotlib as mpl
 
 _MARGIN = 10  # pixels
 _ROW_SIZE = 10  # pixels
