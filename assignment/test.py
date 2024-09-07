@@ -147,7 +147,7 @@ fps_avg_frame_count = 10
 #     print('shown')
 #     cv2.waitKey(1)
 # cv2.destroyAllWindows()
-img = cv2.imread("www.YTS.MX.png")
+img = cv2.imread("./www.YTS.MX.png")
 print(f'image size {img.shape}')
 cv2.imshow("Display window", img)
 k = cv2.waitKey(0)
