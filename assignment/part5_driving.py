@@ -213,13 +213,13 @@ GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_cal
 # GPIO.add_event_detect(motor_lr, GPIO.RISING, callback=motor_lr_callback)
 # GPIO.add_event_detect(motor_rr, GPIO.RISING, callback=motor_rr_callback)
 
-# pc4.forward(20)
+pc4.forward(20)
 
 # pc4.left_rear.set_power(20)
 # pc4.right_rear.set_power(20)
 
-pc4.left_front.set_power(20)
-pc4.right_front.set_power(20)
+# pc4.left_front.set_power(20)
+# pc4.right_front.set_power(20)
 count = 0
 try:
     while True:
