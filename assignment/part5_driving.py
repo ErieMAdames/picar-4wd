@@ -193,7 +193,6 @@ def go_distance(dist, forward=True):
     WHEEL_DIAMETER = 0.0662  # Example wheel diameter in meters
     PPR = 20  # Example pulses per revolution
     def calculate_distance(counts):
-        print(f"Left Encoder Count: {left_encoder_count}, Right Encoder Count: {right_encoder_count}")
         wheel_circumference = WHEEL_DIAMETER * 3.14159
         distance = (((left_encoder_count + right_encoder_count) / 2) / PPR) * wheel_circumference
         return distance
@@ -201,6 +200,8 @@ def go_distance(dist, forward=True):
     left_distance = calculate_distance(left_encoder_count)
     right_distance = calculate_distance(right_encoder_count)
     while left_distance < dist or right_distance < dist:
+        print(f"Left Encoder Count: {left_encoder_count}, Right Encoder Count: {right_encoder_count}")
+        print(f"Left Distance: {left_distance}, Right Distance: {right_distance}")
         if forward:
             pc4.forward(speed)
         else:
