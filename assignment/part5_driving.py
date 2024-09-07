@@ -241,7 +241,7 @@ print(f"Estimated duration for 90-degree turn: {turn_duration_for_90_degrees:.2f
 
 
 # Define the WebSocket server URL
-WEBSOCKET_URL = "ws://192.168.86.246:8080/sensor/connect?type=android.sensor.gyroscope"
+WEBSOCKET_URL = "ws://192.168.86.246:8080/sensor/connect?type=android.sensor.rotation_vector"
 
 async def receive_data():
     # Connect to the WebSocket server
