@@ -200,11 +200,13 @@ def go_distance(dist, forward=True):
 
     left_distance = calculate_distance(left_encoder_count)
     right_distance = calculate_distance(right_encoder_count)
-    while calculate_distance(left_encoder_count) < dist or calculate_distance(right_encoder_count) < dist:
+    while left_distance < dist or right_distance < dist:
         if forward:
             pc4.forward(speed)
         else:
             pc4.backward(speed)
+        left_distance = calculate_distance(left_encoder_count)
+        right_distance = calculate_distance(right_encoder_count)
     pc4.stop()
     print(f"Left Wheel Distance: {left_distance:.2f} meters")
     print(f"Right Wheel Distance: {right_distance:.2f} meters")
