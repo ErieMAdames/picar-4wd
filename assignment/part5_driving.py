@@ -190,3 +190,4 @@ except KeyboardInterrupt:
 
 finally:
     GPIO.cleanup()  # Clean up GPIO on exit
+    pc4.stop()
