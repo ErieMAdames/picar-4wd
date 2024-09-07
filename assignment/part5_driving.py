@@ -170,12 +170,12 @@ right_encoder_count_falling = 0
 
 # Callback functions to increment counts
 def left_encoder_callback_rising(channel):
-    global left_encoder_count
-    left_encoder_count += 1
+    global left_encoder_count_rising
+    left_encoder_count_rising += 1
 
 def right_encoder_callback_rising(channel):
-    global right_encoder_count
-    right_encoder_count += 1
+    global right_encoder_count_falling
+    right_encoder_count_falling += 1
 def left_encoder_callback_falling(channel):
     global left_encoder_count_falling
     left_encoder_count_falling += 1
