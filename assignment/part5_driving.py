@@ -230,6 +230,8 @@ try:
         count += 1
         if count == 20:
             pc4.stop()
+            pc4.left_front.set_power(20)
+            pc4.right_front.set_power(20)
 
 except KeyboardInterrupt:
     pc4.stop()
