@@ -91,10 +91,10 @@ while True:
     rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
     # Create a TensorImage object from the RGB image.
-    input_tensor = vision.TensorImage.create_from_array(rgb_image)
+    # input_tensor = vision.TensorImage.create_from_array(rgb_image)
 
-    # Run object detection estimation using the model.
-    detection_result = detector.detect(input_tensor)
+    # # Run object detection estimation using the model.
+    # detection_result = detector.detect(input_tensor)
 
 
     # Draw keypoints and edges on input image
