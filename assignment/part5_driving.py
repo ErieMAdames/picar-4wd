@@ -223,9 +223,9 @@ try:
         # Print encoder counts every second
         print(f"Left Encoder Count: {left_encoder_count}, Right Encoder Count: {right_encoder_count}")
         # print(f"Left Encoder Count: {left_encoder_count_falling}, Right Encoder Count: {right_encoder_count_falling}")
-        time.sleep(1)  # Adjust the sleep time as needed
+        time.sleep(.5)  # Adjust the sleep time as needed
         count += 1
-        if count == 10:
+        if count == 20:
             pc4.stop()
 
 except KeyboardInterrupt:
