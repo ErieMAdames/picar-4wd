@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 import time
 from functools import reduce
 
-# speed = 30
+speed = 30
 # turning_time = .9
 # current_angle = 0
 # us_step = pc4.STEP
@@ -174,46 +174,40 @@ GPIO.setup(LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # Variables to store encoder counts
 left_encoder_count = 0
 right_encoder_count = 0
-motor_lf_count = 0
-motor_rf_count = 0
-motor_lr_count = 0
-motor_rr_count = 0
 # Callback functions to increment counts
 def left_encoder_callback(channel):
-    # print('left_encoder_callback')
     global left_encoder_count
     left_encoder_count += 1
 
-def right_encoder_callback(channel):
-    # print('right_encoder_callback')
+def right_encoder_callback(channel): 
     global right_encoder_count
     right_encoder_count += 1
-
-def motor_lf_callback(channel):
-    global motor_lf_count
-    motor_lf_count += 1
-
-def motor_rf_callback(channel):
-    global motor_rf_count
-    motor_rf_count += 1
-
-def motor_lr_callback(channel):
-    global motor_lr_count
-    motor_lr_count += 1
-
-def motor_rr_callback(channel):
-    global motor_rr_count
-    motor_rr_count += 1
 
 # Add event detection for rising edges
 GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.RISING, callback=left_encoder_callback)
 GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback)
-# GPIO.add_event_detect(motor_lf, GPIO.RISING, callback=motor_lf_callback)
-# GPIO.add_event_detect(motor_rf, GPIO.RISING, callback=motor_rf_callback)
-# GPIO.add_event_detect(motor_lr, GPIO.RISING, callback=motor_lr_callback)
-# GPIO.add_event_detect(motor_rr, GPIO.RISING, callback=motor_rr_callback)
+def go_distance(dist, forward=True):
+    global left_encoder_count, right_encoder_count
+    left_encoder_count = 0
+    right_encoder_count = 0
+    WHEEL_DIAMETER = 0.0662  # Example wheel diameter in meters
+    PPR = 20  # Example pulses per revolution
+    def calculate_distance(counts):
+        print(f"Left Encoder Count: {left_encoder_count}, Right Encoder Count: {right_encoder_count}")
+        wheel_circumference = WHEEL_DIAMETER * 3.14159
+        distance = (((left_encoder_count + right_encoder_count) / 2) / PPR) * wheel_circumference
+        return distance
 
-pc4.forward(20)
+    left_distance = calculate_distance(left_encoder_count)
+    right_distance = calculate_distance(right_encoder_count)
+    while calculate_distance(left_encoder_count) < dist or calculate_distance(right_encoder_count) < dist:
+        if forward:
+            pc4.forward(speed)
+        else:
+            pc4.backward(speed)
+    pc4.stop()
+    print(f"Left Wheel Distance: {left_distance:.2f} meters")
+    print(f"Right Wheel Distance: {right_distance:.2f} meters")
 
 # pc4.left_rear.set_power(20)
 # pc4.right_rear.set_power(20)
@@ -223,31 +217,10 @@ pc4.forward(20)
 count = 0
 try:
     while True:
-        # Print encoder counts every second
-        print(f"Left Encoder Count: {left_encoder_count}, Right Encoder Count: {right_encoder_count}")
-        # print(f"Left Encoder Count: {left_encoder_count_falling}, Right Encoder Count: {right_encoder_count_falling}")
-        time.sleep(.5)  # Adjust the sleep time as needed
-        count += 1
-        if count == 20:
-            pc4.stop()
-            pc4.left_front.set_power(20)
-            pc4.right_front.set_power(20)
+        go_distance(.5)
+        go_distance(.5, False)
 
 except KeyboardInterrupt:
-    pc4.stop()
     print("Program stopped by user")
-    WHEEL_DIAMETER = 0.0662  # Example wheel diameter in meters
-    PPR = 20  # Example pulses per revolution
-
-    def calculate_distance(counts):
-        wheel_circumference = WHEEL_DIAMETER * 3.14159
-        distance = (((left_encoder_count + right_encoder_count) / 2) / PPR) * wheel_circumference
-        return distance
-
-    left_distance = calculate_distance(left_encoder_count)
-    right_distance = calculate_distance(right_encoder_count)
-
-    print(f"Left Wheel Distance: {left_distance:.2f} meters")
-    print(f"Right Wheel Distance: {right_distance:.2f} meters")
 finally:
     GPIO.cleanup()  # Clean up GPIO on exit
