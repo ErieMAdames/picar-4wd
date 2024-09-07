@@ -3,6 +3,8 @@ import RPi.GPIO as GPIO
 import time
 from functools import reduce
 
+import asyncio
+import websockets
 speed = 30
 # turning_time = .9
 # current_angle = 0
@@ -236,3 +238,24 @@ print(f"Time taken for turn: {duration:.2f} seconds")
 turn_duration_for_90_degrees = duration  # Replace with actual calibration value
 
 print(f"Estimated duration for 90-degree turn: {turn_duration_for_90_degrees:.2f} seconds")
+
+
+# Define the WebSocket server URL
+WEBSOCKET_URL = "ws://192.168.86.246:8080/sensor/connect?type=android.sensor.gyroscope"
+
+async def receive_data():
+    # Connect to the WebSocket server
+    async with websockets.connect(WEBSOCKET_URL) as websocket:
+        print(f"Connected to {WEBSOCKET_URL}")
+
+        try:
+            while True:
+                # Receive data from the server
+                data = await websocket.recv()
+                print(f"Received data: {data}")
+
+        except websockets.ConnectionClosed as e:
+            print(f"Connection closed: {e}")
+
+# Run the async function
+asyncio.run(receive_data())
