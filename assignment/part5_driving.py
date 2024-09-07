@@ -186,8 +186,8 @@ try:
         time.sleep(1)  # Adjust the sleep time as needed
 
 except KeyboardInterrupt:
+    pc4.stop()
     print("Program stopped by user")
 
 finally:
     GPIO.cleanup()  # Clean up GPIO on exit
-    pc4.stop()
