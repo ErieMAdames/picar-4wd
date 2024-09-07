@@ -133,6 +133,7 @@ while True:
     # plt.show()
     # exit()
     # cv2.imshow('object_detector', image)
+    print(image.shape)
     frame_surface = pygame.surfarray.make_surface(image)
 
     # Display the frame on the pygame window
