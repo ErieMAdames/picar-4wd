@@ -223,7 +223,7 @@ if __name__ == "__main__":
     try:
         print('Starting Part 5: Move around object')
         main(True)
-        time.sleep(.25)
+        time.sleep(1)
         main(False)
     except KeyboardInterrupt:
         print('\nStopping')
