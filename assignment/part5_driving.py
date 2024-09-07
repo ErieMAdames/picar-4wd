@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 import time
 from functools import reduce
 
-speed = 30
+speed = 60
 # turning_time = .9
 # current_angle = 0
 # us_step = pc4.STEP
