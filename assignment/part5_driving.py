@@ -180,12 +180,12 @@ motor_lr_count = 0
 motor_rr_count = 0
 # Callback functions to increment counts
 def left_encoder_callback(channel):
-    print('left_encoder_callback')
+    # print('left_encoder_callback')
     global left_encoder_count
     left_encoder_count += 1
 
 def right_encoder_callback(channel):
-    print('right_encoder_callback')
+    # print('right_encoder_callback')
     global right_encoder_count
     right_encoder_count += 1
 
