@@ -78,7 +78,7 @@ text_color = (0, 0, 255)  # red
 font_size = 1
 font_thickness = 1
 fps_avg_frame_count = 10
-
+cv2.startWindowThread()
 # Continuously capture images from the camera and run inference
 while True:
     print('running')
@@ -134,3 +134,4 @@ while True:
     cv2.imshow('object_detector', image)
 
     print('imshow 2')
+cv2.destroyAllWindows()
