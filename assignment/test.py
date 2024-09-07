@@ -13,8 +13,8 @@ _FONT_SIZE = 1
 _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 0, 255)  # red
 
-width = 640 * 2
-height = 480 * 2
+width = 640 * 3
+height = 480 * 3
  # Visualization parameters
 row_size = 20  # pixels
 left_margin = 24  # pixels
@@ -85,7 +85,7 @@ while True:
     image = picam2.capture_array("main")
 
     counter += 1
-    # image = cv2.flip(image, 1)
+    image = cv2.flip(image, 1)
 
     # Convert the image from BGR to RGB as required by the TFLite model.
     rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -120,7 +120,7 @@ while True:
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     frame_surface = pygame.surfarray.make_surface(image)
     frame_surface = pygame.transform.rotate(frame_surface, -90)
-    # frame_surface = pygame.transform.flip(frame_surface, True, False)
+    frame_surface = pygame.transform.flip(frame_surface, True, False)
 
     # Display the frame on the pygame window
     screen.blit(frame_surface, (0, 0))
