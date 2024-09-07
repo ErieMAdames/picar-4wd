@@ -49,14 +49,14 @@ def visualize(
                 _FONT_SIZE, _TEXT_COLOR, _FONT_THICKNESS)
 
   return image
-# Initialize the object detection model
-base_options = core.BaseOptions(
-    file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
-detection_options = processor.DetectionOptions(
-    max_results=3, score_threshold=0.3)
-options = vision.ObjectDetectorOptions(
-    base_options=base_options, detection_options=detection_options)
-detector = vision.ObjectDetector.create_from_options(options)
+# # Initialize the object detection model
+# base_options = core.BaseOptions(
+#     file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
+# detection_options = processor.DetectionOptions(
+#     max_results=3, score_threshold=0.3)
+# options = vision.ObjectDetectorOptions(
+#     base_options=base_options, detection_options=detection_options)
+# detector = vision.ObjectDetector.create_from_options(options)
 # picam2 = Picamera2()
 # picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
 # picam2.start()
@@ -147,7 +147,7 @@ fps_avg_frame_count = 10
 #     print('shown')
 #     cv2.waitKey(1)
 # cv2.destroyAllWindows()
-img = cv2.imread("yts.png")
+img = cv2.imread("yts.jpg")
 print(f'image size {img.shape}')
 cv2.imshow("Display window", img)
 k = cv2.waitKey(0)
