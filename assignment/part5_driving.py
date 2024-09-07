@@ -176,7 +176,7 @@ def right_encoder_callback(channel):
     right_encoder_count += 1
 
 # Add event detection for rising edges
-GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.RISING, callback=left_encoder_callback)
+GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.FALLING, callback=left_encoder_callback)
 GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback)
 # pc4.forward(20)
 
