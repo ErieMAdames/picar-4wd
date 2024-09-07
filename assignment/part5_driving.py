@@ -237,7 +237,7 @@ except KeyboardInterrupt:
     pc4.stop()
     print("Program stopped by user")
     WHEEL_DIAMETER = 0.0662  # Example wheel diameter in meters
-    PPR = 360  # Example pulses per revolution
+    PPR = 20  # Example pulses per revolution
 
     def calculate_distance(counts):
         wheel_circumference = WHEEL_DIAMETER * 3.14159
