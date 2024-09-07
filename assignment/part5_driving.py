@@ -124,35 +124,30 @@ def retrace(retrace_steps):
 def main():
     global distances, current_angle, us_step
     while True:
-        x = input()
-        s = x.split(',')
-        speed = float(s[0])
-        turning_time = float(s[1])
-        pc4.turn_left(speed)
-        time.sleep(turning_time)
-        pc4.stop()
-        pc4.turn_right(speed)
-        time.sleep(turning_time)
-        pc4.stop()
-        # stop = scan()
-        # if stop:
-        #     pc4.stop()
-        #     retrace_steps = avoid_left()
-        #     retrace(retrace_steps)
-        #     if len(retrace_steps) > 0:
-        #         stop = avoid_right()
-        #         if stop:
-        #             print('no path')
-        #             break
+        print("Turning continuously. Press Ctrl+C to stop and measure time.")
+        pc4.turn_right(speed)  # Start turning right
+        time.sleep(0.1)  # Adjust the sleep time to prevent excessive CPU usage
 
-        # else:
-        #     pc4.forward(speed)
 
 if __name__ == "__main__":
+    start_time = time.time()
     try:
         print('Starting Part 5: Move around object')
         main()
     except KeyboardInterrupt:
         print('\nStopping')
+        pc4.stop()
+        end_time = time.time()
+
+        # Calculate and display the time taken
+        duration = end_time - start_time
+        print(f"Time taken for turn: {duration:.2f} seconds")
+
+        # Calculate the time required for a 90-degree turn
+        # Adjust this based on your own measurements
+        turn_duration_for_90_degrees = duration  # Replace with actual calibration value
+
+        print(f"Estimated duration for 90-degree turn: {turn_duration_for_90_degrees:.2f} seconds")
+
     finally:
         pc4.stop()
