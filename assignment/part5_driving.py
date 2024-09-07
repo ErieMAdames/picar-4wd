@@ -189,7 +189,6 @@ def calculate_distance(counts):
 
 def main(right=True):
     global distances, current_angle, us_step
-    speed = 50
     start_time = time.time()
     try:
         while True:
