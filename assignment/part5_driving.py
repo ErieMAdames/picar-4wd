@@ -211,9 +211,9 @@ def turn_continuous(power=50):
     print("Turning continuously. Press Ctrl+C to stop and measure time.")
     # pc4.turn_right(speed)  # Start turning right
     
-    pc4.left_front.set_power(power)
+    # pc4.left_front.set_power(power)
     pc4.left_rear.set_power(power)
-    # pc4.right_front.set_power(-power)
+    pc4.right_front.set_power(-power)
     pc4.right_rear.set_power(-power)
     try:
         while True:
