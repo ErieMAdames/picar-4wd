@@ -130,7 +130,7 @@ def main():
         turning_time = float(s[1])
         
         pc4.left_front.set_power(-speed)
-        pc4.left_rear.set_power(-speed)
+        pc4.right_rear.set_power(speed)
         # pc4.right_front.set_power(power)
         # pc4.right_rear.set_power(power)
         # pc4.turn_left(speed)
