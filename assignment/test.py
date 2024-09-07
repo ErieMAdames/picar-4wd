@@ -13,8 +13,8 @@ _FONT_SIZE = 1
 _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 0, 255)  # red
 
-width = 640 * 3
-height = 480 * 3
+width = 640 * 2
+height = 480 * 2
  # Visualization parameters
 row_size = 20  # pixels
 left_margin = 24  # pixels
