@@ -170,10 +170,12 @@ right_encoder_count_falling = 0
 
 # Callback functions to increment counts
 def left_encoder_callback_rising(channel):
+    print(channel)
     global left_encoder_count_rising
     left_encoder_count_rising += 1
 
 def right_encoder_callback_rising(channel):
+    print(channel)
     global right_encoder_count_falling
     right_encoder_count_falling += 1
 def left_encoder_callback_falling(channel):
@@ -186,7 +188,7 @@ def right_encoder_callback_falling(channel):
 
 # Add event detection for rising edges
 GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.RISING, callback=left_encoder_callback_rising)
-GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback_rising)
+# GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback_rising)
 # GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.FALLING, callback=left_encoder_callback_falling)
 # GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.FALLING, callback=right_encoder_callback_falling)
 # pc4.forward(20)
