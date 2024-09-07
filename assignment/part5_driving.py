@@ -222,8 +222,8 @@ if __name__ == "__main__":
     start_time = time.time()
     try:
         print('Starting Part 5: Move around object')
-        main(True)
         main(False)
+        main(True)
     except KeyboardInterrupt:
         print('\nStopping')
     finally:
