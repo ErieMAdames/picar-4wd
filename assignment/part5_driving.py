@@ -190,6 +190,7 @@ def calculate_distance(counts):
 def main(right=True):
     global distances, current_angle, us_step
     speed = 50
+    start_time = time.time()
     try:
         while True:
             if right:
@@ -219,11 +220,10 @@ def main(right=True):
         print(f"Left Distance: {left_distance}, Right Distance: {right_distance}")
 
 if __name__ == "__main__":
-    start_time = time.time()
     try:
         print('Starting Part 5: Move around object')
         main(True)
-        time.sleep(1)
+        time.sleep(.25)
         main(False)
     except KeyboardInterrupt:
         print('\nStopping')
