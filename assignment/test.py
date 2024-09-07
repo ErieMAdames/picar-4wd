@@ -77,8 +77,8 @@ text_color = (0, 0, 255)  # red
 font_size = 1
 font_thickness = 1
 fps_avg_frame_count = 10
-# pygame.init()
-# screen = pygame.display.set_mode((width, height))
+pygame.init()
+screen = pygame.display.set_mode((width, height))
 
 # Continuously capture images from the camera and run inference
 while True:
@@ -109,25 +109,25 @@ while True:
     # Show the FPS
     fps_text = 'FPS = {:.1f}'.format(fps)
     print(fps)
-    # text_location = (left_margin, row_size)
+    text_location = (left_margin, row_size)
 
-    # cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
-    #             font_size, text_color, font_thickness)
+    cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
+                font_size, text_color, font_thickness)
 
-    # # Stop the program if the ESC key is pressed.
-    # if cv2.waitKey(1) == 27:
-    #   break
+    # Stop the program if the ESC key is pressed.
+    if cv2.waitKey(1) == 27:
+      break
 
-    # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    # frame_surface = pygame.surfarray.make_surface(image)
-    # frame_surface = pygame.transform.rotate(frame_surface, -90)
-    # frame_surface = pygame.transform.flip(frame_surface, True, False)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    frame_surface = pygame.surfarray.make_surface(image)
+    frame_surface = pygame.transform.rotate(frame_surface, -90)
+    frame_surface = pygame.transform.flip(frame_surface, True, False)
 
-    # # Display the frame on the pygame window
-    # screen.blit(frame_surface, (0, 0))
-    # pygame.display.update()
+    # Display the frame on the pygame window
+    screen.blit(frame_surface, (0, 0))
+    pygame.display.update()
 
-    # # Check for events (like the window close button)
-    # for event in pygame.event.get():
-    #     if event.type == pygame.QUIT:
-    #         running = False
+    # Check for events (like the window close button)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
