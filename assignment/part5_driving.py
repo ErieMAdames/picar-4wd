@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 import time
 from functools import reduce
 
-speed = 60
+speed = 30
 # turning_time = .9
 # current_angle = 0
 # us_step = pc4.STEP
@@ -187,22 +187,48 @@ def calculate_distance(counts):
         distance = (counts / PPR) * wheel_circumference
         return distance
 
-def main(right=True):
-    global distances, current_angle, us_step
-    go_distance(.5)
-    turn()
-    go_distance(.5)
-    turn()
-    go_distance(.5)
-    turn()
-    go_distance(.5)
-    turn()
-if __name__ == "__main__":
+# def main(right=True):
+#     global distances, current_angle, us_step
+#     go_distance(.5)
+#     turn()
+#     go_distance(.5)
+#     turn()
+#     go_distance(.5)
+#     turn()
+#     go_distance(.5)
+#     turn()
+# if __name__ == "__main__":
+#     try:
+#         print('Starting Part 5: Move around object')
+#         main()
+#     except KeyboardInterrupt:
+#         print('\nStopping')
+#     finally:
+#         pc4.stop()
+#         GPIO.cleanup()  # Clean up GPIO on exit
+
+def turn_continuous(speed=50):
+    print("Turning continuously. Press Ctrl+C to stop and measure time.")
+    pc4.turn_right(speed)  # Start turning right
     try:
-        print('Starting Part 5: Move around object')
-        main()
+        while True:
+            time.sleep(0.1)  # Adjust the sleep time to prevent excessive CPU usage
     except KeyboardInterrupt:
-        print('\nStopping')
-    finally:
+        # Stop the car when interrupted (Ctrl+C)
         pc4.stop()
-        GPIO.cleanup()  # Clean up GPIO on exit
+        print("Turn stopped.")
+
+# Start the calibration process
+start_time = time.time()
+turn_continuous(speed=50)
+end_time = time.time()
+
+# Calculate and display the time taken
+duration = end_time - start_time
+print(f"Time taken for turn: {duration:.2f} seconds")
+
+# Calculate the time required for a 90-degree turn
+# Adjust this based on your own measurements
+turn_duration_for_90_degrees = duration  # Replace with actual calibration value
+
+print(f"Estimated duration for 90-degree turn: {turn_duration_for_90_degrees:.2f} seconds")
