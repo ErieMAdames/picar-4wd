@@ -161,7 +161,7 @@ PIP_INSTALL_LIST = [
 ]
 
 def install():
-    user_name = getlogin()
+    user_name = 'raspberry'#getlogin()
 
     if "--no-dep" not in options:
         # =============================
