@@ -253,6 +253,7 @@ async def receive_data():
                 # Receive data from the server
                 data = await websocket.recv()
 
+                print(data)
                 print(data['values'])
                 time.sleep(1)
 
