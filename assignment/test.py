@@ -142,7 +142,8 @@ while True:
 
     # for (x, y, w, h) in faces:
     #     cv2.rectangle(im, (x, y), (x + w, y + h), (0, 255, 0))
-
+    print('show')
     cv2.imshow("Camera", im)
+    print('shown')
     cv2.waitKey(1)
 cv2.destroyAllWindows()
