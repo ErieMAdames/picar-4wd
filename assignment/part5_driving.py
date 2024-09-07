@@ -156,8 +156,8 @@ import RPi.GPIO as GPIO
 import time
 
 # Define GPIO pins for photointerruptors
-LEFT_ENCODER_PIN = 7  # Replace with your GPIO pin number
-RIGHT_ENCODER_PIN = 22  # Replace with your GPIO pin number
+LEFT_ENCODER_PIN = 4  # Replace with your GPIO pin number
+RIGHT_ENCODER_PIN = 25  # Replace with your GPIO pin number
 
 # Setup GPIO
 GPIO.setmode(GPIO.BCM)
