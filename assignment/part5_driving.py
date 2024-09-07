@@ -165,10 +165,10 @@ motor_rr = 20  # Replace with your GPIO pin number
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(RIGHT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-# GPIO.setup(motor_lf, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-# GPIO.setup(motor_rf, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-# GPIO.setup(motor_lr, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-# GPIO.setup(motor_rr, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(motor_lf, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(motor_rf, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(motor_lr, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(motor_rr, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # Variables to store encoder counts
