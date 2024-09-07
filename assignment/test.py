@@ -10,7 +10,7 @@ import matplotlib as mpl
 
 img = cv2.imread("yts.jpg")
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-mpl.use('QtAgg')
+# mpl.use('QtAgg')
 plt.imshow(img)
 plt.show()
 exit()
