@@ -5,6 +5,15 @@ import numpy as np
 from tflite_support.task import core
 from tflite_support.task import processor
 from tflite_support.task import vision
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+img = cv2.imread("yts.jpg")
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+mpl.use('QtAgg')
+plt.imshow(img)
+plt.show()
+exit()
 _MARGIN = 10  # pixels
 _ROW_SIZE = 10  # pixels
 _FONT_SIZE = 1
