@@ -178,7 +178,7 @@ def right_encoder_callback(channel):
 # Add event detection for rising edges
 GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.RISING, callback=left_encoder_callback)
 GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback)
-# pc4.forward(20)
+pc4.forward(20)
 try:
     while True:
         # Print encoder counts every second
@@ -186,7 +186,7 @@ try:
         time.sleep(1)  # Adjust the sleep time as needed
 
 except KeyboardInterrupt:
-    # pc4.stop()
+    pc4.stop()
     print("Program stopped by user")
 
 finally:
