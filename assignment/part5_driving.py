@@ -122,75 +122,30 @@ speed = 60
 #             pc4.backward(speed)
 #             time.sleep(turning_time)
 
-def main(right=True):
-    global distances, current_angle, us_step
-    speed = 50
-    try:
-        while True:
-            if right:
-                pc4.turn_right(speed)  # Start turning right
-            else:
-                pc4.turn_left(speed)  # Start turning right
-            time.sleep(0.1)  # Adjust the sleep time to prevent excessive CPU usage
-    except KeyboardInterrupt:
-        pc4.stop()
-        end_time = time.time()
-
-        # Calculate and display the time taken
-        duration = end_time - start_time
-        print(f"Time taken for turn: {duration:.2f} seconds")
-
-        # Calculate the time required for a 90-degree turn
-        # Adjust this based on your own measurements
-        turn_duration_for_90_degrees = duration  # Replace with actual calibration value
-        if right:
-            print(f"Estimated duration for 90-degree right turn: {turn_duration_for_90_degrees:.2f} seconds")
-        else:
-            print(f"Estimated duration for 90-degree right turn: {turn_duration_for_90_degrees:.2f} seconds")
-
-if __name__ == "__main__":
-    start_time = time.time()
-    try:
-        print('Starting Part 5: Move around object')
-        main(True)
-        main(False)
-    except KeyboardInterrupt:
-        print('\nStopping')
-    finally:
-        pc4.stop()
 # Define GPIO pins for photointerruptors
-# LEFT_ENCODER_PIN = 25  # Replace with your GPIO pin number
-# RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
-# motor_lf = 23  # Replace with your GPIO pin number
-# motor_rf = 24  # Replace with your GPIO pin number
-# motor_lr = 13  # Replace with your GPIO pin number
-# motor_rr = 20  # Replace with your GPIO pin number
+LEFT_ENCODER_PIN = 25  # Replace with your GPIO pin number
+RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
 
-# # Setup GPIO
-# GPIO.setmode(GPIO.BCM)
-# GPIO.setup(RIGHT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-# GPIO.setup(LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-# # GPIO.setup(motor_lf, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-# # GPIO.setup(motor_rf, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-# # GPIO.setup(motor_lr, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-# # GPIO.setup(motor_rr, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-# # GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+# Setup GPIO
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(RIGHT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-# # Variables to store encoder counts
-# left_encoder_count = 0
-# right_encoder_count = 0
-# # Callback functions to increment counts
-# def left_encoder_callback(channel):
-#     global left_encoder_count
-#     left_encoder_count += 1
+# Variables to store encoder counts
+left_encoder_count = 0
+right_encoder_count = 0
+# Callback functions to increment counts
+def left_encoder_callback(channel):
+    global left_encoder_count
+    left_encoder_count += 1
 
-# def right_encoder_callback(channel): 
-#     global right_encoder_count
-#     right_encoder_count += 1
+def right_encoder_callback(channel): 
+    global right_encoder_count
+    right_encoder_count += 1
 
 # # Add event detection for rising edges
-# GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.RISING, callback=left_encoder_callback)
-# GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback)
+GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.RISING, callback=left_encoder_callback)
+GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback)
 # def go_distance(dist, forward=True):
 #     global left_encoder_count, right_encoder_count
 #     left_encoder_count = 0
@@ -225,3 +180,51 @@ if __name__ == "__main__":
 #     print("Program stopped by user")
 # finally:
 #     GPIO.cleanup()  # Clean up GPIO on exit
+def calculate_distance(counts):
+        WHEEL_DIAMETER = 0.0662  # Example wheel diameter in meters
+        PPR = 20  # Example pulses per revolution
+        wheel_circumference = WHEEL_DIAMETER * 3.14159
+        distance = (counts / PPR) * wheel_circumference
+        return distance
+
+def main(right=True):
+    global distances, current_angle, us_step
+    speed = 50
+    try:
+        while True:
+            if right:
+                pc4.turn_right(speed)  # Start turning right
+            else:
+                pc4.turn_left(speed)  # Start turning right
+            time.sleep(0.1)  # Adjust the sleep time to prevent excessive CPU usage
+    except KeyboardInterrupt:
+        pc4.stop()
+        end_time = time.time()
+
+        # Calculate and display the time taken
+        duration = end_time - start_time
+        print(f"Time taken for turn: {duration:.2f} seconds")
+
+        # Calculate the time required for a 90-degree turn
+        # Adjust this based on your own measurements
+        turn_duration_for_90_degrees = duration  # Replace with actual calibration value
+        if right:
+            print(f"Estimated duration for 90-degree right turn: {turn_duration_for_90_degrees:.2f} seconds")
+        else:
+            print(f"Estimated duration for 90-degree left turn: {turn_duration_for_90_degrees:.2f} seconds")
+        left_distance = calculate_distance(left_encoder_count)
+        right_distance = calculate_distance(right_encoder_count)
+        
+        print(f"Left Encoder Count: {left_encoder_count}, Right Encoder Count: {right_encoder_count}")
+        print(f"Left Distance: {left_distance}, Right Distance: {right_distance}")
+
+if __name__ == "__main__":
+    start_time = time.time()
+    try:
+        print('Starting Part 5: Move around object')
+        main(True)
+        main(False)
+    except KeyboardInterrupt:
+        print('\nStopping')
+    finally:
+        pc4.stop()
