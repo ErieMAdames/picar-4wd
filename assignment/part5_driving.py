@@ -190,22 +190,18 @@ def right_encoder_callback(channel):
     right_encoder_count += 1
 
 def motor_lf_callback(channel):
-    print('motor_lf_callback')
     global motor_lf_count
     motor_lf_count += 1
 
 def motor_rf_callback(channel):
-    print('motor_rf_callback')
     global motor_rf_count
     motor_rf_count += 1
 
 def motor_lr_callback(channel):
-    print('motor_lr_callback')
     global motor_lr_count
     motor_lr_count += 1
 
 def motor_rr_callback(channel):
-    print('motor_rr_callback')
     global motor_rr_count
     motor_rr_count += 1
 
