@@ -122,20 +122,24 @@ speed = 30
 #             pc4.backward(speed)
 #             time.sleep(turning_time)
 
-def main():
+def main(right=True):
     global distances, current_angle, us_step
     speed = 50
     while True:
         print("Turning continuously. Press Ctrl+C to stop and measure time.")
-        pc4.turn_right(speed)  # Start turning right
+        if right:
+            pc4.turn_right(speed)  # Start turning right
+        else:
+            pc4.turn_left(speed)  # Start turning right
         time.sleep(0.1)  # Adjust the sleep time to prevent excessive CPU usage
 
 
 if __name__ == "__main__":
     start_time = time.time()
+    right = True
     try:
         print('Starting Part 5: Move around object')
-        main()
+        main(right)
     except KeyboardInterrupt:
         print('\nStopping')
         pc4.stop()
@@ -148,9 +152,11 @@ if __name__ == "__main__":
         # Calculate the time required for a 90-degree turn
         # Adjust this based on your own measurements
         turn_duration_for_90_degrees = duration  # Replace with actual calibration value
-
-        print(f"Estimated duration for 90-degree turn: {turn_duration_for_90_degrees:.2f} seconds")
-
+        if right:
+            print(f"Estimated duration for 90-degree right turn: {turn_duration_for_90_degrees:.2f} seconds")
+            main(False)
+        else:
+            print(f"Estimated duration for 90-degree right turn: {turn_duration_for_90_degrees:.2f} seconds")
     finally:
         pc4.stop()
 # Define GPIO pins for photointerruptors
