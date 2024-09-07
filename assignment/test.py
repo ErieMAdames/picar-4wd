@@ -129,29 +129,9 @@ while True:
     print(image)
 
     # mpl.use('QtAgg')
-    plt.imshow(image)
-    plt.show()
+    # plt.imshow(image)
+    # plt.show()
     # exit()
-    # cv2.imshow('object_detector', image)
+    cv2.imshow('object_detector', image)
 
     print('imshow 2')
-face_detector = cv2.CascadeClassifier("/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml")
-cv2.startWindowThread()
-
-picam2 = Picamera2()
-picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
-picam2.start()
-
-while True:
-    im = picam2.capture_array()
-
-    # grey = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-    # faces = face_detector.detectMultiScale(grey, 1.1, 5)
-
-    # for (x, y, w, h) in faces:
-    #     cv2.rectangle(im, (x, y), (x + w, y + h), (0, 255, 0))
-    print('show')
-    cv2.imshow("Camera", im)
-    print('shown')
-    cv2.waitKey(1)
-cv2.destroyAllWindows()
