@@ -210,12 +210,14 @@ def calculate_distance(counts):
 def turn_continuous(speed=50):
     print("Turning continuously. Press Ctrl+C to stop and measure time.")
     # pc4.turn_right(speed)  # Start turning right
-    pc4.left_front.set_power(speed)
-    pc4.left_rear.set_power(speed)
-    # pc4.right_front.set_power(power)
-    # pc4.right_rear.set_power(power)
     try:
         while True:
+            pc4.left_front.set_power(speed)
+            pc4.left_rear.set_power(speed)
+            pc4.stop()
+            pc4.right_front.set_power(-speed)
+            pc4.right_rear.set_power(-speed)
+            pc4.stop()
             time.sleep(0.1)  # Adjust the sleep time to prevent excessive CPU usage
     except KeyboardInterrupt:
         # Stop the car when interrupted (Ctrl+C)
