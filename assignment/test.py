@@ -77,8 +77,8 @@ text_color = (0, 0, 255)  # red
 font_size = 1
 font_thickness = 1
 fps_avg_frame_count = 10
-pygame.init()
-screen = pygame.display.set_mode((width, height))
+# pygame.init()
+# screen = pygame.display.set_mode((width, height))
 
 # Continuously capture images from the camera and run inference
 while True:
