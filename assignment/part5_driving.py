@@ -123,6 +123,7 @@ def retrace(retrace_steps):
 
 def main():
     global distances, current_angle, us_step
+    speed = 50
     while True:
         print("Turning continuously. Press Ctrl+C to stop and measure time.")
         pc4.turn_right(speed)  # Start turning right
