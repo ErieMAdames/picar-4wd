@@ -98,7 +98,7 @@ while True:
 
 
     # Draw keypoints and edges on input image
-    image = visualize(image, detection_result)
+    # image = visualize(image, detection_result)
 
     # Calculate the FPS
     if counter % fps_avg_frame_count == 0:
@@ -108,26 +108,26 @@ while True:
 
     # Show the FPS
     fps_text = 'FPS = {:.1f}'.format(fps)
-    text_location = (left_margin, row_size)
+    print(fps)
+    # text_location = (left_margin, row_size)
 
-    cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
-                font_size, text_color, font_thickness)
+    # cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
+    #             font_size, text_color, font_thickness)
 
-    # Stop the program if the ESC key is pressed.
-    if cv2.waitKey(1) == 27:
-      break
+    # # Stop the program if the ESC key is pressed.
+    # if cv2.waitKey(1) == 27:
+    #   break
 
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    frame_surface = pygame.surfarray.make_surface(image)
-    frame_surface = pygame.transform.rotate(frame_surface, -90)
-    frame_surface = pygame.transform.flip(frame_surface, True, False)
+    # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    # frame_surface = pygame.surfarray.make_surface(image)
+    # frame_surface = pygame.transform.rotate(frame_surface, -90)
+    # frame_surface = pygame.transform.flip(frame_surface, True, False)
 
-    # Display the frame on the pygame window
-    screen.blit(frame_surface, (0, 0))
-    pygame.display.update()
+    # # Display the frame on the pygame window
+    # screen.blit(frame_surface, (0, 0))
+    # pygame.display.update()
 
-    # Check for events (like the window close button)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-cv2.destroyAllWindows()
+    # # Check for events (like the window close button)
+    # for event in pygame.event.get():
+    #     if event.type == pygame.QUIT:
+    #         running = False
