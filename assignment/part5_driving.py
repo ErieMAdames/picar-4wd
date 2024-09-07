@@ -163,21 +163,32 @@ GPIO.setup(RIGHT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # Variables to store encoder counts
-left_encoder_count = 0
-right_encoder_count = 0
+left_encoder_count_rising = 0
+right_encoder_count_rising = 0
+left_encoder_count_falling = 0
+right_encoder_count_falling = 0
 
 # Callback functions to increment counts
-def left_encoder_callback(channel):
+def left_encoder_callback_rising(channel):
     global left_encoder_count
     left_encoder_count += 1
 
-def right_encoder_callback(channel):
+def right_encoder_callback_rising(channel):
     global right_encoder_count
     right_encoder_count += 1
+def left_encoder_callback_falling(channel):
+    global left_encoder_count_falling
+    left_encoder_count_falling += 1
+
+def right_encoder_callback_falling(channel):
+    global right_encoder_count_falling
+    right_encoder_count_falling += 1
 
 # Add event detection for rising edges
-GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.FALLING, callback=left_encoder_callback)
-GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback)
+GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.RISING, callback=left_encoder_callback_rising)
+GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback_rising)
+GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.FALLING, callback=left_encoder_callback_falling)
+GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.FALLING, callback=right_encoder_callback_falling)
 # pc4.forward(20)
 
 pc4.left_front.set_power(20)
@@ -185,7 +196,8 @@ pc4.right_front.set_power(20)
 try:
     while True:
         # Print encoder counts every second
-        print(f"Left Encoder Count: {left_encoder_count}, Right Encoder Count: {right_encoder_count}")
+        print(f"Rising | Left Encoder Count: {left_encoder_count_rising}, Right Encoder Count: {right_encoder_count_rising}")
+        print(f"Left Encoder Count: {left_encoder_count_falling}, Right Encoder Count: {right_encoder_count_falling}")
         time.sleep(1)  # Adjust the sleep time as needed
 
 except KeyboardInterrupt:
