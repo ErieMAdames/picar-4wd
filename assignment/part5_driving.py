@@ -179,11 +179,11 @@ motor_rf_count = 0
 motor_lr_count = 0
 motor_rr_count = 0
 # Callback functions to increment counts
-def left_encoder_callback_rising(channel):
+def left_encoder_callback(channel):
     global left_encoder_count
     left_encoder_count += 1
 
-def right_encoder_callback_rising(channel):
+def right_encoder_callback(channel):
     global right_encoder_count
     right_encoder_count += 1
 
@@ -204,8 +204,8 @@ def motor_rr_callback(channel):
     motor_rr_count += 1
 
 # Add event detection for rising edges
-GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.RISING, callback=left_encoder_callback_rising)
-GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback_rising)
+GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.RISING, callback=left_encoder_callback)
+GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback)
 GPIO.add_event_detect(motor_lf, GPIO.RISING, callback=motor_lf_callback)
 GPIO.add_event_detect(motor_rf, GPIO.RISING, callback=motor_rf_callback)
 GPIO.add_event_detect(motor_lr, GPIO.RISING, callback=motor_lr_callback)
