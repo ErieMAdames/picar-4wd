@@ -16,7 +16,7 @@ _TEXT_COLOR = (0, 0, 255)  # red
 width = 640 * 2
 height = 480 * 2
  # Visualization parameters
-row_size = 20  # pixels
+row_size = 20  # pixelssud
 left_margin = 24  # pixels
 text_color = (0, 0, 255)  # red
 font_size = 1

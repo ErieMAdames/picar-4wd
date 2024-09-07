@@ -2,13 +2,13 @@ import picar_4wd as pc4
 import time
 from functools import reduce
 
-speed = 25
+speed = 30
+turning_time = .9
 current_angle = 0
 us_step = pc4.STEP
 min_angle = -36
 max_angle = 36
 distances = []
-turning_time = 1
 
 def scan():
     global distances, current_angle, us_step
@@ -123,25 +123,33 @@ def retrace(retrace_steps):
 
 def main():
     global distances, current_angle, us_step
-    angles = []
     while True:
-        stop = scan()
-        if stop:
+        x = input()
+        if x == 'l':
+            pc4.turn_left(speed)
+            time.sleep(turning_time)
             pc4.stop()
-            retrace_steps = avoid_left()
-            retrace(retrace_steps)
-            if len(retrace_steps) > 0:
-                stop = avoid_right()
-                if stop:
-                    print('no path')
-                    break
+        if x == 'r':
+            pc4.turn_right(speed)
+            time.sleep(turning_time)
+            pc4.stop()
+        # stop = scan()
+        # if stop:
+        #     pc4.stop()
+        #     retrace_steps = avoid_left()
+        #     retrace(retrace_steps)
+        #     if len(retrace_steps) > 0:
+        #         stop = avoid_right()
+        #         if stop:
+        #             print('no path')
+        #             break
 
-        else:
-            pc4.forward(speed)
+        # else:
+        #     pc4.forward(speed)
 
 if __name__ == "__main__":
     try:
-        print('Starting Part 3: Move around object')
+        print('Starting Part 5: Move around object')
         main()
     except KeyboardInterrupt:
         print('\nStopping')
