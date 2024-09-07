@@ -13,6 +13,8 @@ _FONT_SIZE = 1
 _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 0, 255)  # red
 
+width = 640 * 2
+height = 480 * 2
  # Visualization parameters
 row_size = 20  # pixels
 left_margin = 24  # pixels
@@ -60,7 +62,7 @@ options = vision.ObjectDetectorOptions(
     base_options=base_options, detection_options=detection_options)
 detector = vision.ObjectDetector.create_from_options(options)
 picam2 = Picamera2()
-picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
+picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (width, height)}))
 picam2.start()
 
 time.sleep(2)
@@ -68,8 +70,6 @@ time.sleep(2)
 counter, fps = 0, 0
 start_time = time.time()
 
-width = 640
-height = 480
 # Visualization parameters
 row_size = 20  # pixels
 left_margin = 24  # pixels
