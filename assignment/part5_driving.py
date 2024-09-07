@@ -1,6 +1,7 @@
 import picar_4wd as pc4
 import RPi.GPIO as GPIO
 import time
+import json
 from functools import reduce
 
 import asyncio
@@ -252,8 +253,7 @@ async def receive_data():
             while True:
                 # Receive data from the server
                 data = await websocket.recv()
-
-                print(data)
+                data = json.loads(data)
                 print(data['values'])
                 time.sleep(1)
 
