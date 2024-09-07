@@ -1,6 +1,6 @@
 import cv2
+import pygame
 import time
-import pyautogui
 from picamera2 import Picamera2
 import numpy as np
 from tflite_support.task import core
@@ -77,7 +77,9 @@ text_color = (0, 0, 255)  # red
 font_size = 1
 font_thickness = 1
 fps_avg_frame_count = 10
-cv2.startWindowThread()
+pygame.init()
+screen = pygame.display.set_mode((width, height))
+
 # Continuously capture images from the camera and run inference
 while True:
     print('running')
@@ -130,7 +132,16 @@ while True:
     # plt.imshow(image)
     # plt.show()
     # exit()
-    cv2.imshow('object_detector', image)
+    # cv2.imshow('object_detector', image)
+    frame_surface = pygame.surfarray.make_surface(image)
 
+    # Display the frame on the pygame window
+    screen.blit(frame_surface, (0, 0))
+    pygame.display.update()
+
+    # Check for events (like the window close button)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
     print('imshow 2')
 cv2.destroyAllWindows()
