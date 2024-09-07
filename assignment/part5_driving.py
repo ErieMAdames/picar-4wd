@@ -161,8 +161,8 @@ RIGHT_ENCODER_PIN = 25  # Replace with your GPIO pin number
 
 # Setup GPIO
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(RIGHT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # Variables to store encoder counts
 left_encoder_count = 0
