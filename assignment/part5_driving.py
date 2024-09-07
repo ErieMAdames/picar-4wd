@@ -161,7 +161,7 @@ RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(RIGHT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+# GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # Variables to store encoder counts
 left_encoder_count_rising = 0
@@ -188,7 +188,7 @@ def right_encoder_callback_falling(channel):
 # Add event detection for rising edges
 GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.RISING, callback=left_encoder_callback_rising)
 GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback_rising)
-GPIO.add_event_detect(23, GPIO.RISING, callback=left_encoder_callback_falling)
+# GPIO.add_event_detect(23, GPIO.RISING, callback=left_encoder_callback_falling)
 # GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.FALLING, callback=left_encoder_callback_falling)
 # GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.FALLING, callback=right_encoder_callback_falling)
 # pc4.forward(20)
