@@ -179,12 +179,15 @@ def right_encoder_callback(channel):
 GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.RISING, callback=left_encoder_callback)
 GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback)
 pc4.forward(20)
+count = 0
 try:
     while True:
         # Print encoder counts every second
         print(f"Left Encoder Count: {left_encoder_count}, Right Encoder Count: {right_encoder_count}")
         time.sleep(1)  # Adjust the sleep time as needed
-
+        count+=1
+        if count == 10:
+            pc4.stop()
 except KeyboardInterrupt:
     pc4.stop()
     print("Program stopped by user")
