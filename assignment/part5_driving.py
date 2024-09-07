@@ -1,6 +1,7 @@
-# import picar_4wd as pc4
-# import time
-# from functools import reduce
+import picar_4wd as pc4
+import RPi.GPIO as GPIO
+import time
+from functools import reduce
 
 # speed = 30
 # turning_time = .9
@@ -152,9 +153,6 @@
 
 #     finally:
 #         pc4.stop()
-import RPi.GPIO as GPIO
-import time
-
 # Define GPIO pins for photointerruptors
 LEFT_ENCODER_PIN = 4  # Replace with your GPIO pin number
 RIGHT_ENCODER_PIN = 25  # Replace with your GPIO pin number
@@ -180,7 +178,7 @@ def right_encoder_callback(channel):
 # Add event detection for rising edges
 GPIO.add_event_detect(LEFT_ENCODER_PIN, GPIO.RISING, callback=left_encoder_callback)
 GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_callback)
-
+pc4.forward(20)
 try:
     while True:
         # Print encoder counts every second
