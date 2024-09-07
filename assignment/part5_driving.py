@@ -193,14 +193,18 @@ GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.RISING, callback=right_encoder_cal
 # GPIO.add_event_detect(RIGHT_ENCODER_PIN, GPIO.FALLING, callback=right_encoder_callback_falling)
 # pc4.forward(20)
 
-pc4.left_front.set_power(20)
-pc4.right_front.set_power(20)
+pc4.left_rear.set_power(20)
+pc4.right_rear.set_power(20)
+count = 0
 try:
     while True:
         # Print encoder counts every second
         print(f"Rising | Left Encoder Count: {left_encoder_count_rising}, Right Encoder Count: {right_encoder_count_rising}")
-        print(f"Left Encoder Count: {left_encoder_count_falling}, Right Encoder Count: {right_encoder_count_falling}")
+        # print(f"Left Encoder Count: {left_encoder_count_falling}, Right Encoder Count: {right_encoder_count_falling}")
         time.sleep(1)  # Adjust the sleep time as needed
+        count += 1
+        if count == 10:
+            pc4.stop()
 
 except KeyboardInterrupt:
     pc4.stop()
