@@ -75,16 +75,19 @@ class AvoidObjects():
         self.imu_offsets['z'] = z / counter
     def calculate_turning_angle(self):
         """Calculates the turning angle from gyroscope data."""
-        while True:
-            with self.data_lock:
-                current_time = time.time()
-                dt = current_time - self.prev_time  # Time difference
-                self.prev_time = current_time
-                gyro_data = self.imu.get_gyro_data()
-                gyro_z = gyro_data['z'] - self.imu_offsets['z']
-                # Integrate angular velocity (in degrees per second) over time (in seconds)
-                self.turning_angle += gyro_z * dt
-                print(self.turning_angle)
+        try:
+            while True:
+                with self.data_lock:
+                    current_time = time.time()
+                    dt = current_time - self.prev_time  # Time difference
+                    self.prev_time = current_time
+                    gyro_data = self.imu.get_gyro_data()
+                    gyro_z = gyro_data['z'] - self.imu_offsets['z']
+                    # Integrate angular velocity (in degrees per second) over time (in seconds)
+                    self.turning_angle += gyro_z * dt
+                    print(self.turning_angle)
+        except:
+            self.calculate_turning_angle()
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
