@@ -44,7 +44,7 @@ class AvoidObjects():
             dt = current_time - self.prev_time  # Time difference
             self.prev_time = current_time
             self.calculate_turning_angle(dt)
-            print(f"Current Turning Angle: {self.turning_angle:.2f} degrees")
+            # print(f"Current Turning Angle: {self.turning_angle:.2f} degrees")
 
             time.sleep(0.1)  # Delay to reduce noise and limit data rate
 
