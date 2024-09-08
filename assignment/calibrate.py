@@ -4,7 +4,7 @@ import time
 from time import sleep
 
 i2c = I2C(0, sda=Pin(0), scl=Pin(1), freq=400000)
-mpu6050 = MPU6050(i2c)
+mpu6050 = mpu6050(i2c)
 t0 = time.time()
 # Wait for MPU to Settle
 settling_time = 4
