@@ -230,6 +230,8 @@ class AvoidObjects():
             print(error)
             print('-----')
         pc4.stop()
+        print('stopped')
+        exit()
         # print('----')
         # print(start_angle)
         # print(self.current_car_angle)
