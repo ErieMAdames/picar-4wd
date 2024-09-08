@@ -63,7 +63,7 @@ class AvoidObjects():
     def calibrate(self, duration):
         now = time.time()
         future = now + duration
-        counter = 0
+        counter = 1
         x = 0
         z = 0
         y = 0
