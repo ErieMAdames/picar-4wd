@@ -274,7 +274,7 @@ def start_websocket_client():
 
 client_thread = threading.Thread(target=start_websocket_client)
 client_thread.start()
-time.sleep(5)
+time.sleep(2)
 # Start the calibration process
 start_time = time.time()
 turn_continuous(10)
