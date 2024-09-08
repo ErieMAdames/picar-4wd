@@ -39,6 +39,7 @@ class AvoidObjects():
         # sys.exit(0)
         while True:
             self.read_imu_data()
+            time.sleep(.5)
             continue
             traveled = self.go_distance(10, True)
             if traveled < 10:
