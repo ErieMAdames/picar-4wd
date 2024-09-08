@@ -298,7 +298,10 @@ client_thread.start()
 time.sleep(2)
 # Start the calibration process
 start_time = time.time()
-turn(True, 90, 600)
+try:
+    turn(True, 90, 30)
+except KeyboardInterrupt:
+    pc4.stop()
 end_time = time.time()
 
 # Calculate and display the time taken
