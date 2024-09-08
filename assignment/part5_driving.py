@@ -221,7 +221,6 @@ def turn_continuous(speed=50):
         while True:
             a = current_car_angle - start_angle
             a = abs((a + 180) % 360 - 180)
-            print(a)
             if a >= 90:
                 pc4.stop()
                 break
