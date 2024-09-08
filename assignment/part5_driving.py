@@ -254,7 +254,10 @@ async def receive_data():
                 # Receive data from the server
                 data = await websocket.recv()
                 data = json.loads(data)
-                print(get_orientation_from_rotation_vector(data['values'])[0])
+                angle = get_orientation_from_rotation_vector(data['values'])[0]
+                if angle < 0:
+                    angle = angle + 360
+                print(angle)
 
         except websockets.ConnectionClosed as e:
             print(f"Connection closed: {e}")
