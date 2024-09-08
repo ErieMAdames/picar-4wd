@@ -4,9 +4,10 @@ import time
 import json
 import math
 from functools import reduce
-
+import threading
 import asyncio
 import websockets
+current_car_angle = 0
 speed = 30
 # turning_time = .9
 # current_angle = 0
@@ -261,9 +262,13 @@ async def receive_data():
             print(f"Connection closed: {e}")
             await receive_data()
 
-# Run the async function
-asyncio.run(receive_data())
+def start_websocket_client():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(receive_data())
 
+client_thread = threading.Thread(target=start_websocket_client)
+client_thread.start()
 
 # Start the calibration process
 start_time = time.time()
