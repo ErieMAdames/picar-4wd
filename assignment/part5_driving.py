@@ -41,6 +41,7 @@ class AvoidObjects():
         imu_thread = threading.Thread(target=self.calculate_turning_angle)
         imu_thread.daemon = True  # Daemon thread will exit when the main thread does
         imu_thread.start()
+        self.turn()
         while True:
             # print(self.turning_angle)
             continue
@@ -207,8 +208,8 @@ class AvoidObjects():
         return (left_distance + right_distance) / 2
 
     def turn(self, right=True, angle=90, speed=30):
-        start_angle = self.current_car_angle
-        a = self.current_car_angle - start_angle
+        start_angle = self.turning_angle
+        a = self.turning_angle - start_angle
         a = abs((a + 180) % 360 - 180)
         if right:
             pc4.turn_right(speed)
@@ -216,7 +217,7 @@ class AvoidObjects():
             pc4.turn_left(speed)
         speed_lowered = False
         while a < angle:
-            a = self.current_car_angle - start_angle
+            a = self.turning_angle - start_angle
             a = abs((a + 180) % 360 - 180)
             error = abs((a - angle)/angle)
             if error < .25 and not speed_lowered:
