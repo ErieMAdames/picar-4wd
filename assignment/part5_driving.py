@@ -35,7 +35,15 @@ class AvoidObjects():
         client_thread.start()
         time.sleep(2)
         print('starting')
-        self.go_distance(10, True)
+        while True:
+            traveled = self.go_distance(10, True)
+            if traveled < 10:
+                retrace_steps = self.avoid()
+                if len(retrace_steps):
+                    self.retrace(retrace_steps)
+                    retrace_steps = self.avoid(False)
+                    if len(retrace_steps):
+                        print('No path')
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
@@ -117,23 +125,18 @@ class AvoidObjects():
                 self.turn(step[0], 90, self.speed)
 
     def go_distance(self, dist, forward=True):
-        print("going " + str(dist))
         self.left_encoder_count = 0
         self.right_encoder_count = 0
-        print("going 1")
         def calculate_distance(counts):
             wheel_circumference = self.WHEEL_DIAMETER * 3.14159
             distance = (counts / self.PPR) * wheel_circumference
             return distance
 
-        print("going 2")
         left_distance = calculate_distance(self.left_encoder_count)
         right_distance = calculate_distance(self.right_encoder_count)
         
-        print("going 3")
         while left_distance < dist or right_distance < dist:
             stop = self.scan()
-            print("going 4 scan")
             if stop:
                 break
             if forward:
