@@ -166,6 +166,7 @@ class AvoidObjects():
         print(start_angle)
         print(self.current_car_angle)
         print(a)
+        print(a/angle)
         print('----')
         if a/angle > 5:
             self.turn(not right, a - angle, speed/2)
