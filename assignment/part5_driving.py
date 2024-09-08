@@ -218,13 +218,13 @@ def turn_continuous(speed):
     global current_car_angle
     start_angle = current_car_angle
     try:
-        while True:
+        a = current_car_angle - start_angle
+        a = abs((a + 180) % 360 - 180)
+        while a < 90:
             a = current_car_angle - start_angle
             a = abs((a + 180) % 360 - 180)
-            if a >= 90:
-                print(a)
-                pc4.stop()
-                break
+        print(a)
+        pc4.stop()
     except KeyboardInterrupt:
         # Stop the car when interrupted (Ctrl+C)
         pc4.stop()
