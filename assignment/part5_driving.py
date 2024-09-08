@@ -163,7 +163,7 @@ class AvoidObjects():
             a = self.current_car_angle - start_angle
             a = abs((a + 180) % 360 - 180)
             time.sleep(.1)
-            print(f"start : {start_angle} | current : {self.current_car_angle} | a : {a} | error : {(a - angle)/angle} | left : {a - angle}")
+            print(f"start : {start_angle} | current : {self.current_car_angle} | a : {a} | error : {abs((a - angle)/angle)} | left : {a - angle}")
         print('----')
         print(start_angle)
         print(self.current_car_angle)
@@ -171,7 +171,7 @@ class AvoidObjects():
         print(a/angle)
         print(a - angle)
         print('----')
-        if (a - angle)/angle > .1:
+        if abs((a - angle)/angle) > .1:
             self.turn(not right, a - angle, speed/2)
 
 
