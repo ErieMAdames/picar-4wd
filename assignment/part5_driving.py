@@ -74,6 +74,8 @@ class AvoidObjects():
             self.distances.reverse()
         distances_map = map(lambda x: x < 20 and x != -2, self.distances)
         stop = reduce(lambda x, y: x or y, distances_map)
+        if stop:
+            print(self.distances)
         self.distances = []
         return stop
 
