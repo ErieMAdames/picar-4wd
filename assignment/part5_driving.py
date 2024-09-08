@@ -121,6 +121,7 @@ class AvoidObjects():
             return retrace_steps
         return retrace_steps
     def retrace(self, retrace_steps):
+        print('retracing')
         for step in reversed(retrace_steps):
             if step[0] == 'b':
                 self.go_distance(step[1], False)
