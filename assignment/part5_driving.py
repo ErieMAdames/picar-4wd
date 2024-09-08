@@ -2,6 +2,7 @@ import picar_4wd as pc4
 import RPi.GPIO as GPIO
 import time
 import json
+import math
 from functools import reduce
 
 import asyncio
@@ -243,7 +244,23 @@ print(f"Estimated duration for 90-degree turn: {turn_duration_for_90_degrees:.2f
 
 # Define the WebSocket server URL
 WEBSOCKET_URL = "ws://192.168.86.246:8080/sensor/connect?type=android.sensor.rotation_vector"
+def get_orientation_from_rotation_vector(rotation_vector):
+    x = rotation_vector[0]
+    y = rotation_vector[1]
+    z = rotation_vector[2]
+    w = rotation_vector[3] if len(rotation_vector) > 3 else 1.0
 
+    # Convert quaternion to Euler angles
+    yaw = math.atan2(2.0 * (x * y + z * w), 1.0 - 2.0 * (y * y + z * z))
+    pitch = math.asin(2.0 * (x * z - w * y))
+    roll = math.atan2(2.0 * (x * w + y * z), 1.0 - 2.0 * (z * z + w * w))
+
+    # Convert radians to degrees
+    yaw = math.degrees(yaw)
+    pitch = math.degrees(pitch)
+    roll = math.degrees(roll)
+
+    return yaw, pitch, roll
 async def receive_data():
     # Connect to the WebSocket server
     async with websockets.connect(WEBSOCKET_URL) as websocket:
@@ -254,7 +271,7 @@ async def receive_data():
                 # Receive data from the server
                 data = await websocket.recv()
                 data = json.loads(data)
-                print(data['values'])
+                print(get_orientation_from_rotation_vector(data['values']))
                 time.sleep(1)
 
         except websockets.ConnectionClosed as e:
