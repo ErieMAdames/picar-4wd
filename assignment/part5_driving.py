@@ -120,15 +120,20 @@ class AvoidObjects():
         print("going " + str(dist))
         self.left_encoder_count = 0
         self.right_encoder_count = 0
+        print("going 1")
         def calculate_distance(counts):
             wheel_circumference = self.WHEEL_DIAMETER * 3.14159
             distance = (counts / self.PPR) * wheel_circumference
             return distance
 
+        print("going 2")
         left_distance = calculate_distance(self.left_encoder_count)
         right_distance = calculate_distance(self.right_encoder_count)
+        
+        print("going 3")
         while left_distance < dist or right_distance < dist:
             stop = self.scan()
+            print("going 4 scan")
             if stop:
                 break
             if forward:
