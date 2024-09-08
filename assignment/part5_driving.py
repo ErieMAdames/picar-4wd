@@ -259,7 +259,7 @@ async def receive_data():
 
         except websockets.ConnectionClosed as e:
             print(f"Connection closed: {e}")
-            receive_data()
+            await receive_data()
 
 # Run the async function
 asyncio.run(receive_data())
