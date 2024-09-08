@@ -34,6 +34,7 @@ class AvoidObjects():
         client_thread = threading.Thread(target=self.start_websocket_client)
         client_thread.start()
         time.sleep(2)
+        print('starting')
         self.go_distance(10, True)
     # Variables to store encoder counts
     # Callback functions to increment counts
@@ -116,6 +117,7 @@ class AvoidObjects():
                 self.turn(step[0], 90, self.speed)
 
     def go_distance(self, dist, forward=True):
+        print("going " + str(dist))
         self.left_encoder_count = 0
         self.right_encoder_count = 0
         def calculate_distance(counts):
