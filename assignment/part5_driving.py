@@ -256,7 +256,7 @@ async def receive_data():
                 # Receive data from the server
                 data = await websocket.recv()
                 data = json.loads(data)
-                angle = get_orientation_from_rotation_vector(data['values'])[0]
+                angle = get_orientation_from_rotation_vector(data['values'])
                 if angle < 0:
                     angle = angle + 360
                 current_car_angle = angle
