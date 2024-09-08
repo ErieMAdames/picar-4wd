@@ -71,6 +71,7 @@ class AvoidObjects():
         self.imu_offsets['y'] = y / counter
         self.imu_offsets['z'] = z / counter
     def get_gyro_data(self):
+        print(pc4.left_front.STEP)
         with pc4.left_front.lock:
             with pc4.left_rear.lock:
                 with pc4.right_front.lock:
