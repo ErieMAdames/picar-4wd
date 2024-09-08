@@ -80,6 +80,9 @@ class AvoidObjects():
         # if there is something in the way while avoiding, retrace stepts
         retrace_steps = []
         self.turn(right, 90, self.speed)
+        turning_right = 'turning right' if right else 'turning left'
+        turning_left = 'turining left' if right else 'turningright'
+        print(turning_right)
         stop = self.scan()
         if stop:
             # turn right to retrace
@@ -90,6 +93,7 @@ class AvoidObjects():
             retrace_steps.append(('b', dist))
             return retrace_steps
         self.turn(not right, 90, self.speed)
+        print(turning_left)
         stop = self.scan()
         if stop:
             retrace_steps.append(('b', dist))
@@ -100,6 +104,7 @@ class AvoidObjects():
             retrace_steps.append(('b', dist))
             return retrace_steps
         self.turn(not right, 90, self.speed)
+        print(turning_left)
         stop = self.scan()
         if stop:
             retrace_steps.append(('b', dist))
@@ -110,6 +115,7 @@ class AvoidObjects():
             retrace_steps.append(('b', dist))
             return retrace_steps
         self.turn(right, 90, self.speed)
+        print(turning_right)
         stop = self.scan()
         if stop:
             retrace_steps.append(('b', dist))
