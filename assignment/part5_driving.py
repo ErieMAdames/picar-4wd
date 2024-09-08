@@ -72,10 +72,10 @@ class AvoidObjects():
         self.imu_offsets['z'] = z / counter
     def get_gyro_data(self):
         print(pc4.left_front.STEP)
-        with pc4.left_front.lock:
-            with pc4.left_rear.lock:
-                with pc4.right_front.lock:
-                    with pc4.right_rear.lock:
+        with pc4.left_front.LOCK:
+            with pc4.left_rear.LOCK:
+                with pc4.right_front.LOCK:
+                    with pc4.right_rear.LOCK:
                         return self.imu.get_gyro_data()
     # Variables to store encoder counts
     # Callback functions to increment counts
