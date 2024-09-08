@@ -221,11 +221,11 @@ def turn_continuous(speed):
         while True:
             a = current_car_angle - start_angle
             a = abs((a + 180) % 360 - 180)
-            pc4.turn_right(speed * ((90 - a) / 90) )  # Start turning right
+            # pc4.turn_right(speed * ((90 - a) / 90) )  # Start turning right
             if a >= 90:
-                print(start_angle)
-                print(current_car_angle)
-                print(a)
+                # print(start_angle)
+                # print(current_car_angle)
+                # print(a)
                 pc4.stop()
                 break
     except KeyboardInterrupt:
@@ -282,7 +282,7 @@ client_thread.start()
 time.sleep(5)
 # Start the calibration process
 start_time = time.time()
-turn_continuous(20)
+turn_continuous(10)
 end_time = time.time()
 
 # Calculate and display the time taken
