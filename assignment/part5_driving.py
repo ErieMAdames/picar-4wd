@@ -44,6 +44,7 @@ class AvoidObjects():
                     retrace_steps = self.avoid(False)
                     if len(retrace_steps):
                         print('No path')
+                        exit()
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
