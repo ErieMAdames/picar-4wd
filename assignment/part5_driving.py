@@ -215,11 +215,12 @@ def calculate_distance(counts):
 def turn_continuous(speed=50):
     print("Turning continuously. Press Ctrl+C to stop and measure time.")
     pc4.turn_right(speed)  # Start turning right
-    # global current_car_angle
+    global current_car_angle
     # start_angle = current_car_angle
     try:
         while True:
             time.sleep(0.1)  # Adjust the sleep time to prevent excessive CPU usage
+            print(current_car_angle)
     except KeyboardInterrupt:
         # Stop the car when interrupted (Ctrl+C)
         pc4.stop()
@@ -235,16 +236,17 @@ def get_orientation_from_rotation_vector(rotation_vector):
 
     # Convert quaternion to Euler angles
     yaw = math.atan2(2.0 * (x * y + z * w), 1.0 - 2.0 * (y * y + z * z))
-    pitch = math.asin(2.0 * (x * z - w * y))
-    roll = math.atan2(2.0 * (x * w + y * z), 1.0 - 2.0 * (z * z + w * w))
+    # pitch = math.asin(2.0 * (x * z - w * y))
+    # roll = math.atan2(2.0 * (x * w + y * z), 1.0 - 2.0 * (z * z + w * w))
 
     # Convert radians to degrees
     yaw = math.degrees(yaw)
-    pitch = math.degrees(pitch)
-    roll = math.degrees(roll)
+    # pitch = math.degrees(pitch)
+    # roll = math.degrees(roll)
 
-    return yaw, pitch, roll
+    return yaw #, pitch, roll
 async def receive_data():
+    global current_car_angle
     # Connect to the WebSocket server
     async with websockets.connect(WEBSOCKET_URL) as websocket:
         print(f"Connected to {WEBSOCKET_URL}")
@@ -257,7 +259,7 @@ async def receive_data():
                 angle = get_orientation_from_rotation_vector(data['values'])[0]
                 if angle < 0:
                     angle = angle + 360
-                print(angle)
+                current_car_angle = angle
 
         except websockets.ConnectionClosed as e:
             print(f"Connection closed: {e}")
