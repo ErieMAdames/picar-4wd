@@ -84,7 +84,6 @@ class AvoidObjects():
                     gyro_z = gyro_data['z'] - self.imu_offsets['z']
                     # Integrate angular velocity (in degrees per second) over time (in seconds)
                     self.turning_angle += gyro_z * dt
-                    print(self.turning_angle)
         except:
             self.calculate_turning_angle()
     # Variables to store encoder counts
@@ -223,11 +222,12 @@ class AvoidObjects():
             pc4.turn_left(speed)
         speed_lowered = False
         while a < angle:
+            print(a, angle)
             with self.data_lock:
                 a = self.turning_angle - start_angle
                 a = abs((a + 180) % 360 - 180)
                 error = abs((a - angle)/angle)
-                if error < .25 and not speed_lowered:
+                if error <.25 and not speed_lowered:
                     speed_lowered = True
                     if right:
                         pc4.turn_right(speed/2)
