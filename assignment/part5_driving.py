@@ -198,6 +198,7 @@ def turn(right=True, angle=90, speed=speed):
     print(prev)
     print('a')
     print(a)
+    print(a/angle)
     print('====')
     if a/angle > 1:
         turn(not right, a - angle, speed/2)
