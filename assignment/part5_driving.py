@@ -201,8 +201,8 @@ def turn(right=True, angle=90, speed=speed):
     print(a)
     print(a/angle)
     print('====')
-    # if a/angle > 1:
-    #     turn(not right, a - angle, speed/2)
+    if a/angle > 5:
+        turn(not right, a - angle, speed/2)
 def calculate_distance(counts):
         WHEEL_DIAMETER = 0.0662  # Example wheel diameter in meters
         PPR = 20  # Example pulses per revolution
