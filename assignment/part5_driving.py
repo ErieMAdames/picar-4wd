@@ -10,7 +10,7 @@ import websockets
 import sys
 class AvoidObjects():
     current_car_angle = 0
-    speed = 30
+    speed = 50
     turning_time = .9
     current_angle = 0
     us_step = pc4.STEP
