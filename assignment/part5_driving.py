@@ -78,11 +78,8 @@ class AvoidObjects():
         self.imu_offsets['z'] = z / counter
     def calculate_turning_angle(self, dt):
         """Calculates the turning angle from gyroscope data."""
-        x_offset = -1.144460281965872
-        y_offset = -1.4893897537175251
-        z_offset = 2.8258756363525697
         gyro_data = self.imu.get_gyro_data()
-        gyro_z = gyro_data['z'] - z_offset
+        gyro_z = gyro_data['z'] - self.imu_offsets['z']
         # Integrate angular velocity (in degrees per second) over time (in seconds)
         self.turning_angle += gyro_z * dt
     # Variables to store encoder counts
