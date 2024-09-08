@@ -222,7 +222,6 @@ def turn_continuous(speed):
             a = current_car_angle - start_angle
             a = abs((a + 180) % 360 - 180)
             pc4.turn_right(speed * ((90 - a) / 90) )  # Start turning right
-            print(speed * ((90 - a) / 90))
             if a >= 90:
                 print(start_angle)
                 print(current_car_angle)
@@ -267,6 +266,7 @@ async def receive_data():
                 if angle < 0:
                     angle = angle + 360
                 current_car_angle = angle
+                print(current_car_angle)
 
         except websockets.ConnectionClosed as e:
             print(f"Connection closed: {e}")
