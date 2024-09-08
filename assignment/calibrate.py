@@ -1,4 +1,4 @@
-from imu import MPU6050
+from imu import mpu6050
 from machine import Pin, I2C
 import time
 from time import sleep
