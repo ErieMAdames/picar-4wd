@@ -212,7 +212,7 @@ def calculate_distance(counts):
 #         pc4.stop()
 #         GPIO.cleanup()  # Clean up GPIO on exit
 
-def turn_continuous(speed=50):
+def turn_continuous(speed):
     print("Turning continuously. Press Ctrl+C to stop and measure time.")
     pc4.turn_right(speed)  # Start turning right
     global current_car_angle
@@ -277,7 +277,7 @@ client_thread.start()
 time.sleep(5)
 # Start the calibration process
 start_time = time.time()
-turn_continuous(speed=50)
+turn_continuous(20)
 end_time = time.time()
 
 # Calculate and display the time taken
