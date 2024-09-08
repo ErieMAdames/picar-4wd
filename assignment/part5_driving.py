@@ -232,7 +232,7 @@ class AvoidObjects():
                     pc4.turn_right(speed/2)
                 else:
                     pc4.turn_left(speed/2)
-                self.imu = mpu6050(0x68
+                self.imu = mpu6050(0x68)
         # print('----')
         # print(start_angle)
         # print(self.current_car_angle)
