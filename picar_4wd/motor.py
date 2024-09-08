@@ -3,20 +3,20 @@ import threading
 class Motor():
     STEP = 10
     DELAY = 0.1
+    lock = threading.Lock()
     def __init__(self, pwm_pin, dir_pin, is_reversed=False):
         self.pwm_pin = pwm_pin
         self.dir_pin = dir_pin
         self._is_reversed = is_reversed
         self._power = 0
         self._except_power = 0
-        self.lock = threading.Lock()
     
     # def start_timer(self):
     #     self.t = threading.Timer(self.DELAY, self.adder_thread)
     #     self.t.start()
 
     def set_power(self, power):
-        with self.lock():
+        with self.lock:
             if power >= 0:
                 direction = 0
             elif power < 0:
