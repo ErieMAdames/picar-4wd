@@ -7,7 +7,7 @@ from functools import reduce
 import threading
 import asyncio
 import websockets
-
+import sys
 class AvoidObjects():
     current_car_angle = 0
     speed = 30
@@ -44,7 +44,7 @@ class AvoidObjects():
                     retrace_steps = self.avoid(False)
                     if len(retrace_steps):
                         print('No path')
-                        exit()
+                        sys.exit(0)
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
@@ -150,16 +150,20 @@ class AvoidObjects():
         return (left_distance + right_distance) / 2
 
     def turn(self, right=True, angle=90, speed=30):
+        start_angle = self.current_car_angle
+        a = self.current_car_angle - start_angle
+        a = abs((a + 180) % 360 - 180)
         if right:
             pc4.turn_right(speed)
         else:
             pc4.turn_left(speed)
-        start_angle = self.current_car_angle
-        a = self.current_car_angle - start_angle
-        a = abs((a + 180) % 360 - 180)
         while a < 90:
             a = self.current_car_angle - start_angle
             a = abs((a + 180) % 360 - 180)
+        print('----')
+        print(start_angle)
+        print(a)
+        print('----')
         if a/angle > 5:
             self.turn(not right, a - angle, speed/2)
 
