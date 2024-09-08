@@ -177,14 +177,25 @@ def go_distance(dist, forward=True):
     print(f"Left Distance: {left_distance}, Right Distance: {right_distance}")
 
 
-def turn(right=True):
+def turn(right=True, angle=90, speed=speed):
     if right:
         pc4.turn_right(speed)
-        time.sleep(1.5)
     else:
         pc4.turn_left(speed)
-        time.sleep(1.5)
+    global current_car_angle
+    start_angle = current_car_angle
+    a = current_car_angle - start_angle
+    a = abs((a + 180) % 360 - 180)
+    prev = a
+    while a < 90:
+        prev = a
+        a = current_car_angle - start_angle
+        a = abs((a + 180) % 360 - 180)
     pc4.stop()
+    if a/angle > 1:
+        turn(not right, a - angle, speed/2)
+    print(prev)
+    print(a)
 def calculate_distance(counts):
         WHEEL_DIAMETER = 0.0662  # Example wheel diameter in meters
         PPR = 20  # Example pulses per revolution
