@@ -168,7 +168,7 @@ class AvoidObjects():
         print(a)
         print(a/angle)
         print('----')
-        if a/angle > 5:
+        if a/angle > .1:
             self.turn(not right, a - angle, speed/2)
 
 
