@@ -25,8 +25,10 @@ class AvoidObjects():
     RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
     left_encoder_count = 0
     right_encoder_count = 0
-    WEBSOCKET_URL = "ws://192.168.86.246:8080/sensor/connect?type=android.sensor.rotation_vector"
     imu = mpu6050(0x68)
+    turning_angle = 0.0  # Initial angle in degrees
+    prev_time = time.time()
+
     # Setup GPIO
     def __init__(self) -> None:
         GPIO.setmode(GPIO.BCM)
@@ -38,8 +40,14 @@ class AvoidObjects():
         # self.turn()
         # sys.exit(0)
         while True:
-            self.read_imu_data()
-            time.sleep(.5)
+            current_time = time.time()
+            dt = current_time - self.prev_time  # Time difference
+            self.prev_time = current_time
+            angle = self.calculate_turning_angle(dt)
+            print(f"Current Turning Angle: {angle:.2f} degrees")
+
+            time.sleep(0.1)  # Delay to reduce noise and limit data rate
+
             continue
             traveled = self.go_distance(10, True)
             if traveled < 10:
@@ -51,15 +59,15 @@ class AvoidObjects():
                     if len(retrace_steps):
                         print('No path')
                         sys.exit(0)
-    def read_imu_data(self):
-        """Reads and prints IMU data."""
-        accel_data = self.imu.get_accel_data()
-        gyro_data = self.imu.get_gyro_data()
 
-        print("Accelerometer Data: X: {:.2f}, Y: {:.2f}, Z: {:.2f}".format(
-            accel_data['x'], accel_data['y'], accel_data['z']))
-        print("Gyroscope Data: X: {:.2f}, Y: {:.2f}, Z: {:.2f}".format(
-            gyro_data['x'], gyro_data['y'], gyro_data['z']))
+    def calculate_turning_angle(self, dt):
+        """Calculates the turning angle from gyroscope data."""
+        global turning_angle
+        gyro_data = self.imu.get_gyro_data()
+        gyro_z = gyro_data['z']
+        # Integrate angular velocity (in degrees per second) over time (in seconds)
+        turning_angle += gyro_z * dt
+        return turning_angle
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
