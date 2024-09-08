@@ -26,6 +26,7 @@ class AvoidObjects():
     turning_angle = 0.0  # Initial angle in degrees
     prev_time = time.time()
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
+    data_lock = threading.Lock()
     # Setup GPIO
     def __init__(self) -> None:
         GPIO.setmode(GPIO.BCM)
@@ -74,14 +75,15 @@ class AvoidObjects():
     def calculate_turning_angle(self):
         """Calculates the turning angle from gyroscope data."""
         while True:
-            current_time = time.time()
-            dt = current_time - self.prev_time  # Time difference
-            self.prev_time = current_time
-            gyro_data = self.imu.get_gyro_data()
-            gyro_z = gyro_data['z'] - self.imu_offsets['z']
-            # Integrate angular velocity (in degrees per second) over time (in seconds)
-            self.turning_angle += gyro_z * dt
-            print(self.turning_angle)
+            with self.data_lock:
+                current_time = time.time()
+                dt = current_time - self.prev_time  # Time difference
+                self.prev_time = current_time
+                gyro_data = self.imu.get_gyro_data()
+                gyro_z = gyro_data['z'] - self.imu_offsets['z']
+                # Integrate angular velocity (in degrees per second) over time (in seconds)
+                self.turning_angle += gyro_z * dt
+                print(self.turning_angle)
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
@@ -209,23 +211,25 @@ class AvoidObjects():
 
     def turn(self, right=True, angle=90, speed=30):
         start_angle = self.turning_angle
-        a = self.turning_angle - start_angle
-        a = abs((a + 180) % 360 - 180)
+        with self.data_lock:
+            a = self.turning_angle - start_angle
+            a = abs((a + 180) % 360 - 180)
         if right:
             pc4.turn_right(speed)
         else:
             pc4.turn_left(speed)
         speed_lowered = False
         while a < angle:
-            a = self.turning_angle - start_angle
-            a = abs((a + 180) % 360 - 180)
-            error = abs((a - angle)/angle)
-            if error < .25 and not speed_lowered:
-                speed_lowered = True
-                if right:
-                    pc4.turn_right(speed/2)
-                else:
-                    pc4.turn_left(speed/2)
+            with self.data_lock:
+                a = self.turning_angle - start_angle
+                a = abs((a + 180) % 360 - 180)
+                error = abs((a - angle)/angle)
+                if error < .25 and not speed_lowered:
+                    speed_lowered = True
+                    if right:
+                        pc4.turn_right(speed/2)
+                    else:
+                        pc4.turn_left(speed/2)
         # print('----')
         # print(start_angle)
         # print(self.current_car_angle)
