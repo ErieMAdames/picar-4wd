@@ -1,4 +1,4 @@
-import picar_4wd as pc4
+from ..picar_4wd import picar_4wd as pc4
 import RPi.GPIO as GPIO
 import time
 import math
