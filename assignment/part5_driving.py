@@ -214,7 +214,7 @@ class AvoidObjects():
         else:
             pc4.turn_left(speed)
         speed_lowered = False
-        prev_time = current_time
+        prev_time = time.time()
         while a < angle:
             current_time = time.time()
             dt = current_time - prev_time  # Time difference
