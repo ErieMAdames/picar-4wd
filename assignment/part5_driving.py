@@ -37,17 +37,13 @@ class AvoidObjects():
         self.calibrate(10)
         print('Done calibrating. Offsets:')
         print(self.imu_offsets)
-        # self.turn()
-        # sys.exit(0)
         while True:
             current_time = time.time()
             dt = current_time - self.prev_time  # Time difference
             self.prev_time = current_time
             self.calculate_turning_angle(dt)
-            # print(f"Current Turning Angle: {self.turning_angle:.2f} degrees")
-
             print(self.turning_angle)
-            time.sleep(0.1)  # Delay to reduce noise and limit data rate
+            time.sleep(10)  # Delay to reduce noise and limit data rate
 
             continue
             traveled = self.go_distance(10, True)
