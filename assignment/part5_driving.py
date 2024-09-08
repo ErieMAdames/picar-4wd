@@ -35,12 +35,12 @@ class AvoidObjects():
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
         print('calibrating')
-        self.calibrate(10)
+        self.calibrate(1)
         print('Done calibrating. Offsets:')
         print(self.imu_offsets)
-        imu_thread = threading.Thread(target=self.calculate_turning_angle)
-        imu_thread.daemon = True  # Daemon thread will exit when the main thread does
-        imu_thread.start()
+        # imu_thread = threading.Thread(target=self.calculate_turning_angle)
+        # imu_thread.daemon = True  # Daemon thread will exit when the main thread does
+        # imu_thread.start()
         self.turn()
         while True:
             # print(self.turning_angle)
