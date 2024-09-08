@@ -26,7 +26,7 @@ class AvoidObjects():
     left_encoder_count = 0
     right_encoder_count = 0
     WEBSOCKET_URL = "ws://192.168.86.246:8080/sensor/connect?type=android.sensor.rotation_vector"
-    mpu = mpu6050(0x68)
+    imu = mpu6050(0x68)
     # Setup GPIO
     def __init__(self) -> None:
         GPIO.setmode(GPIO.BCM)
