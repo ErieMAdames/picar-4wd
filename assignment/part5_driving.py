@@ -85,44 +85,56 @@ class AvoidObjects():
         print(turning_right)
         stop = self.scan()
         if stop:
+            print('obstacle')
             # turn right to retrace
             retrace_steps.append((not right,0))
             return retrace_steps
+        print('going')
         dist = self.go_distance(.4, True)
         if dist is not None:
+            print('obstacle')
             retrace_steps.append(('b', dist))
             return retrace_steps
         self.turn(not right, 90, self.speed)
         print(turning_left)
         stop = self.scan()
         if stop:
+            print('obstacle')
             retrace_steps.append(('b', dist))
             retrace_steps.append((right, 0))
             return retrace_steps
+        print('going')
         dist = self.go_distance(.4, True)
         if dist is not None:
+            print('obstacle')
             retrace_steps.append(('b', dist))
             return retrace_steps
         self.turn(not right, 90, self.speed)
         print(turning_left)
         stop = self.scan()
         if stop:
+            print('obstacle')
             retrace_steps.append(('b', dist))
             retrace_steps.append((right, 0))
             return retrace_steps
+        print('going')
         dist = self.go_distance(.4, True)
         if dist is not None:
+            print('obstacle')
             retrace_steps.append(('b', dist))
             return retrace_steps
         self.turn(right, 90, self.speed)
         print(turning_right)
         stop = self.scan()
         if stop:
+            print('obstacle')
             retrace_steps.append(('b', dist))
             retrace_steps.append((not right, 0))
             return retrace_steps
+        print('going')
         dist = self.go_distance(.4, True)
         if dist is not None:
+            print('obstacle')
             retrace_steps.append(('b', dist))
             return retrace_steps
         return retrace_steps
