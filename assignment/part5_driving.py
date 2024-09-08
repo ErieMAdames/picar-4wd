@@ -64,7 +64,7 @@ class AvoidObjects():
         """Calculates the turning angle from gyroscope data."""
         gyro_data = self.imu.get_gyro_data()
         gyro_z = gyro_data['z']
-        print(gyro_z, dt)
+        print(gyro_data)
         # Integrate angular velocity (in degrees per second) over time (in seconds)
         self.turning_angle += gyro_z * dt
     # Variables to store encoder counts
