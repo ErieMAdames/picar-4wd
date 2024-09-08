@@ -226,22 +226,6 @@ def turn_continuous(speed=50):
         pc4.stop()
         print("Turn stopped.")
 
-# Start the calibration process
-start_time = time.time()
-turn_continuous(speed=50)
-end_time = time.time()
-
-# Calculate and display the time taken
-duration = end_time - start_time
-print(f"Time taken for turn: {duration:.2f} seconds")
-
-# Calculate the time required for a 90-degree turn
-# Adjust this based on your own measurements
-turn_duration_for_90_degrees = duration  # Replace with actual calibration value
-
-print(f"Estimated duration for 90-degree turn: {turn_duration_for_90_degrees:.2f} seconds")
-
-
 # Define the WebSocket server URL
 WEBSOCKET_URL = "ws://192.168.86.246:8080/sensor/connect?type=android.sensor.rotation_vector"
 def get_orientation_from_rotation_vector(rotation_vector):
@@ -279,3 +263,19 @@ async def receive_data():
 
 # Run the async function
 asyncio.run(receive_data())
+
+
+# Start the calibration process
+start_time = time.time()
+turn_continuous(speed=50)
+end_time = time.time()
+
+# Calculate and display the time taken
+duration = end_time - start_time
+print(f"Time taken for turn: {duration:.2f} seconds")
+
+# Calculate the time required for a 90-degree turn
+# Adjust this based on your own measurements
+turn_duration_for_90_degrees = duration  # Replace with actual calibration value
+
+print(f"Estimated duration for 90-degree turn: {turn_duration_for_90_degrees:.2f} seconds")
