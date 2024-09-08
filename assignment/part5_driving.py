@@ -278,7 +278,7 @@ client_thread.start()
 time.sleep(2)
 # Start the calibration process
 start_time = time.time()
-turn_continuous(10)
+turn_continuous(30)
 end_time = time.time()
 
 # Calculate and display the time taken
