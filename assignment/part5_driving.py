@@ -159,23 +159,25 @@ class AvoidObjects():
             pc4.turn_right(speed)
         else:
             pc4.turn_left(speed)
+        speed_lowered = False
         while a < angle:
             a = self.current_car_angle - start_angle
             a = abs((a + 180) % 360 - 180)
             error = abs((a - angle)/angle)
-            if error < .25:
+            if error < .25 and not speed_lowered:
                 print('lowering speed')
+                speed_lowered = True
                 if right:
                     pc4.turn_right(speed/2)
                 else:
                     pc4.turn_left(speed/2)
-        print('----')
-        print(start_angle)
-        print(self.current_car_angle)
-        print(a)
-        print(a/angle)
-        print(a - angle)
-        print('----')
+        # print('----')
+        # print(start_angle)
+        # print(self.current_car_angle)
+        # print(a)
+        # print(a/angle)
+        # print(a - angle)
+        # print('----')
         if abs((a - angle)/angle) > .1:
             self.turn(not right, a - angle, speed/2)
 
