@@ -42,7 +42,7 @@ class AvoidObjects():
         imu_thread = threading.Thread(target=self.calculate_turning_angle)
         imu_thread.daemon = True  # Daemon thread will exit when the main thread does
         imu_thread.start()
-        self.turn()
+        self.go_distance(10)
         while True:
             # print(self.turning_angle)
             continue
