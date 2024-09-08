@@ -91,7 +91,7 @@ class AvoidObjects():
             retrace_steps.append((not right,0))
             return retrace_steps
         print('going')
-        dist = self.go_distance(.4, True)
+        dist = self.go_distance(.2, True)
         if dist is not None:
             print('obstacle')
             retrace_steps.append(('b', dist))
@@ -105,7 +105,7 @@ class AvoidObjects():
             retrace_steps.append((right, 0))
             return retrace_steps
         print('going')
-        dist = self.go_distance(.4, True)
+        dist = self.go_distance(.2, True)
         if dist is not None:
             print('obstacle')
             retrace_steps.append(('b', dist))
@@ -119,7 +119,7 @@ class AvoidObjects():
             retrace_steps.append((right, 0))
             return retrace_steps
         print('going')
-        dist = self.go_distance(.4, True)
+        dist = self.go_distance(.2, True)
         if dist is not None:
             print('obstacle')
             retrace_steps.append(('b', dist))
@@ -133,7 +133,7 @@ class AvoidObjects():
             retrace_steps.append((not right, 0))
             return retrace_steps
         print('going')
-        dist = self.go_distance(.4, True)
+        dist = self.go_distance(.2, True)
         if dist is not None:
             print('obstacle')
             retrace_steps.append(('b', dist))
