@@ -1,12 +1,8 @@
 import picar_4wd as pc4
 import RPi.GPIO as GPIO
 import time
-import json
 import math
 from functools import reduce
-# import threading
-# import asyncio
-# import websockets
 import sys
 from mpu6050 import mpu6050
 
