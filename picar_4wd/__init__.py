@@ -3,7 +3,7 @@
 from .pwm import PWM
 from .adc import ADC
 from .pin import Pin
-from .motor import Motor
+# from .motor import Motor
 from .servo import Servo
 from .ultrasonic import Ultrasonic 
 from .speed import Speed
@@ -11,7 +11,38 @@ from .filedb import FileDB
 from .utils import *
 import time
 from .version import __version__
+import threading
 
+class Motor():
+    STEP = 10
+    DELAY = 0.1
+    LOCK = threading.Lock()
+    def __init__(self, pwm_pin, dir_pin, is_reversed=False):
+        self.pwm_pin = pwm_pin
+        self.dir_pin = dir_pin
+        self._is_reversed = is_reversed
+        self._power = 0
+        self._except_power = 0
+    
+    # def start_timer(self):
+    #     self.t = threading.Timer(self.DELAY, self.adder_thread)
+    #     self.t.start()
+
+    def set_power(self, power):
+        with self.lock:
+            if power >= 0:
+                direction = 0
+            elif power < 0:
+                direction = 1
+            power = abs(power)
+            if power != 0:
+                power = int(power /2 ) + 50
+            power = power
+
+            direction = direction if not self._is_reversed else not direction  
+            self.dir_pin.value(direction)
+                
+            self.pwm_pin.pulse_width_percent(power)
 soft_reset()
 time.sleep(0.2)
 
