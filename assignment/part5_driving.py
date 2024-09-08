@@ -184,7 +184,6 @@ class AvoidObjects():
             a = abs((a + 180) % 360 - 180)
             error = abs((a - angle)/angle)
             if error < .25 and not speed_lowered:
-                print('lowering speed')
                 speed_lowered = True
                 if right:
                     pc4.turn_right(speed/2)
@@ -198,7 +197,7 @@ class AvoidObjects():
         # print(a - angle)
         # print('----')
         if abs((a - angle)/angle) > .1:
-            self.turn(not right, a - angle, speed/2)
+            self.turn(not right, a - angle, speed * .75)
 
 
     def get_orientation_from_rotation_vector(self, rotation_vector):
