@@ -220,9 +220,12 @@ def turn_continuous(speed):
     try:
         a = current_car_angle - start_angle
         a = abs((a + 180) % 360 - 180)
+        prev = a
         while a < 90:
+            prev = a
             a = current_car_angle - start_angle
             a = abs((a + 180) % 360 - 180)
+        print(prev)
         print(a)
         pc4.stop()
     except KeyboardInterrupt:
