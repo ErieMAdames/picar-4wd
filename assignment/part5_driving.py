@@ -85,6 +85,7 @@ class AvoidObjects():
                     # Integrate angular velocity (in degrees per second) over time (in seconds)
                     self.turning_angle += gyro_z * dt
         except:
+            print('restart')
             self.calculate_turning_angle()
     # Variables to store encoder counts
     # Callback functions to increment counts
