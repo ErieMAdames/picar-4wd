@@ -24,7 +24,7 @@ class AvoidObjects():
     imu = mpu6050(0x68)
     turning_angle = 0.0  # Initial angle in degrees
     prev_time = time.time()
-
+    imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
     # Setup GPIO
     def __init__(self) -> None:
         GPIO.setmode(GPIO.BCM)
@@ -33,6 +33,10 @@ class AvoidObjects():
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
+        print('calibrating')
+        self.calibrate(10)
+        print('Done calibrating. Offsets:')
+        print(self.imu_offsets)
         # self.turn()
         # sys.exit(0)
         while True:
@@ -56,7 +60,19 @@ class AvoidObjects():
                     if len(retrace_steps):
                         print('No path')
                         sys.exit(0)
-
+    def calibrate(self, duration):
+        now = time.time()
+        future = now + duration
+        counter = 0
+        while time.time() < future:
+            g = self.imu.get_gyro_data()
+            x += g['x']
+            y += g['y']
+            z += g['z']
+            counter += 1
+        self.imu_offsets['x'] = x / counter
+        self.imu_offsets['y'] = y / counter
+        self.imu_offsets['z'] = z / counter
     def calculate_turning_angle(self, dt):
         """Calculates the turning angle from gyroscope data."""
         x_offset = -1.144460281965872
