@@ -221,11 +221,7 @@ def turn_continuous(speed):
         while True:
             a = current_car_angle - start_angle
             a = abs((a + 180) % 360 - 180)
-            # pc4.turn_right(speed * ((90 - a) / 90) )  # Start turning right
             if a >= 90:
-                # print(start_angle)
-                # print(current_car_angle)
-                # print(a)
                 pc4.stop()
                 break
     except KeyboardInterrupt:
@@ -266,7 +262,6 @@ async def receive_data():
                 if angle < 0:
                     angle = angle + 360
                 current_car_angle = angle
-                print(current_car_angle)
 
         except websockets.ConnectionClosed as e:
             print(f"Connection closed: {e}")
