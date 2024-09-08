@@ -162,6 +162,7 @@ class AvoidObjects():
             a = abs((a + 180) % 360 - 180)
         print('----')
         print(start_angle)
+        print(self.current_car_angle)
         print(a)
         print('----')
         if a/angle > 5:
