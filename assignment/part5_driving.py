@@ -70,15 +70,12 @@ class AvoidObjects():
         self.imu_offsets['x'] = x / counter
         self.imu_offsets['y'] = y / counter
         self.imu_offsets['z'] = z / counter
-    def calculate_turning_angle(self):
-        """Calculates the turning angle from gyroscope data."""
-        current_time = time.time()
-        dt = current_time - self.prev_time  # Time difference
-        self.prev_time = current_time
-        gyro_data = self.imu.get_gyro_data()
-        gyro_z = gyro_data['z'] - self.imu_offsets['z']
-        # Integrate angular velocity (in degrees per second) over time (in seconds)
-        self.turning_angle += gyro_z * dt
+    def get_gyro_data(self):
+        with pc4.left_front.lock():
+            with pc4.left_rear.lock():
+                with pc4.right_front.lock():
+                    with pc4.right_rear.lock():
+                        return self.imu.get_gyro_data()
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
@@ -216,11 +213,11 @@ class AvoidObjects():
                 pc4.turn_right(speed)
             else:
                 pc4.turn_left(speed)
-            # time.sleep(.1)
+            time.sleep(.1)
             current_time = time.time()
             dt = current_time - prev_time  # Time difference
             prev_time = current_time
-            gyro_data = self.imu.get_gyro_data()
+            gyro_data = self.get_gyro_data()
             gyro_z = gyro_data['z'] - self.imu_offsets['z']
             self.turning_angle += gyro_z * dt
             a = self.turning_angle - start_angle
