@@ -25,7 +25,6 @@ class AvoidObjects():
     imu = mpu6050(0x68)
     turning_angle = 0.0  # Initial angle in degrees
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
-    data_lock = threading.Lock()
     # Setup GPIO
     def __init__(self) -> None:
         GPIO.setmode(GPIO.BCM)
@@ -35,7 +34,7 @@ class AvoidObjects():
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
         print('calibrating')
-        self.calibrate(1)
+        self.calibrate(5)
         print('Done calibrating. Offsets:')
         print(self.imu_offsets)
         # imu_thread = threading.Thread(target=self.calculate_turning_angle)
