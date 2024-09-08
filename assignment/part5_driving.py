@@ -71,7 +71,7 @@ class AvoidObjects():
             self.distances.append(distance)
         if self.us_step < 0:
             self.distances.reverse()
-        distances_map = map(lambda x: x < 30 and x != -2, self.distances)
+        distances_map = map(lambda x: x < 20 and x != -2, self.distances)
         stop = reduce(lambda x, y: x or y, distances_map)
         self.distances = []
         return stop
