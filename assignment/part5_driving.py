@@ -35,8 +35,8 @@ class AvoidObjects():
         client_thread.start()
         time.sleep(2)
         print('starting')
-        self.turn()
-        sys.exit(0)
+        # self.turn()
+        # sys.exit(0)
         while True:
             traveled = self.go_distance(10, True)
             if traveled < 10:
