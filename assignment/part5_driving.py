@@ -4,10 +4,12 @@ import time
 import json
 import math
 from functools import reduce
-import threading
-import asyncio
-import websockets
+# import threading
+# import asyncio
+# import websockets
 import sys
+from mpu6050 import mpu6050
+
 class AvoidObjects():
     current_car_angle = 0
     speed = 50
@@ -24,6 +26,7 @@ class AvoidObjects():
     left_encoder_count = 0
     right_encoder_count = 0
     WEBSOCKET_URL = "ws://192.168.86.246:8080/sensor/connect?type=android.sensor.rotation_vector"
+    mpu = mpu6050(0x68)
     # Setup GPIO
     def __init__(self) -> None:
         GPIO.setmode(GPIO.BCM)
@@ -31,13 +34,12 @@ class AvoidObjects():
         GPIO.setup(self.LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
-        client_thread = threading.Thread(target=self.start_websocket_client)
-        client_thread.start()
-        time.sleep(2)
         print('starting')
         # self.turn()
         # sys.exit(0)
         while True:
+            self.read_imu_data()
+            continue
             traveled = self.go_distance(10, True)
             if traveled < 10:
                 retrace_steps = self.avoid()
@@ -48,6 +50,15 @@ class AvoidObjects():
                     if len(retrace_steps):
                         print('No path')
                         sys.exit(0)
+    def read_imu_data(self):
+        """Reads and prints IMU data."""
+        accel_data = self.imu.get_accel_data()
+        gyro_data = self.imu.get_gyro_data()
+
+        print("Accelerometer Data: X: {:.2f}, Y: {:.2f}, Z: {:.2f}".format(
+            accel_data['x'], accel_data['y'], accel_data['z']))
+        print("Gyroscope Data: X: {:.2f}, Y: {:.2f}, Z: {:.2f}".format(
+            gyro_data['x'], gyro_data['y'], gyro_data['z']))
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
@@ -220,29 +231,6 @@ class AvoidObjects():
         # roll = math.degrees(roll)
 
         return yaw #, pitch, roll
-    async def receive_data(self):
-        # Connect to the WebSocket server
-        async with websockets.connect(self.WEBSOCKET_URL) as websocket:
-            print(f"Connected to {self.WEBSOCKET_URL}")
-            try:
-                while True:
-                    # Receive data from the server
-                    data = await websocket.recv()
-                    data = json.loads(data)
-                    angle = self.get_orientation_from_rotation_vector(data['values'])
-                    if angle < 0:
-                        angle = angle + 360
-                    self.current_car_angle = angle
-
-            except websockets.ConnectionClosed as e:
-                print(f"Connection closed: {e}")
-                await self.receive_data()
-
-    def start_websocket_client(self):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(self.receive_data())
-
 if __name__ == "__main__":
     try:
         print('Starting Part 5: Move around object')
