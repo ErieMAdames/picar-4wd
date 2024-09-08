@@ -43,8 +43,8 @@ class AvoidObjects():
             current_time = time.time()
             dt = current_time - self.prev_time  # Time difference
             self.prev_time = current_time
-            angle = self.calculate_turning_angle(dt)
-            print(f"Current Turning Angle: {angle:.2f} degrees")
+            self.calculate_turning_angle(dt)
+            print(f"Current Turning Angle: {self.turning_angle:.2f} degrees")
 
             time.sleep(0.1)  # Delay to reduce noise and limit data rate
 
@@ -62,12 +62,10 @@ class AvoidObjects():
 
     def calculate_turning_angle(self, dt):
         """Calculates the turning angle from gyroscope data."""
-        global turning_angle
         gyro_data = self.imu.get_gyro_data()
         gyro_z = gyro_data['z']
         # Integrate angular velocity (in degrees per second) over time (in seconds)
-        turning_angle += gyro_z * dt
-        return turning_angle
+        self.turning_angle += gyro_z * dt
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
