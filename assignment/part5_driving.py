@@ -193,6 +193,7 @@ def turn(right=True, angle=90, speed=speed):
         prev = a
         a = current_car_angle - start_angle
         a = abs((a + 180) % 360 - 180)
+        print(a)
     pc4.stop()
     print('prev')
     print(prev)
