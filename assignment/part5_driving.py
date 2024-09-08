@@ -215,10 +215,8 @@ def calculate_distance(counts):
 def turn_continuous(speed=50):
     print("Turning continuously. Press Ctrl+C to stop and measure time.")
     pc4.turn_right(speed)  # Start turning right
-    # pc4.left_front.set_power(speed)
-    # pc4.left_rear.set_power(speed)
-    # pc4.right_front.set_power(power)
-    # pc4.right_rear.set_power(power)
+    # global current_car_angle
+    # start_angle = current_car_angle
     try:
         while True:
             time.sleep(0.1)  # Adjust the sleep time to prevent excessive CPU usage
@@ -256,7 +254,7 @@ async def receive_data():
                 # Receive data from the server
                 data = await websocket.recv()
                 data = json.loads(data)
-                print(get_orientation_from_rotation_vector(data['values']))
+                print(get_orientation_from_rotation_vector(data['values'])[0])
 
         except websockets.ConnectionClosed as e:
             print(f"Connection closed: {e}")
@@ -269,7 +267,7 @@ def start_websocket_client():
 
 client_thread = threading.Thread(target=start_websocket_client)
 client_thread.start()
-
+time.sleep(1)
 # Start the calibration process
 start_time = time.time()
 turn_continuous(speed=50)
