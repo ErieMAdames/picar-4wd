@@ -42,7 +42,7 @@ class AvoidObjects():
         imu_thread.daemon = True  # Daemon thread will exit when the main thread does
         imu_thread.start()
         while True:
-            print(self.turning_angle)
+            # print(self.turning_angle)
             continue
             traveled = self.go_distance(10, True)
             if traveled < 10:
@@ -79,6 +79,7 @@ class AvoidObjects():
         gyro_z = gyro_data['z'] - self.imu_offsets['z']
         # Integrate angular velocity (in degrees per second) over time (in seconds)
         self.turning_angle += gyro_z * dt
+        print(self.turning_angle)
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
