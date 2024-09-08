@@ -38,6 +38,7 @@ class AvoidObjects():
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(channel, self):
+        print('here?')
         self.left_encoder_count += 1
 
     def right_encoder_callback(channel, self): 
