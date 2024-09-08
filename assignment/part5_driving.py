@@ -216,11 +216,15 @@ def turn_continuous(speed=50):
     print("Turning continuously. Press Ctrl+C to stop and measure time.")
     pc4.turn_right(speed)  # Start turning right
     global current_car_angle
-    # start_angle = current_car_angle
+    start_angle = current_car_angle
     try:
         while True:
-            time.sleep(0.1)  # Adjust the sleep time to prevent excessive CPU usage
-            print(current_car_angle)
+            a = current_car_angle - start_angle
+            a = abs((a + 180) % 360 - 180)
+            print(a)
+            if a >= 90:
+                pc4.stop()
+                break
     except KeyboardInterrupt:
         # Stop the car when interrupted (Ctrl+C)
         pc4.stop()
@@ -250,7 +254,6 @@ async def receive_data():
     # Connect to the WebSocket server
     async with websockets.connect(WEBSOCKET_URL) as websocket:
         print(f"Connected to {WEBSOCKET_URL}")
-
         try:
             while True:
                 # Receive data from the server
@@ -272,7 +275,7 @@ def start_websocket_client():
 
 client_thread = threading.Thread(target=start_websocket_client)
 client_thread.start()
-time.sleep(1)
+time.sleep(5)
 # Start the calibration process
 start_time = time.time()
 turn_continuous(speed=50)
