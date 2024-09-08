@@ -1,10 +1,10 @@
-from imu import mpu6050
+from mpu6050 import mpu6050
 from machine import Pin, I2C
 import time
 from time import sleep
 
 i2c = I2C(0, sda=Pin(0), scl=Pin(1), freq=400000)
-imu = MPU6050(i2c)
+mpu6050 = MPU6050(i2c)
 t0 = time.time()
 # Wait for MPU to Settle
 settling_time = 4
@@ -14,9 +14,9 @@ print('MPU is Done Settling')
 
 
 def get_gyro():
-    gx=imu.gyro.x
-    gy=imu.gyro.y
-    gz=imu.gyro.z
+    gx=mpu6050.gyro.x
+    gy=mpu6050.gyro.y
+    gz=mpu6050.gyro.z
     return gx, gy, gz
     
 
