@@ -233,11 +233,11 @@ class AvoidObjects():
             print('-----')
             if error < .25 and not speed_lowered:
                 speed_lowered = True
+                print('lowering speed')
                 if right:
                     pc4.turn_right(speed/2)
                 else:
                     pc4.turn_left(speed/2)
-                self.imu = mpu6050(0x68)
         # print('----')
         # print(start_angle)
         # print(self.current_car_angle)
