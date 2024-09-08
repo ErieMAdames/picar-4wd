@@ -221,6 +221,7 @@ def turn_continuous(speed):
         while True:
             a = current_car_angle - start_angle
             a = abs((a + 180) % 360 - 180)
+            pc4.turn_right(speed * ((90 - a) / 90) )  # Start turning right
             if a >= 90:
                 print(start_angle)
                 print(current_car_angle)
