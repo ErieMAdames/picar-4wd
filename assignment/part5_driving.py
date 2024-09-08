@@ -5,6 +5,7 @@ import math
 from functools import reduce
 import sys
 from mpu6050 import mpu6050
+import threading
 
 class AvoidObjects():
     current_car_angle = 0
@@ -37,14 +38,11 @@ class AvoidObjects():
         self.calibrate(10)
         print('Done calibrating. Offsets:')
         print(self.imu_offsets)
+        imu_thread = threading.Thread(target=self.calculate_turning_angle)
+        imu_thread.daemon = True  # Daemon thread will exit when the main thread does
+        imu_thread.start()
         while True:
-            current_time = time.time()
-            dt = current_time - self.prev_time  # Time difference
-            self.prev_time = current_time
-            self.calculate_turning_angle(dt)
             print(self.turning_angle)
-            time.sleep(10)  # Delay to reduce noise and limit data rate
-
             continue
             traveled = self.go_distance(10, True)
             if traveled < 10:
@@ -72,8 +70,11 @@ class AvoidObjects():
         self.imu_offsets['x'] = x / counter
         self.imu_offsets['y'] = y / counter
         self.imu_offsets['z'] = z / counter
-    def calculate_turning_angle(self, dt):
+    def calculate_turning_angle(self):
         """Calculates the turning angle from gyroscope data."""
+        current_time = time.time()
+        dt = current_time - self.prev_time  # Time difference
+        self.prev_time = current_time
         gyro_data = self.imu.get_gyro_data()
         gyro_z = gyro_data['z'] - self.imu_offsets['z']
         # Integrate angular velocity (in degrees per second) over time (in seconds)
