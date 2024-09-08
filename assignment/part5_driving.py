@@ -37,11 +37,10 @@ class AvoidObjects():
         self.go_distance(10, True)
     # Variables to store encoder counts
     # Callback functions to increment counts
-    def left_encoder_callback(channel, self):
-        print('here?')
+    def left_encoder_callback(self, channel):
         self.left_encoder_count += 1
 
-    def right_encoder_callback(channel, self): 
+    def right_encoder_callback(self, channel): 
         self.right_encoder_count += 1
 
     # # Add event detection for rising edges
