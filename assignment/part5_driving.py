@@ -64,6 +64,9 @@ class AvoidObjects():
         now = time.time()
         future = now + duration
         counter = 0
+        x = 0
+        z = 0
+        y = 0
         while time.time() < future:
             g = self.imu.get_gyro_data()
             x += g['x']
