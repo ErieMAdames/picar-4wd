@@ -224,16 +224,6 @@ class AvoidObjects():
             a = abs((a + 180) % 360 - 180)
             error = abs((a - angle)/angle)
         pc4.stop()
-        print('stopped')
-        # print('----')
-        # print(start_angle)
-        # print(self.current_car_angle)
-        # print(a)
-        # print(a/angle)
-        # print(a - angle)
-        # print('----')
-        if abs((a - angle)/angle) > .1:
-            self.turn(not right, a - angle, speed * .75)
 
 
     def get_orientation_from_rotation_vector(self, rotation_vector):
