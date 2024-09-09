@@ -193,9 +193,9 @@ class AvoidObjects():
         return (left_distance + right_distance) / 2
 
     def turn(self, right=True, angle=90, speed=30):
-        print(right)
-        print(angle)
-        print('turning')
+        # print(right)
+        # print(angle)
+        # print('turning')
         start_angle = self.turning_angle
         a = self.turning_angle - start_angle
         a = abs((a + 180) % 360 - 180)
@@ -217,13 +217,13 @@ class AvoidObjects():
                 a = abs((a + 180) % 360 - 180)
                 error = abs((a - angle)/angle)
         except IOError:
-            print('error')
+            # print('error')
             self.turn(right, angle - a, speed)
-        print('------')
-        print(angle)
-        print(start_angle)
-        print(a)
-        print(error)
+        # print('------')
+        # print(angle)
+        # print(start_angle)
+        # print(a)
+        # print(error)
         pc4.stop()
         time.sleep(.05)
 
