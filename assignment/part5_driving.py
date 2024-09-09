@@ -33,6 +33,8 @@ class AvoidObjects():
         GPIO.setup(self.LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
+        while True:
+            self.scan()
         print('starting')
         print('calibrating')
         self.calibrate(5)
@@ -94,6 +96,7 @@ class AvoidObjects():
             self.distances.reverse()
         distances_map = map(lambda x: x < 20 and x != -2, self.distances)
         stop = reduce(lambda x, y: x or y, distances_map)
+        print(self.distances)
         if stop:
             print(self.distances)
         self.distances = []
