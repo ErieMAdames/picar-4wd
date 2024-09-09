@@ -41,6 +41,7 @@ class AvoidObjects():
         while True:
             traveled = self.go_distance(.1, True)
             print(traveled)
+            exit()
             if traveled < 10:
                 retrace_steps = self.avoid()
                 if len(retrace_steps):
