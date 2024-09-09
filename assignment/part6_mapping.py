@@ -61,7 +61,7 @@ class Map():
     # # Add event detection for rising edges
     def scan(self):
         self.current_angle = 90 if self.current_angle > 0 else -90
-        self.us_step = -pc4.STEP if self.current_angle > 0 else pc4.STEP
+        self.us_step = -1 if self.current_angle > 0 else 1
         for _ in range(180):
             self.current_angle += self.us_step
             print(self.current_angle)
