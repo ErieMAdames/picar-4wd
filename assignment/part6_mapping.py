@@ -6,8 +6,8 @@ import math
 from functools import reduce
 import sys
 # from mpu6050 import mpu6050
-
 import traceback
+numpy.set_printoptions(threshold=sys.maxsize)
 
 class Map():
     current_car_angle = 0
