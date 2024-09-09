@@ -465,13 +465,14 @@ class AvoidObjects():
         else:
             pc4.turn_left(speed)
         try:
-            while a < (angle * 10000):
+            while a < angle
                 current_time = time.time()
                 dt = current_time - prev_time  # Time difference
                 prev_time = current_time
                 gyro_data = self.imu.get_gyro_data()
                 gyro_z = gyro_data['z'] - self.imu_offsets['z']
                 self.turning_angle += gyro_z * dt
+                print(self.turning_angle)
                 a = self.turning_angle - start_angle
                 a = abs((a + 180) % 360 - 180)
                 error = abs((a - angle)/angle)
