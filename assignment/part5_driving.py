@@ -201,12 +201,12 @@ class AvoidObjects():
         a = abs((a + 180) % 360 - 180)
         prev_time = time.time()
         error = 0
+        if right:
+            pc4.turn_right(speed)
+        else:
+            pc4.turn_left(speed)
         try:
             while a < angle:
-                if right:
-                    pc4.turn_right(speed)
-                else:
-                    pc4.turn_left(speed)
                 current_time = time.time()
                 dt = current_time - prev_time  # Time difference
                 prev_time = current_time
