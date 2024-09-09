@@ -86,10 +86,16 @@ class mpu6050:
 
             value = (high << 8) + low
         except OSError as e:
+            self.bus.close()
+            self.bus = smbus.SMBus(1)
             print(e)
             print(traceback.format_exc())
-            exit()
+            # exit()
+        
+            high = self.bus.read_byte_data(self.address, register)
+            low = self.bus.read_byte_data(self.address, register + 1)
 
+            value = (high << 8) + low
         if (value >= 0x8000):
             return -((65535 - value) + 1)
         else:
