@@ -225,7 +225,9 @@ class AvoidObjects():
                 a = self.turning_angle - start_angle
                 a = abs((a + 180) % 360 - 180)
                 error = abs((a - angle)/angle)
-        except IOError:       
+        except IOError as e:
+            print(e)
+            exit()
             pc4.soft_reset()
             self.imu = mpu6050(0x68)
             print('error')
