@@ -23,7 +23,7 @@ class AvoidObjects():
     RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
     left_encoder_count = 0
     right_encoder_count = 0
-    # imu = mpu6050(0x68)
+    imu = mpu6050(0x69)
     turning_angle = 0.0  # Initial angle in degrees
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
     forward_dist = .3
@@ -59,9 +59,8 @@ class AvoidObjects():
         x = 0
         z = 0
         y = 0
-        imu = mpu6050(0x68)
         while time.time() < future:
-            g = imu.get_gyro_data()
+            g = self.imu.get_gyro_data()
             x += g['x']
             y += g['y']
             z += g['z']
@@ -215,12 +214,11 @@ class AvoidObjects():
         else:
             pc4.turn_left(speed)
         try:
-            imu = mpu6050(0x68)
             while a < angle:
                 current_time = time.time()
                 dt = current_time - prev_time  # Time difference
                 prev_time = current_time
-                gyro_data = imu.get_gyro_data()
+                gyro_data = self.imu.get_gyro_data()
                 gyro_z = gyro_data['z'] - self.imu_offsets['z']
                 self.turning_angle += gyro_z * dt
                 a = self.turning_angle - start_angle
@@ -231,7 +229,6 @@ class AvoidObjects():
             print(traceback.format_exc())
             exit()
             pc4.soft_reset()
-            self.imu = mpu6050(0x68)
             print('error')
             self.turn(right, angle - a, speed)
         # print('------')
