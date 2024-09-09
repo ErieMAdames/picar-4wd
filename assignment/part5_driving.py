@@ -35,6 +35,9 @@ class AvoidObjects():
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
+        self.calibrate_turn_speed()
+        print(self.turning_time)
+        x = input()
         traveled = self.go_distance(1, True)
         print(traveled)
         if traveled < 1:
@@ -46,9 +49,14 @@ class AvoidObjects():
             #     if len(retrace_steps):
             #         print('No path')
             sys.exit(0)
-    def get_gyro_data(self):
-        with pc4.lock:
-            return self.imu.get_gyro_data()
+    def calibrate_turn_speed(self):
+        start = time.time()
+        try:
+            while True:
+                pc4.turn_left()
+        except KeyboardInterrupt:
+            pc4.stop()
+            self.turning_time = time.time() - start
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
@@ -180,12 +188,12 @@ class AvoidObjects():
 
     def turn_right(self,  angle=90, speed=30):
         pc4.turn_right(speed)
-        time.sleep(1)
+        time.sleep(self.turning_time)
         pc4.stop()
 
     def turn_left(self, angle=90, speed=30):
         pc4.turn_left(speed)
-        time.sleep(1)
+        time.sleep(self.turning_time)
         pc4.stop()
 
 if __name__ == "__main__":
