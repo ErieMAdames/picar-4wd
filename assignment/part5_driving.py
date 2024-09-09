@@ -42,6 +42,7 @@ class AvoidObjects():
         # imu_thread.start()
         self.turn()
         self.turn(False)
+        exit()
         while True:
             # print(self.turning_angle)
             continue
@@ -224,7 +225,6 @@ class AvoidObjects():
             error = abs((a - angle)/angle)
         pc4.stop()
         print('stopped')
-        exit()
         # print('----')
         # print(start_angle)
         # print(self.current_car_angle)
