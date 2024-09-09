@@ -25,7 +25,7 @@ def create_2d_map(grid_size=20, grid_resolution=10, max_distance=200):
 
         # Read the distance from the ultrasonic sensor
         distance = pc4.get_distance_at(angle)
-
+        print(angle, distance)
         # Check if the distance is valid and within the maximum range
         if distance > 0 and distance < max_distance:
             # Convert the distance and angle to grid coordinates
