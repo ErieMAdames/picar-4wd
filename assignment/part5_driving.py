@@ -26,13 +26,19 @@ class AvoidObjects():
     turning_angle = 0.0  # Initial angle in degrees
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
     forward_dist = .3
+    two =  0
+    three =  0
     # Setup GPIO
-    def __init__(self) -> None:
+    def __init__(self):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.RIGHT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(self.LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
+        GPIO.setup(2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.add_event_detect(2, GPIO.RISING, callback=self.left_encoder_callback)
+        GPIO.add_event_detect(3, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
         print('calibrating')
         self.calibrate(5)
@@ -49,6 +55,13 @@ class AvoidObjects():
                 if len(retrace_steps):
                     print('No path')
                     sys.exit(0)
+    def two(self, c):
+        self.two += 1
+        print(self.two)
+    def three(self, c):
+        three += 1
+        print(self.three)
+    
     def calibrate(self, duration):
         now = time.time()
         future = now + duration
@@ -94,7 +107,6 @@ class AvoidObjects():
             self.distances.reverse()
         distances_map = map(lambda x: x < 20 and x != -2, self.distances)
         stop = reduce(lambda x, y: x or y, distances_map)
-        print(stop)
         if stop:
             print(self.distances)
         self.distances = []
