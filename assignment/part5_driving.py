@@ -42,6 +42,8 @@ class AvoidObjects():
         print(self.imu_offsets)
         traveled = self.go_distance(1, True)
         print(traveled)
+        
+        pc4.soft_reset()
         if traveled < 1:
             retrace_steps = self.avoid()
             if len(retrace_steps):
