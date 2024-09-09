@@ -378,7 +378,7 @@ class AvoidObjects():
         # if there is something in the way while avoiding, retrace stepts
         print('avoiding')
         retrace_steps = []
-        self.turn(right, 90, self.speed)
+        self.turn_right(90, self.speed)
         turning_right = 'turning right' if right else 'turning left'
         turning_left = 'turining left' if right else 'turningright'
         print(turning_right)
@@ -395,7 +395,7 @@ class AvoidObjects():
         if dist < self.forward_dist:
             print('obstacle')
             return retrace_steps
-        self.turn(not right, 90, self.speed)
+        self.turn_left()
         print(turning_left)
         stop = self.scan()
         retrace_steps.append((right, 0))
@@ -408,7 +408,7 @@ class AvoidObjects():
         if dist < self.forward_dist:
             print('obstacle')
             return retrace_steps
-        self.turn(not right, 90, self.speed)
+        self.turn_left()
         print(turning_left)
         stop = self.scan()
         retrace_steps.append((right, 0))
@@ -421,7 +421,7 @@ class AvoidObjects():
         if dist < self.forward_dist:
             print('obstacle')
             return retrace_steps
-        self.turn(right, 90, self.speed)
+        self.turn_right()
         print(turning_right)
         stop = self.scan()
         retrace_steps.append((not right, 0))
@@ -472,7 +472,7 @@ class AvoidObjects():
         time.sleep(.5)
         return min(left_distance,right_distance)
 
-    def turn(self, right=True, angle=90, speed=30):
+    def turn_right(self,  angle=90, speed=30):
         # print(right)
         # print(angle)
         # print('turning')
@@ -481,9 +481,43 @@ class AvoidObjects():
         a = abs((a + 180) % 360 - 180)
         prev_time = time.time()
         error = 0
-        # pc4.turn_right(speed)
-        # if right:
-        # else:
+        pc4.turn_right(speed)
+        try:
+            while a < angle:
+                time.sleep(.1)
+                current_time = time.time()
+                dt = current_time - prev_time  # Time difference
+                prev_time = current_time
+                gyro_data = self.imu.get_gyro_data()
+                gyro_z = gyro_data['z'] - self.imu_offsets['z']
+                self.turning_angle += gyro_z * dt
+                # print(self.turning_angle)
+                a = self.turning_angle - start_angle
+                a = abs((a + 180) % 360 - 180)
+                error = abs((a - angle)/angle)
+        except IOError as e:
+            print(e)
+            print(traceback.format_exc())
+            pc4.soft_reset()
+            print('error')
+            self.turn_right(angle - a, speed)
+        # print('------')
+        # print(angle)
+        # print(start_angle)
+        # print(a)
+        # print(error)
+        pc4.stop()
+        time.sleep(.5)
+
+    def turn_left(self, angle=90, speed=30):
+        # print(right)
+        # print(angle)
+        # print('turning')
+        start_angle = self.turning_angle
+        a = self.turning_angle - start_angle
+        a = abs((a + 180) % 360 - 180)
+        prev_time = time.time()
+        error = 0
         pc4.turn_left(speed)
         try:
             while a < angle:
@@ -503,7 +537,7 @@ class AvoidObjects():
             print(traceback.format_exc())
             pc4.soft_reset()
             print('error')
-            self.turn(right, angle - a, speed)
+            self.turn_left(angle - a, speed)
         # print('------')
         # print(angle)
         # print(start_angle)
@@ -511,7 +545,6 @@ class AvoidObjects():
         # print(error)
         pc4.stop()
         time.sleep(.5)
-
 
     def get_orientation_from_rotation_vector(self, rotation_vector):
         x = rotation_vector[0]
