@@ -13,7 +13,7 @@ class Map():
     speed = 30
     turning_time = .9
     current_angle = 0
-    us_step = pc4.STEP
+    us_step = 1
     min_angle = -90
     max_angle = 90
     distances = []
