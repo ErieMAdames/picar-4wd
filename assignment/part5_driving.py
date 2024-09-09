@@ -80,10 +80,13 @@ class mpu6050:
         Returns the combined read results.
         """
         # Read the data from the registers
-        high = self.bus.read_byte_data(self.address, register)
-        low = self.bus.read_byte_data(self.address, register + 1)
+        try:
+            high = self.bus.read_byte_data(self.address, register)
+            low = self.bus.read_byte_data(self.address, register + 1)
 
-        value = (high << 8) + low
+            value = (high << 8) + low
+        except OSError:
+            print(traceback.format_exc())
 
         if (value >= 0x8000):
             return -((65535 - value) + 1)
