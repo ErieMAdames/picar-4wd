@@ -6,6 +6,7 @@ from functools import reduce
 import sys
 from mpu6050 import mpu6050
 
+import traceback
 
 class AvoidObjects():
     current_car_angle = 0
@@ -227,6 +228,7 @@ class AvoidObjects():
                 error = abs((a - angle)/angle)
         except IOError as e:
             print(e)
+            print(traceback.format_exc())
             exit()
             pc4.soft_reset()
             self.imu = mpu6050(0x68)
