@@ -194,6 +194,7 @@ class AvoidObjects():
 
     def turn(self, right=True, angle=90, speed=30):
         print(right)
+        print(speed)
         print('turning')
         start_angle = self.turning_angle
         a = self.turning_angle - start_angle
