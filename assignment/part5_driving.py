@@ -215,7 +215,7 @@ class AvoidObjects():
                     pc4.turn_right(speed)
                 else:
                     pc4.turn_left(speed)
-                time.sleep(.05)
+                # time.sleep(.05)
                 current_time = time.time()
                 dt = current_time - prev_time  # Time difference
                 prev_time = current_time
