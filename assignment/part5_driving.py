@@ -85,7 +85,8 @@ class mpu6050:
             low = self.bus.read_byte_data(self.address, register + 1)
 
             value = (high << 8) + low
-        except OSError:
+        except OSError as e:
+            print(e)
             print(traceback.format_exc())
             exit()
 
