@@ -200,6 +200,7 @@ class AvoidObjects():
         return (left_distance + right_distance) / 2
 
     def turn(self, right=True, angle=90, speed=30):
+        print(right)
         print('turning')
         start_angle = self.turning_angle
         a = self.turning_angle - start_angle
@@ -221,9 +222,6 @@ class AvoidObjects():
             a = self.turning_angle - start_angle
             a = abs((a + 180) % 360 - 180)
             error = abs((a - angle)/angle)
-            print(a)
-            print(error)
-            print('-----')
         pc4.stop()
         print('stopped')
         exit()
