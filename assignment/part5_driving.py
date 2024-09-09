@@ -207,6 +207,7 @@ class AvoidObjects():
         a = self.turning_angle - start_angle
         a = abs((a + 180) % 360 - 180)
         prev_time = time.time()
+        error = 0
         while a < angle:
             print(a)
             if right:
@@ -223,6 +224,9 @@ class AvoidObjects():
             a = self.turning_angle - start_angle
             a = abs((a + 180) % 360 - 180)
             error = abs((a - angle)/angle)
+        print('------')
+        print(a)
+        print(error)
         pc4.stop()
 
 
