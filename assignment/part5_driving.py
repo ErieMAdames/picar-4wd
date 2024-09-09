@@ -58,13 +58,13 @@ class AvoidObjects():
         x = 0
         z = 0
         y = 0
-        with mpu6050(0x68) as imu:
-            while time.time() < future:
-                g = imu.get_gyro_data()
-                x += g['x']
-                y += g['y']
-                z += g['z']
-                counter += 1
+        imu = mpu6050(0x68)
+        while time.time() < future:
+            g = imu.get_gyro_data()
+            x += g['x']
+            y += g['y']
+            z += g['z']
+            counter += 1
         self.imu_offsets['x'] = x / counter
         self.imu_offsets['y'] = y / counter
         self.imu_offsets['z'] = z / counter
@@ -214,14 +214,14 @@ class AvoidObjects():
         else:
             pc4.turn_left(speed)
         try:
+            imu = mpu6050(0x68)
             while a < angle:
                 current_time = time.time()
                 dt = current_time - prev_time  # Time difference
                 prev_time = current_time
-                with mpu6050(0x68) as imu:
-                    gyro_data = imu.get_gyro_data()
-                    gyro_z = gyro_data['z'] - self.imu_offsets['z']
-                    self.turning_angle += gyro_z * dt
+                gyro_data = imu.get_gyro_data()
+                gyro_z = gyro_data['z'] - self.imu_offsets['z']
+                self.turning_angle += gyro_z * dt
                 a = self.turning_angle - start_angle
                 a = abs((a + 180) % 360 - 180)
                 error = abs((a - angle)/angle)
