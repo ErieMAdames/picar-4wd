@@ -38,18 +38,17 @@ class AvoidObjects():
         self.calibrate(5)
         print('Done calibrating. Offsets:')
         print(self.imu_offsets)
-        while True:
-            traveled = self.go_distance(1, True)
-            print(traveled)
-            if traveled < 1:
-                retrace_steps = self.avoid()
+        traveled = self.go_distance(1, True)
+        print(traveled)
+        if traveled < 1:
+            retrace_steps = self.avoid()
+            if len(retrace_steps):
+                self.retrace(retrace_steps)
+                self.turn(False, 90, self.speed)
+                retrace_steps = self.avoid(False)
                 if len(retrace_steps):
-                    self.retrace(retrace_steps)
-                    self.turn(False, 90, self.speed)
-                    retrace_steps = self.avoid(False)
-                    if len(retrace_steps):
-                        print('No path')
-                        sys.exit(0)
+                    print('No path')
+                    sys.exit(0)
     def calibrate(self, duration):
         now = time.time()
         future = now + duration
