@@ -42,8 +42,6 @@ class AvoidObjects():
         print(self.imu_offsets)
         traveled = self.go_distance(1, True)
         print(traveled)
-        
-        pc4.soft_reset()
         if traveled < 1:
             retrace_steps = self.avoid()
             if len(retrace_steps):
@@ -225,7 +223,9 @@ class AvoidObjects():
                 a = self.turning_angle - start_angle
                 a = abs((a + 180) % 360 - 180)
                 error = abs((a - angle)/angle)
-        except IOError:
+        except IOError:       
+            pc4.soft_reset()
+            self.imu = mpu6050(0x68)
             print('error')
             self.turn(right, angle - a, speed)
         # print('------')
