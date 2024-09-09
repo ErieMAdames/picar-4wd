@@ -41,11 +41,12 @@ class AvoidObjects():
         GPIO.add_event_detect(3, GPIO.RISING, callback=self.three)
         print('starting')
         print('calibrating')
-        self.calibrate(5)
+        # self.calibrate(5)
         print('Done calibrating. Offsets:')
-        print(self.imu_offsets)
+        # print(self.imu_offsets)
         traveled = self.go_distance(1, True)
         print(traveled)
+        exit()
         if traveled < 1:
             retrace_steps = self.avoid()
             if len(retrace_steps):
