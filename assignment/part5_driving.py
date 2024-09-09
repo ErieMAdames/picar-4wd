@@ -22,7 +22,7 @@ class AvoidObjects():
     RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
     left_encoder_count = 0
     right_encoder_count = 0
-    imu = mpu6050(0x68)
+    # imu = mpu6050(0x68)
     turning_angle = 0.0  # Initial angle in degrees
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
     forward_dist = .3
@@ -217,9 +217,9 @@ class AvoidObjects():
                 current_time = time.time()
                 dt = current_time - prev_time  # Time difference
                 prev_time = current_time
-                gyro_data = self.get_gyro_data()
-                gyro_z = gyro_data['z'] - self.imu_offsets['z']
-                self.turning_angle += gyro_z * dt
+                # gyro_data = self.get_gyro_data()
+                # gyro_z = gyro_data['z'] - self.imu_offsets['z']
+                # self.turning_angle += gyro_z * dt
                 a = self.turning_angle - start_angle
                 a = abs((a + 180) % 360 - 180)
                 error = abs((a - angle)/angle)
