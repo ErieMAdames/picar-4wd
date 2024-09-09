@@ -76,8 +76,7 @@ class Map():
                 self.us_step = pc4.STEP
             distance = pc4.get_distance_at(self.current_angle)
             print(self.current_angle, distance)
-            if distance == -2:
-                time.sleep(5)
+            if distance > 0:
                 dx = int((distance / max_distance) * (grid_size // 2) * np.cos(np.radians(angle)))
                 dy = int((distance / max_distance) * (grid_size // 2) * np.sin(np.radians(angle)))
                 
