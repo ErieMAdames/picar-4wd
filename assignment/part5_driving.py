@@ -53,7 +53,7 @@ class AvoidObjects():
         start = time.time()
         try:
             while True:
-                pc4.turn_left()
+                pc4.turn_left(self.speed)
         except KeyboardInterrupt:
             pc4.stop()
             self.turning_time = time.time() - start
