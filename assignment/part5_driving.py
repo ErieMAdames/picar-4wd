@@ -37,7 +37,7 @@ class AvoidObjects():
         #     self.scan()
         print('starting')
         print('calibrating')
-        # self.calibrate(1)
+        self.calibrate(1)
         print('Done calibrating. Offsets:')
         print(self.imu_offsets)
         traveled = self.go_distance(1, True)
@@ -58,12 +58,13 @@ class AvoidObjects():
         x = 0
         z = 0
         y = 0
-        while time.time() < future:
-            g = self.imu.get_gyro_data()
-            x += g['x']
-            y += g['y']
-            z += g['z']
-            counter += 1
+        with mpu6050(0x68) as imu:
+            while time.time() < future:
+                g = imu.get_gyro_data()
+                x += g['x']
+                y += g['y']
+                z += g['z']
+                counter += 1
         self.imu_offsets['x'] = x / counter
         self.imu_offsets['y'] = y / counter
         self.imu_offsets['z'] = z / counter
@@ -217,9 +218,10 @@ class AvoidObjects():
                 current_time = time.time()
                 dt = current_time - prev_time  # Time difference
                 prev_time = current_time
-                # gyro_data = self.get_gyro_data()
-                # gyro_z = gyro_data['z'] - self.imu_offsets['z']
-                # self.turning_angle += gyro_z * dt
+                with mpu6050(0x68) as imu:
+                    gyro_data = imu.get_gyro_data()
+                    gyro_z = gyro_data['z'] - self.imu_offsets['z']
+                    self.turning_angle += gyro_z * dt
                 a = self.turning_angle - start_angle
                 a = abs((a + 180) % 360 - 180)
                 error = abs((a - angle)/angle)
