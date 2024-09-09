@@ -214,13 +214,11 @@ class AvoidObjects():
         else:
             pc4.turn_left(speed)
         try:
-            while a < angle:
+            while a < (angle * 10000):
                 current_time = time.time()
                 dt = current_time - prev_time  # Time difference
                 prev_time = current_time
-                
-                imu = mpu6050(0x69)
-                gyro_data = imu.get_gyro_data()
+                gyro_data = self.imu.get_gyro_data()
                 gyro_z = gyro_data['z'] - self.imu_offsets['z']
                 self.turning_angle += gyro_z * dt
                 a = self.turning_angle - start_angle
@@ -229,7 +227,6 @@ class AvoidObjects():
         except IOError as e:
             print(e)
             print(traceback.format_exc())
-            exit()
             pc4.soft_reset()
             print('error')
             self.turn(right, angle - a, speed)
