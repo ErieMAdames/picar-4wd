@@ -37,15 +37,7 @@ class AvoidObjects():
         self.calibrate(5)
         print('Done calibrating. Offsets:')
         print(self.imu_offsets)
-        # imu_thread = threading.Thread(target=self.calculate_turning_angle)
-        # imu_thread.daemon = True  # Daemon thread will exit when the main thread does
-        # imu_thread.start()
-        self.turn()
-        self.turn(False)
-        exit()
         while True:
-            # print(self.turning_angle)
-            continue
             traveled = self.go_distance(10, True)
             if traveled < 10:
                 retrace_steps = self.avoid()
@@ -214,7 +206,6 @@ class AvoidObjects():
                     pc4.turn_right(speed)
                 else:
                     pc4.turn_left(speed)
-                # time.sleep(.05)
                 current_time = time.time()
                 dt = current_time - prev_time  # Time difference
                 prev_time = current_time
@@ -233,6 +224,7 @@ class AvoidObjects():
         print(a)
         print(error)
         pc4.stop()
+        time.sleep(.05)
 
 
     def get_orientation_from_rotation_vector(self, rotation_vector):
