@@ -208,22 +208,26 @@ class AvoidObjects():
         a = abs((a + 180) % 360 - 180)
         prev_time = time.time()
         error = 0
-        while a < angle:
-            print(a)
-            if right:
-                pc4.turn_right(speed)
-            else:
-                pc4.turn_left(speed)
-            time.sleep(.05)
-            current_time = time.time()
-            dt = current_time - prev_time  # Time difference
-            prev_time = current_time
-            gyro_data = self.get_gyro_data()
-            gyro_z = gyro_data['z'] - self.imu_offsets['z']
-            self.turning_angle += gyro_z * dt
-            a = self.turning_angle - start_angle
-            a = abs((a + 180) % 360 - 180)
-            error = abs((a - angle)/angle)
+        try:
+            while a < angle:
+                print(a)
+                if right:
+                    pc4.turn_right(speed)
+                else:
+                    pc4.turn_left(speed)
+                time.sleep(.05)
+                current_time = time.time()
+                dt = current_time - prev_time  # Time difference
+                prev_time = current_time
+                gyro_data = self.get_gyro_data()
+                gyro_z = gyro_data['z'] - self.imu_offsets['z']
+                self.turning_angle += gyro_z * dt
+                a = self.turning_angle - start_angle
+                a = abs((a + 180) % 360 - 180)
+                error = abs((a - angle)/angle)
+        except:
+            print('error')
+            self.turn(right, angle - a, speed)
         print('------')
         print(a)
         print(error)
