@@ -215,7 +215,7 @@ class AvoidObjects():
                 a = self.turning_angle - start_angle
                 a = abs((a + 180) % 360 - 180)
                 error = abs((a - angle)/angle)
-        except:
+        except IOError:
             print('error')
             self.turn(right, angle - a, speed)
         print('------')
