@@ -20,8 +20,8 @@ def create_2d_map(grid_size=20, grid_resolution=10, max_distance=200):
     # Loop to scan the environment
     for angle in range(0, 360, 360 // grid_resolution):
         # Rotate the ultrasonic sensor to the desired angle
-        pc4.set_servo_angle(angle)
-        time.sleep(0.1)  # Give some time to rotate
+        # pc4.set_servo_angle(angle)
+        # time.sleep(0.1)  # Give some time to rotate
 
         # Read the distance from the ultrasonic sensor
         distance = pc4.get_distance_at(angle)
