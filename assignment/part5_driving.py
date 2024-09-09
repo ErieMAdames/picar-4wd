@@ -115,10 +115,12 @@ class AvoidObjects():
         print('going')
         dist = self.go_distance(self.forward_dist, True)
         print(dist)
-        if dist is not None:
-            print('obstacle')
+        if dist < self.forward_dist:
             retrace_steps.append(('b', dist))
+            print('obstacle')
             return retrace_steps
+        else:
+            retrace_steps.append(('b', self.forward_dist))
         self.turn(not right, 90, self.speed)
         print(turning_left)
         stop = self.scan()
@@ -129,10 +131,12 @@ class AvoidObjects():
             return retrace_steps
         print('going')
         dist = self.go_distance(self.forward_dist, True)
-        if dist is not None:
-            print('obstacle')
+        if dist < self.forward_dist:
             retrace_steps.append(('b', dist))
+            print('obstacle')
             return retrace_steps
+        else:
+            retrace_steps.append(('b', self.forward_dist))
         self.turn(not right, 90, self.speed)
         print(turning_left)
         stop = self.scan()
@@ -143,10 +147,12 @@ class AvoidObjects():
             return retrace_steps
         print('going')
         dist = self.go_distance(self.forward_dist, True)
-        if dist is not None:
-            print('obstacle')
+        if dist < self.forward_dist:
             retrace_steps.append(('b', dist))
+            print('obstacle')
             return retrace_steps
+        else:
+            retrace_steps.append(('b', self.forward_dist))
         self.turn(right, 90, self.speed)
         print(turning_right)
         stop = self.scan()
@@ -157,10 +163,12 @@ class AvoidObjects():
             return retrace_steps
         print('going')
         dist = self.go_distance(self.forward_dist, True)
-        if dist is not None:
-            print('obstacle')
+        if dist < self.forward_dist:
             retrace_steps.append(('b', dist))
+            print('obstacle')
             return retrace_steps
+        else:
+            retrace_steps.append(('b', self.forward_dist))
         return retrace_steps
     def retrace(self, retrace_steps):
         print('retracing')
