@@ -25,6 +25,7 @@ class AvoidObjects():
     imu = mpu6050(0x68)
     turning_angle = 0.0  # Initial angle in degrees
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
+    forward_dist = .2
     # Setup GPIO
     def __init__(self) -> None:
         GPIO.setmode(GPIO.BCM)
@@ -112,7 +113,8 @@ class AvoidObjects():
             retrace_steps.append((not right,0))
             return retrace_steps
         print('going')
-        dist = self.go_distance(.2, True)
+        dist = self.go_distance(self.forward_dist, True)
+        print(dist)
         if dist is not None:
             print('obstacle')
             retrace_steps.append(('b', dist))
@@ -126,7 +128,7 @@ class AvoidObjects():
             retrace_steps.append((right, 0))
             return retrace_steps
         print('going')
-        dist = self.go_distance(.2, True)
+        dist = self.go_distance(self.forward_dist, True)
         if dist is not None:
             print('obstacle')
             retrace_steps.append(('b', dist))
@@ -140,7 +142,7 @@ class AvoidObjects():
             retrace_steps.append((right, 0))
             return retrace_steps
         print('going')
-        dist = self.go_distance(.2, True)
+        dist = self.go_distance(self.forward_dist, True)
         if dist is not None:
             print('obstacle')
             retrace_steps.append(('b', dist))
@@ -154,7 +156,7 @@ class AvoidObjects():
             retrace_steps.append((not right, 0))
             return retrace_steps
         print('going')
-        dist = self.go_distance(.2, True)
+        dist = self.go_distance(self.forward_dist, True)
         if dist is not None:
             print('obstacle')
             retrace_steps.append(('b', dist))
