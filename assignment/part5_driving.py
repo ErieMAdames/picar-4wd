@@ -4,7 +4,7 @@ import time
 import math
 from functools import reduce
 import sys
-from mpu6050 import mpu6050
+# from mpu6050 import mpu6050
 
 
 class AvoidObjects():
