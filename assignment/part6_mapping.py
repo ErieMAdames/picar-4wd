@@ -63,6 +63,9 @@ class Map():
     def scan(self):
         self.current_angle = 90 if self.current_angle > 0 else -90
         self.us_step = -1 if self.current_angle > 0 else 1
+        max_distance = 100
+        grid_size = 100
+        map_grid = np.zeros((grid_size, grid_size), dtype=int)
         for _ in range(180):
             self.current_angle += self.us_step
             if self.current_angle >= self.max_angle:
@@ -75,6 +78,16 @@ class Map():
             print(self.current_angle, distance)
             if distance == -2:
                 time.sleep(5)
+                dx = int((distance / max_distance) * (grid_size // 2) * np.cos(np.radians(angle)))
+                dy = int((distance / max_distance) * (grid_size // 2) * np.sin(np.radians(angle)))
+                
+                # Calculate the grid position
+                # object_x = car_x + dx
+                # object_y = car_y + dy
+                
+                # Check if the calculated position is within the grid
+                if 0 <= dx < grid_size and 0 <= dy < grid_size:
+                    map_grid[dy, dx] = 1  # Mark the cell as an obstacle
             self.distances.append(distance)
         if self.us_step < 0:
             self.distances.reverse()
