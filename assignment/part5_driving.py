@@ -202,6 +202,8 @@ class AvoidObjects():
                 pc4.backward(self.speed)
             left_distance = calculate_distance(self.left_encoder_count)
             right_distance = calculate_distance(self.right_encoder_count)
+            print(left_distance)
+            print(right_distance)
         pc4.stop()
         return (left_distance + right_distance) / 2
 
