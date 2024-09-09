@@ -37,7 +37,7 @@ class AvoidObjects():
         #     self.scan()
         print('starting')
         print('calibrating')
-        self.calibrate(1)
+        # self.calibrate(1)
         print('Done calibrating. Offsets:')
         print(self.imu_offsets)
         traveled = self.go_distance(1, True)
