@@ -40,8 +40,6 @@ class AvoidObjects():
         print(self.imu_offsets)
         while True:
             traveled = self.go_distance(1, True)
-            # print(traveled)
-            # exit()
             if traveled < 1:
                 retrace_steps = self.avoid()
                 if len(retrace_steps):
@@ -181,6 +179,7 @@ class AvoidObjects():
                 self.go_distance(step[1], False)
             else:
                 self.turn(step[0], 90, self.speed)
+                
 
     def go_distance(self, dist, forward=True):
         self.left_encoder_count = 0
@@ -203,10 +202,11 @@ class AvoidObjects():
                 pc4.backward(self.speed)
             left_distance = calculate_distance(self.left_encoder_count)
             right_distance = calculate_distance(self.right_encoder_count)
-            print(left_distance)
-            print(right_distance)
-            print('----')
+            # print(left_distance)
+            # print(right_distance)
+            # print('----')
         pc4.stop()
+        time.sleep(.5)
         return min(left_distance,right_distance)
 
     def turn(self, right=True, angle=90, speed=30):
@@ -234,7 +234,7 @@ class AvoidObjects():
                 a = abs((a + 180) % 360 - 180)
                 error = abs((a - angle)/angle)
         except IOError:
-            # print('error')
+            print('error')
             self.turn(right, angle - a, speed)
         # print('------')
         # print(angle)
@@ -242,7 +242,7 @@ class AvoidObjects():
         # print(a)
         # print(error)
         pc4.stop()
-        time.sleep(.05)
+        time.sleep(.5)
 
 
     def get_orientation_from_rotation_vector(self, rotation_vector):
