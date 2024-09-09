@@ -207,7 +207,7 @@ class AvoidObjects():
             print(right_distance)
             print('----')
         pc4.stop()
-        return (left_distance + right_distance) / 2
+        return min(left_distance,right_distance)
 
     def turn(self, right=True, angle=90, speed=30):
         # print(right)
