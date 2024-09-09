@@ -295,7 +295,7 @@ class AvoidObjects():
     RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
     left_encoder_count = 0
     right_encoder_count = 0
-    imu = mpu6050(0x69)
+    # imu = mpu6050(0x69)
     turning_angle = 0.0  # Initial angle in degrees
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
     forward_dist = .3
@@ -310,7 +310,7 @@ class AvoidObjects():
         #     self.scan()
         print('starting')
         print('calibrating')
-        self.calibrate(1)
+        # self.calibrate(1)
         print('Done calibrating. Offsets:')
         print(self.imu_offsets)
         traveled = self.go_distance(1, True)
