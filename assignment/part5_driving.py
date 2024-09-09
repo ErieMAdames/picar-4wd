@@ -57,6 +57,9 @@ class AvoidObjects():
         except KeyboardInterrupt:
             pc4.stop()
             self.turning_time = time.time() - start
+            pc4.turn_right(self.speed)
+            time.sleep(self.turning_time)
+            pc4.stop()
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
@@ -81,7 +84,7 @@ class AvoidObjects():
             self.distances.append(distance)
         if self.us_step < 0:
             self.distances.reverse()
-        distances_map = map(lambda x: x < 20 and x != -2, self.distances)
+        distances_map = map(lambda x: x < 20 and x >= 0, self.distances)
         stop = reduce(lambda x, y: x or y, distances_map)
         if stop:
             print(self.distances)
