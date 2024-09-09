@@ -87,6 +87,7 @@ class mpu6050:
             value = (high << 8) + low
         except OSError:
             print(traceback.format_exc())
+            exit()
 
         if (value >= 0x8000):
             return -((65535 - value) + 1)
