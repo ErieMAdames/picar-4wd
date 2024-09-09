@@ -8,14 +8,14 @@ import sys
 
 import traceback
 
-class AvoidObjects():
+class Map():
     current_car_angle = 0
     speed = 30
     turning_time = .9
     current_angle = 0
     us_step = pc4.STEP
-    min_angle = -36
-    max_angle = 36
+    min_angle = -90
+    max_angle = 90
     distances = []
     WHEEL_DIAMETER = 0.0662  # Example wheel diameter in meters
     PPR = 20  # Example pulses per revolution
@@ -32,14 +32,13 @@ class AvoidObjects():
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
-        self.calibrate_turn_speed()
-        print(self.turning_time)
-        x = input()
-        traveled = self.go_distance(1, True)
-        print(traveled)
-        if traveled < 1:
-            self.avoid()
-            sys.exit(0)
+        self.scan()
+        # x = input()
+        # traveled = self.go_distance(1, True)
+        # print(traveled)
+        # if traveled < 1:
+        #     self.avoid()
+            # sys.exit(0)
     def calibrate_turn_speed(self):
         start = time.time()
         try:
@@ -63,8 +62,9 @@ class AvoidObjects():
     def scan(self):
         self.current_angle = 90 if self.current_angle > 0 else -90
         self.us_step = -pc4.STEP if self.current_angle > 0 else pc4.STEP
-        for _ in range(5):
+        for _ in range(180):
             self.current_angle += self.us_step
+            print(self.current_angle)
             if self.current_angle >= self.max_angle:
                 self.current_angle = self.max_angle
                 self.us_step = -pc4.STEP
