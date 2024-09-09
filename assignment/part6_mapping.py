@@ -77,8 +77,8 @@ class Map():
             distance = pc4.get_distance_at(self.current_angle)
             print(self.current_angle, distance)
             if distance > 0:
-                dx = int((distance / max_distance) * (grid_size // 2) * np.cos(np.radians(angle)))
-                dy = int((distance / max_distance) * (grid_size // 2) * np.sin(np.radians(angle)))
+                dx = int((distance / max_distance) * (grid_size // 2) * np.cos(np.radians(self.current_angle)))
+                dy = int((distance / max_distance) * (grid_size // 2) * np.sin(np.radians(self.current_angle)))
                 
                 # Calculate the grid position
                 # object_x = car_x + dx
@@ -88,6 +88,7 @@ class Map():
                 if 0 <= dx < grid_size and 0 <= dy < grid_size:
                     map_grid[dy, dx] = 1  # Mark the cell as an obstacle
             self.distances.append(distance)
+        print(map_grid)
         if self.us_step < 0:
             self.distances.reverse()
         distances_map = map(lambda x: x < 20 and x >= 0, self.distances)
