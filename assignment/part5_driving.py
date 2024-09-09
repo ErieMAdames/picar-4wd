@@ -88,6 +88,7 @@ class mpu6050:
         except OSError as e:
             self.bus.close()
             self.bus = smbus.SMBus(1)
+            print(self.address)
             print(register)
             print(e)
             print(traceback.format_exc())
