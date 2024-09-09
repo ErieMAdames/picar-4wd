@@ -39,7 +39,8 @@ class AvoidObjects():
         print('Done calibrating. Offsets:')
         print(self.imu_offsets)
         while True:
-            traveled = self.go_distance(10, True)
+            traveled = self.go_distance(.1, True)
+            print(traveled)
             if traveled < 10:
                 retrace_steps = self.avoid()
                 if len(retrace_steps):
@@ -101,6 +102,7 @@ class AvoidObjects():
 
     def avoid(self, right=True):
         # if there is something in the way while avoiding, retrace stepts
+        print('avoiding')
         retrace_steps = []
         self.turn(right, 90, self.speed)
         turning_right = 'turning right' if right else 'turning left'
