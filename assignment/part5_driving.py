@@ -482,8 +482,10 @@ class AvoidObjects():
         prev_time = time.time()
         error = 0
         pc4.turn_right(speed)
+        time.sleep(.5)
         try:
             while a < angle:
+                break
                 time.sleep(.1)
                 current_time = time.time()
                 dt = current_time - prev_time  # Time difference
@@ -519,8 +521,10 @@ class AvoidObjects():
         prev_time = time.time()
         error = 0
         pc4.turn_left(speed)
+        time.sleep(.5)
         try:
             while a < angle:
+                break
                 time.sleep(.1)
                 current_time = time.time()
                 dt = current_time - prev_time  # Time difference
