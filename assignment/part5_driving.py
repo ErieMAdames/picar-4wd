@@ -39,10 +39,10 @@ class AvoidObjects():
         print('Done calibrating. Offsets:')
         print(self.imu_offsets)
         while True:
-            traveled = self.go_distance(.1, True)
-            print(traveled)
-            exit()
-            if traveled < 10:
+            traveled = self.go_distance(1, True)
+            # print(traveled)
+            # exit()
+            if traveled < 1:
                 retrace_steps = self.avoid()
                 if len(retrace_steps):
                     self.retrace(retrace_steps)
