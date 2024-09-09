@@ -228,10 +228,10 @@ class AvoidObjects():
             print('error')
             self.turn(right, angle - a, speed)
         print('------')
+        print(angle)
         print(a)
         print(error)
         pc4.stop()
-        time.sleep(.05)
 
 
     def get_orientation_from_rotation_vector(self, rotation_vector):
