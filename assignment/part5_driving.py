@@ -96,7 +96,6 @@ class AvoidObjects():
             self.distances.reverse()
         distances_map = map(lambda x: x < 20 and x != -2, self.distances)
         stop = reduce(lambda x, y: x or y, distances_map)
-        print(self.distances)
         if stop:
             print(self.distances)
         self.distances = []
@@ -111,69 +110,58 @@ class AvoidObjects():
         turning_left = 'turining left' if right else 'turningright'
         print(turning_right)
         stop = self.scan()
+        retrace_steps.append((not right, 0))
         if stop:
             print('obstacle')
             # turn right to retrace
-            retrace_steps.append((not right,0))
             return retrace_steps
         print('going')
         dist = self.go_distance(self.forward_dist, True)
         print(dist)
+        retrace_steps.append(('b', dist))
         if dist < self.forward_dist:
-            retrace_steps.append(('b', dist))
             print('obstacle')
             return retrace_steps
-        else:
-            retrace_steps.append(('b', self.forward_dist))
         self.turn(not right, 90, self.speed)
         print(turning_left)
         stop = self.scan()
+        retrace_steps.append((right, 0))
         if stop:
             print('obstacle')
-            retrace_steps.append(('b', dist))
-            retrace_steps.append((right, 0))
             return retrace_steps
         print('going')
         dist = self.go_distance(self.forward_dist, True)
+        retrace_steps.append(('b', dist))
         if dist < self.forward_dist:
-            retrace_steps.append(('b', dist))
             print('obstacle')
             return retrace_steps
-        else:
-            retrace_steps.append(('b', self.forward_dist))
         self.turn(not right, 90, self.speed)
         print(turning_left)
         stop = self.scan()
+        retrace_steps.append((right, 0))
         if stop:
             print('obstacle')
-            retrace_steps.append(('b', dist))
-            retrace_steps.append((right, 0))
             return retrace_steps
         print('going')
         dist = self.go_distance(self.forward_dist, True)
+        retrace_steps.append(('b', dist))
         if dist < self.forward_dist:
-            retrace_steps.append(('b', dist))
             print('obstacle')
             return retrace_steps
-        else:
-            retrace_steps.append(('b', self.forward_dist))
         self.turn(right, 90, self.speed)
         print(turning_right)
         stop = self.scan()
+        retrace_steps.append((not right, 0))
         if stop:
             print('obstacle')
-            retrace_steps.append(('b', dist))
-            retrace_steps.append((not right, 0))
             return retrace_steps
         print('going')
         dist = self.go_distance(self.forward_dist, True)
+        retrace_steps.append(('b', dist))
         if dist < self.forward_dist:
-            retrace_steps.append(('b', dist))
             print('obstacle')
             return retrace_steps
-        else:
-            retrace_steps.append(('b', self.forward_dist))
-        return retrace_steps
+        return []
     def retrace(self, retrace_steps):
         print('retracing')
         for step in reversed(retrace_steps):
