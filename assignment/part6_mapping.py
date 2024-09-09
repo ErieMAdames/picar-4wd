@@ -193,7 +193,7 @@ class Map():
 if __name__ == "__main__":
     try:
         print('Starting Part 5: Move around object')
-        AvoidObjects()
+        Map()
     except KeyboardInterrupt:
         print('\nStopping')
     finally:
