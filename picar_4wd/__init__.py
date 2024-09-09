@@ -159,50 +159,50 @@ def scan_step(ref):
 ########################################################
 # Motors
 def forward(power):
-    with left_front.lock():
-        with left_rear.lock():
-            with right_front.lock():
-                with right_rear.lock():
+    with left_front.lock:
+        with left_rear.lock:
+            with right_front.lock:
+                with right_rear.lock:
                     left_front.set_power(power)
                     left_rear.set_power(power)
                     right_front.set_power(power)
                     right_rear.set_power(power)
 
 def backward(power):
-    with left_front.lock():
-        with left_rear.lock():
-            with right_front.lock():
-                with right_rear.lock():
+    with left_front.lock:
+        with left_rear.lock:
+            with right_front.lock:
+                with right_rear.lock:
                     left_front.set_power(-power)
                     left_rear.set_power(-power)
                     right_front.set_power(-power)
                     right_rear.set_power(-power)
 
 def turn_left(power):
-    with left_front.lock():
-        with left_rear.lock():
-            with right_front.lock():
-                with right_rear.lock():
+    with left_front.lock:
+        with left_rear.lock:
+            with right_front.lock:
+                with right_rear.lock:
                     left_front.set_power(-power)
                     left_rear.set_power(-power)
                     right_front.set_power(power)
                     right_rear.set_power(power)
 
 def turn_right(power):
-    with left_front.lock():
-        with left_rear.lock():
-            with right_front.lock():
-                with right_rear.lock():
+    with left_front.lock:
+        with left_rear.lock:
+            with right_front.lock:
+                with right_rear.lock:
                     left_front.set_power(power)
                     left_rear.set_power(power)
                     right_front.set_power(-power)
                     right_rear.set_power(-power)
 
 def stop():
-    with left_front.lock():
-        with left_rear.lock():
-            with right_front.lock():
-                with right_rear.lock():
+    with left_front.lock:
+        with left_rear.lock:
+            with right_front.lock:
+                with right_rear.lock:
                     left_front.set_power(0)
                     left_rear.set_power(0)
                     right_front.set_power(0)
