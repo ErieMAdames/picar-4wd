@@ -73,6 +73,8 @@ class Map():
                 self.us_step = pc4.STEP
             distance = pc4.get_distance_at(self.current_angle)
             print(self.current_angle, distance)
+            if distance == -2:
+                time.sleep(5)
             self.distances.append(distance)
         if self.us_step < 0:
             self.distances.reverse()
