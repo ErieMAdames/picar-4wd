@@ -9,7 +9,7 @@ from mpu6050 import mpu6050
 
 class AvoidObjects():
     current_car_angle = 0
-    speed = 50
+    speed = 30
     turning_time = .9
     current_angle = 0
     us_step = pc4.STEP
