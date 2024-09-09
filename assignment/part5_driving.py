@@ -229,6 +229,7 @@ class AvoidObjects():
             self.turn(right, angle - a, speed)
         print('------')
         print(angle)
+        print(start_angle)
         print(a)
         print(error)
         pc4.stop()
