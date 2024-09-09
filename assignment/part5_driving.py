@@ -205,6 +205,7 @@ class AvoidObjects():
             right_distance = calculate_distance(self.right_encoder_count)
             print(left_distance)
             print(right_distance)
+            print('----')
         pc4.stop()
         return (left_distance + right_distance) / 2
 
