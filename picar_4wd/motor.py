@@ -10,14 +10,12 @@ class Motor():
         self._is_reversed = is_reversed
         self._power = 0
         self._except_power = 0
-        self.lock = threading.Lock()
     
     # def start_timer(self):
     #     self.t = threading.Timer(self.DELAY, self.adder_thread)
     #     self.t.start()
 
     def set_power(self, power):
-        with self.lock:
             if power >= 0:
                 direction = 0
             elif power < 0:

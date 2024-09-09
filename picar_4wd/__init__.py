@@ -10,6 +10,7 @@ from .speed import Speed
 from .filedb import FileDB  
 from .utils import *
 import time
+import threading
 from .version import __version__
 print('here')
 soft_reset()
@@ -41,7 +42,7 @@ gs2 = ADC('A7')
 
 # Init Ultrasonic
 us = Ultrasonic(Pin('D8'), Pin('D9'))
-
+lock = threading.Lock()
 # Init Servo
 # print("Init Servo: %s" % ultrasonic_servo_offset)
 
@@ -159,54 +160,39 @@ def scan_step(ref):
 ########################################################
 # Motors
 def forward(power):
-    with left_front.lock:
-        with left_rear.lock:
-            with right_front.lock:
-                with right_rear.lock:
-                    left_front.set_power(power)
-                    left_rear.set_power(power)
-                    right_front.set_power(power)
-                    right_rear.set_power(power)
+    with lock:
+        left_front.set_power(power)
+        left_rear.set_power(power)
+        right_front.set_power(power)
+        right_rear.set_power(power)
 
 def backward(power):
-    with left_front.lock:
-        with left_rear.lock:
-            with right_front.lock:
-                with right_rear.lock:
-                    left_front.set_power(-power)
-                    left_rear.set_power(-power)
-                    right_front.set_power(-power)
-                    right_rear.set_power(-power)
+    with lock:
+        left_front.set_power(-power)
+        left_rear.set_power(-power)
+        right_front.set_power(-power)
+        right_rear.set_power(-power)
 
 def turn_left(power):
-    with left_front.lock:
-        with left_rear.lock:
-            with right_front.lock:
-                with right_rear.lock:
-                    left_front.set_power(-power)
-                    left_rear.set_power(-power)
-                    right_front.set_power(power)
-                    right_rear.set_power(power)
+    with lock:
+        left_front.set_power(-power)
+        left_rear.set_power(-power)
+        right_front.set_power(power)
+        right_rear.set_power(power)
 
 def turn_right(power):
-    with left_front.lock:
-        with left_rear.lock:
-            with right_front.lock:
-                with right_rear.lock:
-                    left_front.set_power(power)
-                    left_rear.set_power(power)
-                    right_front.set_power(-power)
-                    right_rear.set_power(-power)
+    with lock:
+        left_front.set_power(power)
+        left_rear.set_power(power)
+        right_front.set_power(-power)
+        right_rear.set_power(-power)
 
 def stop():
-    with left_front.lock:
-        with left_rear.lock:
-            with right_front.lock:
-                with right_rear.lock:
-                    left_front.set_power(0)
-                    left_rear.set_power(0)
-                    right_front.set_power(0)
-                    right_rear.set_power(0)
+    with lock:
+        left_front.set_power(0)
+        left_rear.set_power(0)
+        right_front.set_power(0)
+        right_rear.set_power(0)
 
 def set_motor_power(motor, power):
     if motor == 1:

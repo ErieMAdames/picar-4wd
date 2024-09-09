@@ -5,7 +5,7 @@ import math
 from functools import reduce
 import sys
 from mpu6050 import mpu6050
-import threading
+
 
 class AvoidObjects():
     current_car_angle = 0
@@ -71,12 +71,8 @@ class AvoidObjects():
         self.imu_offsets['y'] = y / counter
         self.imu_offsets['z'] = z / counter
     def get_gyro_data(self):
-        print(pc4.left_front.STEP)
-        with pc4.left_front.LOCK:
-            with pc4.left_rear.LOCK:
-                with pc4.right_front.LOCK:
-                    with pc4.right_rear.LOCK:
-                        return self.imu.get_gyro_data()
+        with pc4.lock:
+            return self.imu.get_gyro_data()
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
