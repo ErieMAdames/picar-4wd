@@ -33,11 +33,11 @@ class AvoidObjects():
         GPIO.setup(self.LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
-        while True:
-            self.scan()
+        # while True:
+        #     self.scan()
         print('starting')
         print('calibrating')
-        self.calibrate(5)
+        # self.calibrate(5)
         print('Done calibrating. Offsets:')
         print(self.imu_offsets)
         traveled = self.go_distance(1, True)
