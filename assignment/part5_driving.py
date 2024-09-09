@@ -88,10 +88,10 @@ class mpu6050:
         except OSError as e:
             self.bus.close()
             self.bus = smbus.SMBus(1)
+            print(register)
             print(e)
             print(traceback.format_exc())
             # exit()
-        
             high = self.bus.read_byte_data(self.address, register)
             low = self.bus.read_byte_data(self.address, register + 1)
 
@@ -217,7 +217,16 @@ class mpu6050:
         If raw is False, it will return 250, 500, 1000, 2000 or -1. If the
         returned value is equal to -1 something went wrong.
         """
-        raw_data = self.bus.read_byte_data(self.address, self.GYRO_CONFIG)
+        try:
+            raw_data = self.bus.read_byte_data(self.address, self.GYRO_CONFIG)
+        except OSError as e:
+            self.bus.close()
+            self.bus = smbus.SMBus(1)
+            print(self.address)
+            print(self.GYRO_CONFIG)
+            print(e)
+            print(traceback.format_exc())
+            raw_data = self.bus.read_byte_data(self.address, self.GYRO_CONFIG)
 
         if raw is True:
             return raw_data
@@ -483,7 +492,7 @@ class AvoidObjects():
                 gyro_data = self.imu.get_gyro_data()
                 gyro_z = gyro_data['z'] - self.imu_offsets['z']
                 self.turning_angle += gyro_z * dt
-                print(self.turning_angle)
+                # print(self.turning_angle)
                 a = self.turning_angle - start_angle
                 a = abs((a + 180) % 360 - 180)
                 error = abs((a - angle)/angle)
