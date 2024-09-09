@@ -210,7 +210,6 @@ class AvoidObjects():
         error = 0
         try:
             while a < angle:
-                print(a)
                 if right:
                     pc4.turn_right(speed)
                 else:
