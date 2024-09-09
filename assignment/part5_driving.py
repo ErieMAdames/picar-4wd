@@ -44,13 +44,13 @@ class AvoidObjects():
         print(traveled)
         if traveled < 1:
             retrace_steps = self.avoid()
-            if len(retrace_steps):
-                self.retrace(retrace_steps)
-                self.turn(False, 90, self.speed)
-                retrace_steps = self.avoid(False)
-                if len(retrace_steps):
-                    print('No path')
-                    sys.exit(0)
+            # if len(retrace_steps):
+            #     self.retrace(retrace_steps)
+            #     self.turn(False, 90, self.speed)
+            #     retrace_steps = self.avoid(False)
+            #     if len(retrace_steps):
+            #         print('No path')
+            sys.exit(0)
     def calibrate(self, duration):
         now = time.time()
         future = now + duration
