@@ -3,7 +3,6 @@ import threading
 class Motor():
     STEP = 10
     DELAY = 0.1
-    lock = threading.Lock()
     def __init__(self, pwm_pin, dir_pin, is_reversed=False):
         print('motores')
         self.pwm_pin = pwm_pin
@@ -11,6 +10,7 @@ class Motor():
         self._is_reversed = is_reversed
         self._power = 0
         self._except_power = 0
+        self.lock = threading.Lock()
     
     # def start_timer(self):
     #     self.t = threading.Timer(self.DELAY, self.adder_thread)
