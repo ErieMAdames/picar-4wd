@@ -36,6 +36,7 @@ def visualize(
     Image with bounding boxes.
   """
   for detection in detection_result.detections:
+    print(detection.category_name)
     # Draw bounding_box
     bbox = detection.bounding_box
     start_point = bbox.origin_x, bbox.origin_y
@@ -95,7 +96,6 @@ while True:
 
     # Run object detection estimation using the model.
     detection_result = detector.detect(input_tensor)
-    print(detection_result)
 
     # Draw keypoints and edges on input image
     image = visualize(image, detection_result)
