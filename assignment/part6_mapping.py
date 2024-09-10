@@ -88,8 +88,9 @@ class Map():
                 if 0 <= dx < grid_size and 0 <= dy < grid_size:
                     map_grid[dy, dx] = 1  # Mark the cell as an obstacle
             self.distances.append(distance)
-        x_str = np.array_repr(map_grid).replace('\n', '')
-        print(x_str)
+        for x in np.nditer(map_grid):
+            x_str = np.array_repr(x).replace('\n', '')
+            print(x_str)
         if self.us_step < 0:
             self.distances.reverse()
         distances_map = map(lambda x: x < 20 and x >= 0, self.distances)
