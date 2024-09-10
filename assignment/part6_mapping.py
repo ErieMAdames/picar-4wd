@@ -89,7 +89,7 @@ class Map():
                     map_grid[dy, dx] = 1  # Mark the cell as an obstacle
             self.distances.append(distance)
         for x in map_grid:
-            x_str = np.array_repr(x).replace('\n', '')
+            x_str = np.array_repr(x).replace('\n', '').replace(' ', '')
             print(x)
             print(x_str)
         if self.us_step < 0:
