@@ -95,7 +95,7 @@ while True:
 
     # Run object detection estimation using the model.
     detection_result = detector.detect(input_tensor)
-
+    print(detection_result)
 
     # Draw keypoints and edges on input image
     image = visualize(image, detection_result)
