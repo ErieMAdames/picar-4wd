@@ -90,7 +90,7 @@ class Map():
             self.distances.append(distance)
         for x in map_grid:
             x_str = np.array_repr(x).replace('\n', '').replace(' ', '')
-            print(x)
+            # print(x)
             print(x_str)
         if self.us_step < 0:
             self.distances.reverse()
