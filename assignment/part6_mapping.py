@@ -62,7 +62,7 @@ class Map():
     # # Add event detection for rising edges
     def scan(self):
         self.current_angle = 90 if self.current_angle > 0 else -90
-        step = int(input)
+        step = int(input())
         self.us_step = -step if self.current_angle > 0 else step
         max_distance = 100
         grid_size = 100
