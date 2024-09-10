@@ -41,7 +41,7 @@ def visualize(
     print(detection.categories)
     print(category_name)
     # Draw bounding_box
-    if (category_name == 'stop sight'):
+    if (category_name == 'stop sign'):
       bbox = detection.bounding_box
       start_point = bbox.origin_x, bbox.origin_y
       end_point = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
