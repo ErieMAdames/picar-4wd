@@ -66,7 +66,7 @@ class Map():
         max_distance = 100
         grid_size = 100
         map_grid = np.zeros((grid_size, grid_size), dtype=int)
-        for _ in range(180):
+        for _ in range(18):
             self.current_angle += self.us_step
             if self.current_angle >= self.max_angle:
                 self.current_angle = self.max_angle
