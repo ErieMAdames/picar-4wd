@@ -36,7 +36,10 @@ def visualize(
     Image with bounding boxes.
   """
   for detection in detection_result.detections:
-    print(detection.category_name)
+    category = detection.categories[0]
+    category_name = category.category_name
+    print(detection.categories)
+    print(category_name)
     # Draw bounding_box
     bbox = detection.bounding_box
     start_point = bbox.origin_x, bbox.origin_y
