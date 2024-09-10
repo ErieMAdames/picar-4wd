@@ -5,7 +5,7 @@ import adafruit_mpu6050
 
 # Initialize I2C using FT232H
 i2c = busio.I2C(board.SCL, board.SDA)
-
+print(board.SCL, board.SDA)
 # Initialize MPU6050
 mpu = adafruit_mpu6050.MPU6050(i2c, address=0x69)
 
