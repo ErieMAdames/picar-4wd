@@ -62,7 +62,7 @@ class Map():
     # # Add event detection for rising edges
     def scan(self):
         self.current_angle = 90 if self.current_angle > 0 else -90
-        self.us_step = -1 if self.current_angle > 0 else 1
+        self.us_step = -10 if self.current_angle > 0 else 10
         max_distance = 100
         grid_size = 100
         map_grid = np.zeros((grid_size, grid_size), dtype=int)
@@ -91,6 +91,7 @@ class Map():
         for x in map_grid:
             x_str = np.array_repr(x).replace('\n', '')
             print(x)
+            print(x_str)
         if self.us_step < 0:
             self.distances.reverse()
         distances_map = map(lambda x: x < 20 and x >= 0, self.distances)
