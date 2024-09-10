@@ -100,7 +100,6 @@ class Map():
         # if stop:
         #     print(self.distances)
         self.distances = []
-        return stop
 
     def avoid(self, right=True):
         # if there is something in the way while avoiding, retrace stepts
