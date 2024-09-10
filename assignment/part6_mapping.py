@@ -85,7 +85,7 @@ class Map():
                 # object_y = car_y + dy
                 
                 # Check if the calculated position is within the grid
-                if dx >= 0 and dy >= 0:
+                if dx >= 0 and dy >= 0 and dx < 100 and dy < 100:
                     map_grid[dy, dx] = 1  # Mark the cell as an obstacle
             self.distances.append(distance)
         for x in map_grid:
