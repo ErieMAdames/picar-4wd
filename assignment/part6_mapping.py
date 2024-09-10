@@ -85,12 +85,12 @@ class Map():
                 # object_y = car_y + dy
                 
                 # Check if the calculated position is within the grid
-                if 0 <= dx < grid_size and 0 <= dy < grid_size:
+                if dx >= 0 and dy >= 0:
                     map_grid[dy, dx] = 1  # Mark the cell as an obstacle
             self.distances.append(distance)
         for x in map_grid:
             x_str = np.array_repr(x).replace('\n', '')
-            print(x_str)
+            print(x)
         if self.us_step < 0:
             self.distances.reverse()
         distances_map = map(lambda x: x < 20 and x >= 0, self.distances)
