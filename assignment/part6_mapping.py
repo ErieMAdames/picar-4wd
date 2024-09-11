@@ -57,12 +57,10 @@ class Map():
     def scan(self):
         print('scanning')
         self.current_angle = -90
-        step = int(input())
-        self.us_step = step
+        self.us_step = 1
         grid_size = 100
         map_grid = np.zeros((grid_size, grid_size), dtype=int)
-        for _ in range(int(180 / step)):
-            print('scanning' + '')
+        for _ in range(180):
             distance = pc4.get_distance_at(self.current_angle)
             if distance > 0:
                 dx = int(distance * np.cos(np.radians(self.current_angle + 90))) + 50
