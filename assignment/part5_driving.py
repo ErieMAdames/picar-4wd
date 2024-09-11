@@ -56,7 +56,7 @@ class AvoidObjects():
             #     retrace_steps = self.avoid(False)
             #     if len(retrace_steps):
             #         print('No path')
-            sys.exit(0)
+            # sys.exit(0)
     def calibrate(self, duration):
         now = time.time()
         future = now + duration
