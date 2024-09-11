@@ -90,7 +90,10 @@ class Map():
                 image[map_grid == 0] = [255, 0, 0]  # Blue for 0
                 image[map_grid == 1] = [0, 0, 255]  # Red for 1
                 enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
-                frame_surface = pygame.surfarray.make_surface(enlarged_image)
+
+                # Rotate the image 90 degrees clockwise
+                rotated_image = cv2.rotate(enlarged_image, cv2.ROTATE_90_CLOCKWISE)
+                frame_surface = pygame.surfarray.make_surface(rotated_image)
                 # frame_surface = pygame.transform.rotate(frame_surface, -90)
                 # frame_surface = pygame.transform.flip(frame_surface, True, False)
 
