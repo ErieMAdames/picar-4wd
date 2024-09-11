@@ -232,7 +232,7 @@ class AvoidObjects():
             self.turning_angle += gyro_z * dt
             error = abs((a - angle)/angle)
         pc4.stop()
-    def turn_left(self, angle=90, speed=30):
+    def turn_left(self, angle=-90, speed=30):
         prev_time = time.time()
         start_angle = 0
         a = 0
