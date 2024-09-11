@@ -39,15 +39,14 @@ class AvoidObjects():
         #     self.scan()
         print('starting')
         print('calibrating')
-        # self.calibrate(3)
+        self.calibrate(3)
         print('Done calibrating. Offsets:')
         # traveled = self.go_distance(1, True)
         imu_thread = threading.Thread(target=self.calculate_turning_angle)
         imu_thread.daemon = True
         imu_thread.start()
-        # while True:
-        #     # gyro_data = self.imu.get_gyro_data()
-        #     print(self.turning_angle)
+        while True:
+            print(self.turning_angle)
         # if traveled < 1:
         #     retrace_steps = self.avoid()
             # if len(retrace_steps):
