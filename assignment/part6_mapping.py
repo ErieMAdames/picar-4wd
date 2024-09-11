@@ -31,8 +31,6 @@ class Map():
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
-        while True:
-            pc4.get_distance_at(float(input()))
         pygame.init()
         self.screen = pygame.display.set_mode((500, 500))
         self.scan()
@@ -58,11 +56,11 @@ class Map():
     # # Add event detection for rising edges
     def scan(self):
         print('scanning')
-        self.current_angle = -180
+        self.current_angle = -90
         self.us_step = 1
         grid_size = 100
         map_grid = np.zeros((grid_size, grid_size), dtype=int)
-        for _ in range(360):
+        for _ in range(180):
             print(self.current_angle)
             distance = pc4.get_distance_at(self.current_angle)
             if distance > 0:
