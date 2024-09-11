@@ -42,7 +42,8 @@ i2c = I2cController()
 # Use the correct URL based on your device details
 try:
     # i2c.configure('ftdi://1027/24597/1')  # Ensure this URL is correct
-    url = 'ftdi://ftdi:0403/6015:1:3/1'
+    url = 'ftdi://ftdi:0403/6015:D200B2IB/1'
+
 
     i2c.configure(url)  # Ensure this URL is correct
     # i2c.configure('ftdi:///1')  # Ensure this URL is correct
