@@ -45,8 +45,11 @@ class AvoidObjects():
         imu_thread.start()
         # while True:
         self.turn_right()
+        time.sleep(1)
         self.turn_right()
+        time.sleep(1)
         self.turn_right()
+        time.sleep(1)
         self.turn_right()
         # if traveled < 1:
         #     retrace_steps = self.avoid()
