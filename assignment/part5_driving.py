@@ -4,9 +4,7 @@ import time
 import math
 from functools import reduce
 import sys
-import board
-import busio
-from adafruit_mpu6050 import MPU6050
+from mpu6050 import mpu6050
 import threading
 
 import traceback
@@ -26,8 +24,7 @@ class AvoidObjects():
     RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
     left_encoder_count = 0
     right_encoder_count = 0
-    i2c = busio.I2C(board.SCL, board.SDA)
-    imu = MPU6050(i2c)
+    imu = mpu6050(0x68)
     turning_angle = 0.0  # Initial angle in degrees
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
     forward_dist = .5
@@ -61,16 +58,16 @@ class AvoidObjects():
         z = 0
         y = 0
         while time.time() < future:
-            g = self.imu.gyro
-            x += g[0]
-            y += g[1]
-            z += g[2]
+            g = self.imu.get_gyro_data()
+            x += g['x']
+            y += g['y']
+            z += g['z']
             counter += 1
         self.imu_offsets['x'] = x / counter
         self.imu_offsets['y'] = y / counter
         self.imu_offsets['z'] = z / counter
     def get_gyro_data(self):
-        return self.imu.gyro
+        return self.imu.get_gyro_data()
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
@@ -212,16 +209,15 @@ class AvoidObjects():
         return min(left_distance,right_distance)
     def calculate_turning_angle(self):
         """Calculates the turning angle from gyroscope data."""
-        prev_time = time.monotonic()
+        prev_time = time.time()
         while True:
-            current_time = time.monotonic()
+            current_time = time.time()
             dt = current_time - prev_time  # Time difference
             prev_time = current_time
-            gyro_data = self.imu.gyro
-            gyro_z = gyro_data[2] - self.imu_offsets['z']
+            gyro_data = self.imu.get_gyro_data()
+            gyro_z = gyro_data['z'] - self.imu_offsets['z']
             # Integrate angular velocity over time
             self.turning_angle += gyro_z * dt
-            print(self.turning_angle)
             time.sleep(0.05)  # Adjust sleep time for desired rate
 
     def turn_right(self,  angle=90, speed=30):
@@ -247,7 +243,7 @@ class AvoidObjects():
             current_time = time.time()
             dt = current_time - prev_time  # Time difference
             prev_time = current_time
-            gyro_data = self.imu.gyro
+            gyro_data = self.imu.get_gyro_data()
             gyro_z = gyro_data['z'] - self.imu_offsets['z']
             # Integrate angular velocity over time
             self.turning_angle += gyro_z * dt
