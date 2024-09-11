@@ -5,6 +5,7 @@ import time
 import math
 from functools import reduce
 import sys
+import pygame
 # from mpu6050 import mpu6050
 import traceback
 np.set_printoptions(threshold=sys.maxsize)
@@ -33,6 +34,8 @@ class Map():
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
+        pygame.init()
+        screen = pygame.display.set_mode((200, 200))
         self.scan()
         # x = input()
         # traveled = self.go_distance(1, True)
@@ -80,6 +83,16 @@ class Map():
                 # Check if the calculated position is within the grid
                 if dx >= 0 and dy >= 0 and dx < 100 and dy < 100:
                     map_grid[dy, dx] = 1  # Mark the cell as an obstacle
+                image = np.zeros((100, 100, 3), dtype=np.uint8)
+                image[map_grid == 0] = [255, 0, 0]  # Blue for 0
+                image[map_grid == 1] = [0, 0, 255]  # Red for 1
+                frame_surface = pygame.surfarray.make_surface(image)
+                # frame_surface = pygame.transform.rotate(frame_surface, -90)
+                # frame_surface = pygame.transform.flip(frame_surface, True, False)
+
+                # Display the frame on the pygame window
+                self.screen.blit(frame_surface, (0, 0))
+                pygame.display.update()
             self.distances.append(distance)
         for x in np.flip(map_grid, 0):
             x_str = np.array_repr(x).replace('\n', '').replace(' ', '').replace('array([', '').replace('])', '').replace('0','_').replace('1','@')
