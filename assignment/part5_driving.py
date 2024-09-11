@@ -230,8 +230,14 @@ class AvoidObjects():
             error = abs((a - angle)/angle)
         pc4.stop()
     def turn_left(self, angle=90, speed=30):
+        start_angle = self.turning_angle
+        a = self.turning_angle - start_angle
+        a = abs((a + 180) % 360 - 180)
         pc4.turn_left(speed)
-        time.sleep(1)
+        while a < angle:
+            a = self.turning_angle - start_angle
+            a = abs((a + 180) % 360 - 180)
+            error = abs((a - angle)/angle)
         pc4.stop()
 
 if __name__ == "__main__":
