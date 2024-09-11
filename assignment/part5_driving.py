@@ -4,7 +4,7 @@ import time
 import math
 from functools import reduce
 import sys
-from mpu6050 import mpu6050
+# from mpu6050 import mpu6050
 import threading
 
 import traceback
@@ -48,27 +48,24 @@ class AvoidObjects():
         # exit()
         traveled = self.go_distance(1, True)
         if traveled < 1:
-            time.sleep(.5)
             retrace_steps = self.avoid()
             exit()
-    def calibrate(self, duration):
-        now = time.time()
-        future = now + duration
-        counter = 0
-        x = 0
-        z = 0
-        y = 0
-        while time.time() < future:
-            g = self.imu.get_gyro_data()
-            x += g['x']
-            y += g['y']
-            z += g['z']
-            counter += 1
-        self.imu_offsets['x'] = x / counter
-        self.imu_offsets['y'] = y / counter
-        self.imu_offsets['z'] = z / counter
-    def get_gyro_data(self):
-        return self.imu.get_gyro_data()
+    # def calibrate(self, duration):
+    #     now = time.time()
+    #     future = now + duration
+    #     counter = 0
+    #     x = 0
+    #     z = 0
+    #     y = 0
+    #     while time.time() < future:
+    #         g = self.imu.get_gyro_data()
+    #         x += g['x']
+    #         y += g['y']
+    #         z += g['z']
+    #         counter += 1
+    #     self.imu_offsets['x'] = x / counter
+    #     self.imu_offsets['y'] = y / counter
+    #     self.imu_offsets['z'] = z / counter
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
@@ -208,20 +205,20 @@ class AvoidObjects():
         pc4.stop()
         time.sleep(.5)
         return min(left_distance,right_distance)
-    def calculate_turning_angle(self):
-        """Calculates the turning angle from gyroscope data."""
-        prev_time = time.time()
-        while True:
-            if self.read:
-                current_time = time.time()
-                dt = current_time - prev_time  # Time difference
-                prev_time = current_time
-                gyro_data = self.imu.get_gyro_data()
-                gyro_z = gyro_data['z'] - self.imu_offsets['z']
-                # Integrate angular velocity over time
-                self.turning_angle += gyro_z * dt
-                print(self.turning_angle)
-                time.sleep(0.05)  # Adjust sleep time for desired rate
+    # def calculate_turning_angle(self):
+    #     """Calculates the turning angle from gyroscope data."""
+    #     prev_time = time.time()
+    #     while True:
+    #         if self.read:
+    #             current_time = time.time()
+    #             dt = current_time - prev_time  # Time difference
+    #             prev_time = current_time
+    #             gyro_data = self.imu.get_gyro_data()
+    #             gyro_z = gyro_data['z'] - self.imu_offsets['z']
+    #             # Integrate angular velocity over time
+    #             self.turning_angle += gyro_z * dt
+    #             print(self.turning_angle)
+    #             time.sleep(0.05)  # Adjust sleep time for desired rate
 
     def turn_right(self,  angle=90, speed=30):
         # prev_time = time.time()
@@ -239,24 +236,24 @@ class AvoidObjects():
         # self.read = False
         # time.sleep(.1)
         pc4.stop()
-    def turn_left(self, angle=-90, speed=30):
-        prev_time = time.time()
-        start_angle = 0
-        a = 0
-        a = abs((a + 180) % 360 - 180)
-        pc4.turn_left(speed)
-        while a > angle:
-            a = self.turning_angle - start_angle
-            a = abs((a + 180) % 360 - 180)
-            current_time = time.time()
-            dt = current_time - prev_time  # Time difference
-            prev_time = current_time
-            gyro_data = self.imu.get_gyro_data()
-            gyro_z = gyro_data['z'] - self.imu_offsets['z']
-            # Integrate angular velocity over time
-            self.turning_angle += gyro_z * dt
-            error = abs((a - angle)/angle)
-        pc4.stop()
+    # def turn_left(self, angle=-90, speed=30):
+    #     prev_time = time.time()
+    #     start_angle = 0
+    #     a = 0
+    #     a = abs((a + 180) % 360 - 180)
+    #     pc4.turn_left(speed)
+    #     while a > angle:
+    #         a = self.turning_angle - start_angle
+    #         a = abs((a + 180) % 360 - 180)
+    #         current_time = time.time()
+    #         dt = current_time - prev_time  # Time difference
+    #         prev_time = current_time
+    #         gyro_data = self.imu.get_gyro_data()
+    #         gyro_z = gyro_data['z'] - self.imu_offsets['z']
+    #         # Integrate angular velocity over time
+    #         self.turning_angle += gyro_z * dt
+    #         error = abs((a - angle)/angle)
+    #     pc4.stop()
 
 if __name__ == "__main__":
     try:
