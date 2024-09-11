@@ -28,6 +28,7 @@ class AvoidObjects():
     turning_angle = 0.0  # Initial angle in degrees
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
     forward_dist = .5
+    read = False
     # Setup GPIO
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
@@ -211,15 +212,16 @@ class AvoidObjects():
         """Calculates the turning angle from gyroscope data."""
         prev_time = time.time()
         while True:
-            current_time = time.time()
-            dt = current_time - prev_time  # Time difference
-            prev_time = current_time
-            gyro_data = self.imu.get_gyro_data()
-            gyro_z = gyro_data['z'] - self.imu_offsets['z']
-            # Integrate angular velocity over time
-            self.turning_angle += gyro_z * dt
-            print(self.turning_angle)
-            time.sleep(0.05)  # Adjust sleep time for desired rate
+            if self.read:
+                current_time = time.time()
+                dt = current_time - prev_time  # Time difference
+                prev_time = current_time
+                gyro_data = self.imu.get_gyro_data()
+                gyro_z = gyro_data['z'] - self.imu_offsets['z']
+                # Integrate angular velocity over time
+                self.turning_angle += gyro_z * dt
+                print(self.turning_angle)
+                time.sleep(0.05)  # Adjust sleep time for desired rate
 
     def turn_right(self,  angle=90, speed=30):
         prev_time = time.time()
@@ -227,11 +229,14 @@ class AvoidObjects():
         a = 0
         a = abs((a + 180) % 360 - 180)
         pc4.turn_right(speed)
+        self.read = True
         while a < angle:
             a = self.turning_angle - start_angle
             a = abs((a + 180) % 360 - 180)
             print(a)
             error = abs((a - angle)/angle)
+        self.read = False
+        time.sleep(.1)
         pc4.stop()
     def turn_left(self, angle=-90, speed=30):
         prev_time = time.time()
