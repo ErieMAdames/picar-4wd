@@ -4,7 +4,8 @@ import time
 import math
 from functools import reduce
 import sys
-# from mpu6050 import mpu6050
+from mpu6050 import mpu6050
+import threading
 
 import traceback
 
@@ -23,7 +24,10 @@ class AvoidObjects():
     RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
     left_encoder_count = 0
     right_encoder_count = 0
-    forward_dist = .5
+    imu = mpu6050(0x69)
+    turning_angle = 0.0  # Initial angle in degrees
+    imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
+    forward_dist = .3
     # Setup GPIO
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
@@ -31,26 +35,47 @@ class AvoidObjects():
         GPIO.setup(self.LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
+        # while True:
+        #     self.scan()
         print('starting')
-        self.calibrate_turn_speed()
-        print(self.turning_time)
-        x = input()
+        print('calibrating')
+        self.calibrate(3)
+        print('Done calibrating. Offsets:')
+        print(self.imu_offsets)
         traveled = self.go_distance(1, True)
         print(traveled)
+        imu_thread = threading.Thread(target=self.calculate_turning_angle)
+        imu_thread.daemon = True
+        imu_thread.start()
+        while True:
+            print(self.turning_angle)
         if traveled < 1:
-            self.avoid()
+            retrace_steps = self.avoid()
+            # if len(retrace_steps):
+            #     self.retrace(retrace_steps)
+            #     self.turn(False, 90, self.speed)
+            #     retrace_steps = self.avoid(False)
+            #     if len(retrace_steps):
+            #         print('No path')
             sys.exit(0)
-    def calibrate_turn_speed(self):
-        start = time.time()
-        try:
-            while True:
-                pc4.turn_left(self.speed)
-        except KeyboardInterrupt:
-            pc4.stop()
-            self.turning_time = time.time() - start
-            pc4.turn_right(self.speed)
-            time.sleep(self.turning_time)
-            pc4.stop()
+    def calibrate(self, duration):
+        now = time.time()
+        future = now + duration
+        counter = 0
+        x = 0
+        z = 0
+        y = 0
+        while time.time() < future:
+            g = self.imu.get_gyro_data()
+            x += g['x']
+            y += g['y']
+            z += g['z']
+            counter += 1
+        self.imu_offsets['x'] = x / counter
+        self.imu_offsets['y'] = y / counter
+        self.imu_offsets['z'] = z / counter
+    def get_gyro_data(self):
+        return self.imu.get_gyro_data()
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
@@ -75,7 +100,7 @@ class AvoidObjects():
             self.distances.append(distance)
         if self.us_step < 0:
             self.distances.reverse()
-        distances_map = map(lambda x: x < 20 and x >= 0, self.distances)
+        distances_map = map(lambda x: x < 20 and x != -2, self.distances)
         stop = reduce(lambda x, y: x or y, distances_map)
         if stop:
             print(self.distances)
@@ -179,15 +204,28 @@ class AvoidObjects():
         pc4.stop()
         time.sleep(.5)
         return min(left_distance,right_distance)
+    def calculate_turning_angle(self):
+        """Calculates the turning angle from gyroscope data."""
+        while True:
+            current_time = time.time()
+            dt = current_time - self.prev_time  # Time difference
+            self.prev_time = current_time
+            gyro_data = self.imu.get_gyro_data()
+            gyro_z = gyro_data['z'] - self.imu_offsets['z']
+            # Integrate angular velocity over time
+            self.turning_angle += gyro_z * dt
+            time.sleep(0.05)  # Adjust sleep time for desired rate
 
     def turn_right(self,  angle=90, speed=30):
+
         pc4.turn_right(speed)
-        time.sleep(self.turning_time)
+
+        time.sleep(1)
         pc4.stop()
 
     def turn_left(self, angle=90, speed=30):
         pc4.turn_left(speed)
-        time.sleep(self.turning_time)
+        time.sleep(1)
         pc4.stop()
 
 if __name__ == "__main__":
