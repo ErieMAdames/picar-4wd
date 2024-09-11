@@ -205,10 +205,11 @@ class AvoidObjects():
         return min(left_distance,right_distance)
     def calculate_turning_angle(self):
         """Calculates the turning angle from gyroscope data."""
+        prev_time = time.time()
         while True:
             current_time = time.time()
-            dt = current_time - self.prev_time  # Time difference
-            self.prev_time = current_time
+            dt = current_time - prev_time  # Time difference
+            prev_time = current_time
             gyro_data = self.imu.get_gyro_data()
             gyro_z = gyro_data['z'] - self.imu_offsets['z']
             # Integrate angular velocity over time
