@@ -83,7 +83,7 @@ class Map():
                 # Display the frame on the pygame window
                 self.screen.blit(frame_surface, (0, 0))
                 pygame.display.update()
-            self.current_angle += step
+            self.current_angle += self.us_step
             self.distances.append(distance)
 
         time.sleep(10)
