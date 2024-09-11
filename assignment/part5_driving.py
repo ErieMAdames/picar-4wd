@@ -61,7 +61,7 @@ class AvoidObjects():
         z = 0
         y = 0
         while time.time() < future:
-            g = self.imu.get_gyro_data()
+            g = self.imu.gyro
             x += g[0]
             y += g[1]
             z += g[2]
@@ -70,7 +70,7 @@ class AvoidObjects():
         self.imu_offsets['y'] = y / counter
         self.imu_offsets['z'] = z / counter
     def get_gyro_data(self):
-        return self.imu.get_gyro_data()
+        return self.imu.gyro
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
@@ -217,7 +217,7 @@ class AvoidObjects():
             current_time = time.time()
             dt = current_time - prev_time  # Time difference
             prev_time = current_time
-            gyro_data = self.imu.get_gyro_data()
+            gyro_data = self.imu.gyro
             gyro_z = gyro_data[2] - self.imu_offsets['z']
             # Integrate angular velocity over time
             self.turning_angle += gyro_z * dt
@@ -246,7 +246,7 @@ class AvoidObjects():
             current_time = time.time()
             dt = current_time - prev_time  # Time difference
             prev_time = current_time
-            gyro_data = self.imu.get_gyro_data()
+            gyro_data = self.imu.gyro
             gyro_z = gyro_data['z'] - self.imu_offsets['z']
             # Integrate angular velocity over time
             self.turning_angle += gyro_z * dt
