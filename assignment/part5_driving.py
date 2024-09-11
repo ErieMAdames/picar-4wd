@@ -46,7 +46,7 @@ class AvoidObjects():
         # # self.turn_right(90)
         # self.turn_left()
         # exit()
-        traveled = self.go_distance(1, True)
+        traveled = self.go_distance(10, True)
         if traveled < 1:
             retrace_steps = self.avoid()
             exit()
