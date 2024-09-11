@@ -42,7 +42,7 @@ class AvoidObjects():
         # imu_thread = threading.Thread(target=self.calculate_turning_angle)
         # imu_thread.daemon = True
         # imu_thread.start()
-        self.turn_right()
+        # self.turn_right()
         self.turn_left()
         exit()
         traveled = self.go_distance(1, True)
