@@ -8,6 +8,7 @@ import sys
 import pygame
 # from mpu6050 import mpu6050
 import traceback
+import cv2
 np.set_printoptions(threshold=sys.maxsize)
 
 class Map():
