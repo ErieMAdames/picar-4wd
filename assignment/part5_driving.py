@@ -27,7 +27,7 @@ class AvoidObjects():
     imu = mpu6050(0x68)
     turning_angle = 0.0  # Initial angle in degrees
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
-    forward_dist = .3
+    forward_dist = .5
     # Setup GPIO
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
@@ -42,9 +42,9 @@ class AvoidObjects():
         # imu_thread = threading.Thread(target=self.calculate_turning_angle)
         # imu_thread.daemon = True
         # imu_thread.start()
-        self.turn_right(90)
+        # self.turn_right(90)
         # self.turn_left()
-        exit()
+        # exit()
         traveled = self.go_distance(1, True)
         if traveled < 1:
             retrace_steps = self.avoid()
