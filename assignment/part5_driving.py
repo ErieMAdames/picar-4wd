@@ -47,6 +47,7 @@ class AvoidObjects():
         # exit()
         traveled = self.go_distance(1, True)
         if traveled < 1:
+            time.sleep(.5)
             retrace_steps = self.avoid()
             exit()
     def calibrate(self, duration):
@@ -107,6 +108,7 @@ class AvoidObjects():
         turning_left = 'turining left' if right else 'turningright'
         print(turning_right)
         stop = self.scan()
+        time.sleep(.5)
         retrace_steps.append((not right, 0))
         if stop:
             print('obstacle')
