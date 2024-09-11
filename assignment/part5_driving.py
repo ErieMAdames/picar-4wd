@@ -45,11 +45,11 @@ class AvoidObjects():
         imu_thread = threading.Thread(target=self.calculate_turning_angle)
         imu_thread.daemon = True
         imu_thread.start()
-        while True:
-            # gyro_data = self.imu.get_gyro_data()
-            print(self.turning_angle)
-        if traveled < 1:
-            retrace_steps = self.avoid()
+        # while True:
+        #     # gyro_data = self.imu.get_gyro_data()
+        #     print(self.turning_angle)
+        # if traveled < 1:
+        #     retrace_steps = self.avoid()
             # if len(retrace_steps):
             #     self.retrace(retrace_steps)
             #     self.turn(False, 90, self.speed)
