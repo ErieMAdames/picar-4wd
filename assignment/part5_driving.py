@@ -230,6 +230,7 @@ class AvoidObjects():
             gyro_z = gyro_data['z'] - self.imu_offsets['z']
             # Integrate angular velocity over time
             self.turning_angle += gyro_z * dt
+            print(self.turning_angle)
             error = abs((a - angle)/angle)
         pc4.stop()
     def turn_left(self, angle=-90, speed=30):
