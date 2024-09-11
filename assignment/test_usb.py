@@ -4,7 +4,7 @@ from adafruit_mpu6050 import MPU6050
 
 # Initialize FT200XD
 i2c = I2cController()
-i2c.configure('ftdi://ftdi:ft200xd/1')  # Adjust URL if needed
+i2c.configure('ftdi://ftdi:0403/6015/1')  # Adjust URL if needed
 
 # Get I2C port for communication
 i2c_port = i2c.get_port()
