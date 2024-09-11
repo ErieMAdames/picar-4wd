@@ -70,7 +70,6 @@ class Map():
         grid_size = 100
         map_grid = np.zeros((grid_size, grid_size), dtype=int)
         for _ in range(180):
-            print(self.current_angle)
             distance = pc4.get_distance_at(self.current_angle)
             if distance > 0:
                 dx = int(distance * np.cos(np.radians(self.current_angle + 90))) + 50
@@ -124,6 +123,7 @@ def generate_frames():
 
 @app.route('/video_feed')
 def video_feed():
+    print('video_feed')
     return Response(generate_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
