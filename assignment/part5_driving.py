@@ -24,7 +24,7 @@ class AvoidObjects():
     RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
     left_encoder_count = 0
     right_encoder_count = 0
-    imu = mpu6050(0x68)
+    imu = 00 #mpu6050(0x68)
     turning_angle = 0.0  # Initial angle in degrees
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
     forward_dist = .5
@@ -40,10 +40,10 @@ class AvoidObjects():
         print('calibrating')
         self.calibrate(3)
         print('Done calibrating. Offsets:')
-        imu_thread = threading.Thread(target=self.calculate_turning_angle)
-        imu_thread.daemon = True
-        imu_thread.start()
-        # self.turn_right(90)
+        # imu_thread = threading.Thread(target=self.calculate_turning_angle)
+        # imu_thread.daemon = True
+        # imu_thread.start()
+        # # self.turn_right(90)
         # self.turn_left()
         # exit()
         traveled = self.go_distance(1, True)
@@ -224,19 +224,20 @@ class AvoidObjects():
                 time.sleep(0.05)  # Adjust sleep time for desired rate
 
     def turn_right(self,  angle=90, speed=30):
-        prev_time = time.time()
-        start_angle = 0
-        a = 0
-        a = abs((a + 180) % 360 - 180)
+        # prev_time = time.time()
+        # start_angle = 0
+        # a = 0
+        # a = abs((a + 180) % 360 - 180)
         pc4.turn_right(speed)
-        self.read = True
-        while a < angle:
-            a = self.turning_angle - start_angle
-            a = abs((a + 180) % 360 - 180)
-            print(a)
-            error = abs((a - angle)/angle)
-        self.read = False
-        time.sleep(.1)
+        input()
+        # self.read = True
+        # while a < angle:
+        #     a = self.turning_angle - start_angle
+        #     a = abs((a + 180) % 360 - 180)
+        #     print(a)
+        #     error = abs((a - angle)/angle)
+        # self.read = False
+        # time.sleep(.1)
         pc4.stop()
     def turn_left(self, angle=-90, speed=30):
         prev_time = time.time()
