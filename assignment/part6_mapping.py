@@ -131,10 +131,10 @@ if __name__ == "__main__":
     try:
         print('Starting Part 5: Move around object')
         # Start the mapping process
-        map_thread = Map()
+        app.run(host='0.0.0.0', port=5000, threaded=True)
+        Map()
 
         # Start Flask server in a separate thread
-        app.run(host='0.0.0.0', port=5000, threaded=True)
     except KeyboardInterrupt:
         print('\nStopping')
     finally:
