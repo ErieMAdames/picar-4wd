@@ -1,17 +1,33 @@
+import time
 from pyftdi.i2c import I2cController
+from adafruit_mpu6050 import MPU6050
 
-# Create an I2C controller instance
+# Initialize FT200XD
 i2c = I2cController()
+i2c.configure('ftdi://ftdi:ft200xd/1')  # Adjust URL if needed
 
-# Open the FTDI device
-i2c.configure('ftdi://ftdi:232h/1')
+# Get I2C port for communication
+i2c_port = i2c.get_port()
 
-# Example I2C communication
-slave = i2c.get_port(0x68)  # Replace 0x68 with your I2C device address
+# Initialize MPU6050
+mpu = MPU6050(i2c_port)
 
-# Read from the device
-try:
-    data = slave.read(10)  # Read 10 bytes
-    print("Data read from device:", data)
-except Exception as e:
-    print("Error reading from I2C device:", e)
+def read_angles():
+    while True:
+        # Read raw accelerometer and gyroscope values
+        accel_x, accel_y, accel_z = mpu.acceleration
+        gyro_x, gyro_y, gyro_z = mpu.gyro
+
+        # Convert to angles if needed
+        angle_x = accel_x  # Replace with actual conversion if necessary
+        angle_y = accel_y
+        angle_z = accel_z
+
+        print(f"Angle X: {angle_x:.2f} degrees")
+        print(f"Angle Y: {angle_y:.2f} degrees")
+        print(f"Angle Z: {angle_z:.2f} degrees")
+
+        time.sleep(1)
+
+if __name__ == "__main__":
+    read_angles()
