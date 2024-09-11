@@ -1,23 +1,17 @@
-import time
-import board
-import busio
-from adafruit_ft232h import FT232H
+from pyftdi.i2c import I2cController
 
-# Initialize the FT232H device
-ft232h = FT232H()
-i2c = busio.I2C(ft232h.get_i2c_by_index(0))
+# Create an I2C controller instance
+i2c = I2cController()
 
-# Define the I2C address for your device
-DEVICE_ADDRESS = 0x68  # Replace with your device's address
+# Open the FTDI device
+i2c.configure('ftdi://ftdi:232h/1')
 
-def read_data():
-    try:
-        # Replace with your specific I2C read commands
-        data = i2c.readfrom(DEVICE_ADDRESS, 6)
-        print("Data read from device:", data)
-    except Exception as e:
-        print("Error reading data:", e)
+# Example I2C communication
+slave = i2c.get_port(0x68)  # Replace 0x68 with your I2C device address
 
-while True:
-    read_data()
-    time.sleep(1)
+# Read from the device
+try:
+    data = slave.read(10)  # Read 10 bytes
+    print("Data read from device:", data)
+except Exception as e:
+    print("Error reading from I2C device:", e)
