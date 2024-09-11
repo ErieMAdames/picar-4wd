@@ -35,7 +35,7 @@ class Map():
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
         pygame.init()
-        self.screen = pygame.display.set_mode((200, 200))
+        self.screen = pygame.display.set_mode((500, 500))
         self.scan()
         # x = input()
         # traveled = self.go_distance(1, True)
@@ -88,7 +88,8 @@ class Map():
                 image = np.zeros((100, 100, 3), dtype=np.uint8)
                 image[map_grid == 0] = [255, 0, 0]  # Blue for 0
                 image[map_grid == 1] = [0, 0, 255]  # Red for 1
-                frame_surface = pygame.surfarray.make_surface(image)
+                enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
+                frame_surface = pygame.surfarray.make_surface(enlarged_image)
                 # frame_surface = pygame.transform.rotate(frame_surface, -90)
                 # frame_surface = pygame.transform.flip(frame_surface, True, False)
 
