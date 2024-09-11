@@ -6,6 +6,7 @@ import sys
 import pygame
 import cv2
 from flask import Flask, Response
+import threading
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -15,7 +16,7 @@ frame = None
 
 np.set_printoptions(threshold=sys.maxsize)
 
-class Map():
+class Map:
     current_car_angle = 0
     speed = 30
     turning_time = .9
@@ -42,7 +43,6 @@ class Map():
         print('starting')
         pygame.init()
         self.screen = pygame.display.set_mode((500, 500))
-        self.scan()
 
     def calibrate_turn_speed(self):
         start = time.time()
@@ -123,18 +123,27 @@ def generate_frames():
 
 @app.route('/video_feed')
 def video_feed():
-    print('video_feed')
     return Response(generate_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
+
+def run_flask():
+    # Start Flask server
+    app.run(host='0.0.0.0', port=5000, threaded=True)
 
 if __name__ == "__main__":
     try:
         print('Starting Part 5: Move around object')
-        # Start the mapping process
-        app.run(host='0.0.0.0', port=5000, threaded=True)
-        Map()
 
-        # Start Flask server in a separate thread
+        # Create a Map object
+        map_instance = Map()
+
+        # Create a thread for the Flask server
+        flask_thread = threading.Thread(target=run_flask)
+        flask_thread.start()
+
+        # Run the scan method in the main thread
+        map_instance.scan()
+
     except KeyboardInterrupt:
         print('\nStopping')
     finally:
