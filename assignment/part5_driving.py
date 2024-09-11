@@ -219,9 +219,9 @@ class AvoidObjects():
             prev_time = current_time
             gyro_data = self.imu.gyro
             gyro_z = gyro_data[2] - self.imu_offsets['z']
-            print(gyro_z)
             # Integrate angular velocity over time
             self.turning_angle += gyro_z * dt
+            print(self.turning_angle)
             time.sleep(0.05)  # Adjust sleep time for desired rate
 
     def turn_right(self,  angle=90, speed=30):
@@ -233,6 +233,7 @@ class AvoidObjects():
         while a < angle:
             a = self.turning_angle - start_angle
             a = abs((a + 180) % 360 - 180)
+            print()
             error = abs((a - angle)/angle)
         pc4.stop()
     def turn_left(self, angle=-90, speed=30):
