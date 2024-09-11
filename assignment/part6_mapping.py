@@ -35,7 +35,7 @@ class Map():
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
         pygame.init()
-        screen = pygame.display.set_mode((200, 200))
+        self.screen = pygame.display.set_mode((200, 200))
         self.scan()
         # x = input()
         # traveled = self.go_distance(1, True)
