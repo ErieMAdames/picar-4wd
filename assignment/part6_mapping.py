@@ -98,6 +98,8 @@ class Map():
                 pygame.display.update()
             self.current_angle += step
             self.distances.append(distance)
+
+        time.sleep(10)
         for x in np.flip(map_grid, 0):
             x_str = np.array_repr(x).replace('\n', '').replace(' ', '').replace('array([', '').replace('])', '').replace('0','_').replace('1','@')
             # print(x)
