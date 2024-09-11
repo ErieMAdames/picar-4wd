@@ -1,23 +1,23 @@
 import time
 import board
 import busio
-from adafruit_mpu6050 import MPU6050
+from adafruit_ft232h import FT232H
 
-# Initialize I2C
-i2c = busio.I2C(board.SCL, board.SDA)
+# Initialize the FT232H device
+ft232h = FT232H()
+i2c = busio.I2C(ft232h.get_i2c_by_index(0))
 
-# Initialize MPU6050
-mpu = MPU6050(i2c)
+# Define the I2C address for your device
+DEVICE_ADDRESS = 0x68  # Replace with your device's address
 
-# Function to read accelerometer and gyroscope data
-def read_mpu6050():
-    accel = mpu.acceleration
-    gyro = mpu.gyro
-    return accel, gyro
+def read_data():
+    try:
+        # Replace with your specific I2C read commands
+        data = i2c.readfrom(DEVICE_ADDRESS, 6)
+        print("Data read from device:", data)
+    except Exception as e:
+        print("Error reading data:", e)
 
-# Main loop
 while True:
-    accel, gyro = read_mpu6050()
-    print(f"Acceleration: {accel}")
-    print(f"Gyroscope: {gyro}")
+    read_data()
     time.sleep(1)
