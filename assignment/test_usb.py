@@ -56,9 +56,9 @@ from pyftdi.ftdi import Ftdi
 #     print(f"Available device: {dev}")
 def scan_i2c_bus(i2c_controller, bus_number=1, timeout=0.1):
     """Scan the I2C bus for available addresses."""
-    i2c = i2c_controller.get_port()
     devices = []
     for address in range(0x03, 0x78):  # Addresses from 0x03 to 0x77
+        i2c = i2c_controller.get_port(address)
         try:
             i2c.write(address, b'')
             devices.append(address)
