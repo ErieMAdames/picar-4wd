@@ -34,23 +34,58 @@
 
 from pyftdi.i2c import I2cController
 from pyftdi.ftdi import Ftdi
-import time
+# import time
 
-# Initialize I2C controller
-i2c = I2cController()
+# # Initialize I2C controller
+# i2c = I2cController()
 
-# Use the correct URL based on your device details
-try:
-    # i2c.configure('ftdi://1027/24597/1')  # Ensure this URL is correct
-    url = 'ftdi://ftdi:232h:1:5/1 '
+# # Use the correct URL based on your device details
+# try:
+#     # i2c.configure('ftdi://1027/24597/1')  # Ensure this URL is correct
+#     url = 'ftdi://ftdi:232h:1:5/1 '
 
 
-    i2c.configure(url)  # Ensure this URL is correct
-    # i2c.configure('ftdi:///1')  # Ensure this URL is correct
-    print("FTDI device configured successfully")
-except Exception as e:
-    print(f"Error configuring I2C: {e}")
+#     i2c.configure(url)  # Ensure this URL is correct
+#     # i2c.configure('ftdi:///1')  # Ensure this URL is correct
+#     print("FTDI device configured successfully")
+# except Exception as e:
+#     print(f"Error configuring I2C: {e}")
 
-# List available devices
-for dev in Ftdi.list_devices():
-    print(f"Available device: {dev}")
+# # List available devices
+# for dev in Ftdi.list_devices():
+#     print(f"Available device: {dev}")
+def scan_i2c_bus(i2c_controller, bus_number=1, timeout=0.1):
+    """Scan the I2C bus for available addresses."""
+    i2c = i2c_controller.get_port()
+    devices = []
+    for address in range(0x03, 0x78):  # Addresses from 0x03 to 0x77
+        try:
+            i2c.write(address, b'')
+            devices.append(address)
+        except Exception as e:
+            # Address not responding
+            pass
+    return devices
+
+def main():
+    # Initialize I2C controller
+    i2c_controller = I2cController()
+    
+    # Configure the FT232H device
+    try:
+        i2c_controller.configure('ftdi://ftdi:232h/1')  # Adjust URL as needed
+    except Exception as e:
+        print(f"Error configuring I2C: {e}")
+        return
+    
+    # Scan the I2C bus
+    print("Scanning I2C bus for devices...")
+    devices = scan_i2c_bus(i2c_controller)
+    
+    # Print available I2C addresses
+    print("Available I2C addresses:")
+    for device in devices:
+        print(f"0x{device:02X}")
+
+if __name__ == "__main__":
+    main()
