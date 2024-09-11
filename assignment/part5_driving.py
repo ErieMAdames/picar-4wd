@@ -48,13 +48,7 @@ class AvoidObjects():
         traveled = self.go_distance(1, True)
         if traveled < 1:
             retrace_steps = self.avoid()
-            # if len(retrace_steps):
-            #     self.retrace(retrace_steps)
-            #     self.turn(False, 90, self.speed)
-            #     retrace_steps = self.avoid(False)
-            #     if len(retrace_steps):
-            #         print('No path')
-            # sys.exit(0)
+            exit()
     def calibrate(self, duration):
         now = time.time()
         future = now + duration
@@ -108,7 +102,7 @@ class AvoidObjects():
         # if there is something in the way while avoiding, retrace stepts
         print('avoiding')
         retrace_steps = []
-        self.turn_right(90, self.speed)
+        self.turn_right()
         turning_right = 'turning right' if right else 'turning left'
         turning_left = 'turining left' if right else 'turningright'
         print(turning_right)
@@ -125,7 +119,12 @@ class AvoidObjects():
         if dist < self.forward_dist:
             print('obstacle')
             return retrace_steps
-        self.turn_left()
+        self.turn_right()
+        time.sleep(.5)
+        self.turn_right()
+        time.sleep(.5)
+        self.turn_right()
+        time.sleep(.5)
         print(turning_left)
         stop = self.scan()
         retrace_steps.append((right, 0))
@@ -138,7 +137,12 @@ class AvoidObjects():
         if dist < self.forward_dist:
             print('obstacle')
             return retrace_steps
-        self.turn_left()
+        self.turn_right()
+        time.sleep(.5)
+        self.turn_right()
+        time.sleep(.5)
+        self.turn_right()
+        time.sleep(.5)
         print(turning_left)
         stop = self.scan()
         retrace_steps.append((right, 0))
@@ -230,7 +234,6 @@ class AvoidObjects():
             gyro_z = gyro_data['z'] - self.imu_offsets['z']
             # Integrate angular velocity over time
             self.turning_angle += gyro_z * dt
-            print(a)
             error = abs((a - angle)/angle)
         pc4.stop()
     def turn_left(self, angle=-90, speed=30):
