@@ -64,12 +64,14 @@ class Map():
 
     # # Add event detection for rising edges
     def scan(self):
+        print('scanning')
         self.current_angle = -90
         step = int(input())
         self.us_step = step
         grid_size = 100
         map_grid = np.zeros((grid_size, grid_size), dtype=int)
         for _ in range(int(180 / step)):
+            print('scanning' + '')
             distance = pc4.get_distance_at(self.current_angle)
             if distance > 0:
                 dx = int(distance * np.cos(np.radians(self.current_angle + 90))) + 50
