@@ -95,6 +95,7 @@ class Map():
                 # Display the frame on the pygame window
                 self.screen.blit(frame_surface, (0, 0))
                 pygame.display.update()
+            self.current_angle += step
             self.distances.append(distance)
         for x in np.flip(map_grid, 0):
             x_str = np.array_repr(x).replace('\n', '').replace(' ', '').replace('array([', '').replace('])', '').replace('0','_').replace('1','@')
