@@ -39,7 +39,7 @@ class AvoidObjects():
         #     self.scan()
         print('starting')
         print('calibrating')
-        self.calibrate(3)
+        # self.calibrate(3)
         print('Done calibrating. Offsets:')
         # traveled = self.go_distance(1, True)
         imu_thread = threading.Thread(target=self.calculate_turning_angle)
@@ -213,9 +213,7 @@ class AvoidObjects():
             gyro_z = gyro_data['z'] - self.imu_offsets['z']
             # Integrate angular velocity over time
             self.turning_angle += gyro_z * dt
-            print('tttt')
             print(self.turning_angle)
-            print('tttt')
             time.sleep(0.05)  # Adjust sleep time for desired rate
 
     def turn_right(self,  angle=90, speed=30):
