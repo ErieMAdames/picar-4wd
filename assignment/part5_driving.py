@@ -35,8 +35,6 @@ class AvoidObjects():
         GPIO.setup(self.LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
-        # while True:
-        #     self.scan()
         print('starting')
         print('calibrating')
         self.calibrate(3)
@@ -45,8 +43,11 @@ class AvoidObjects():
         imu_thread = threading.Thread(target=self.calculate_turning_angle)
         imu_thread.daemon = True
         imu_thread.start()
-        while True:
-            print(self.turning_angle)
+        # while True:
+        self.turn_right()
+        self.turn_right()
+        self.turn_right()
+        self.turn_right()
         # if traveled < 1:
         #     retrace_steps = self.avoid()
             # if len(retrace_steps):
@@ -217,12 +218,15 @@ class AvoidObjects():
             time.sleep(0.05)  # Adjust sleep time for desired rate
 
     def turn_right(self,  angle=90, speed=30):
-
+        start_angle = self.turning_angle
+        a = self.turning_angle - start_angle
+        a = abs((a + 180) % 360 - 180)
         pc4.turn_right(speed)
-
-        time.sleep(1)
+        while a < angle:
+            a = self.turning_angle - start_angle
+            a = abs((a + 180) % 360 - 180)
+            error = abs((a - angle)/angle)
         pc4.stop()
-
     def turn_left(self, angle=90, speed=30):
         pc4.turn_left(speed)
         time.sleep(1)
