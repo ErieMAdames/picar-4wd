@@ -39,9 +39,9 @@ class AvoidObjects():
         print('calibrating')
         self.calibrate(3)
         print('Done calibrating. Offsets:')
-        # imu_thread = threading.Thread(target=self.calculate_turning_angle)
-        # imu_thread.daemon = True
-        # imu_thread.start()
+        imu_thread = threading.Thread(target=self.calculate_turning_angle)
+        imu_thread.daemon = True
+        imu_thread.start()
         # self.turn_right(90)
         # self.turn_left()
         # exit()
@@ -229,13 +229,6 @@ class AvoidObjects():
         while a < angle:
             a = self.turning_angle - start_angle
             a = abs((a + 180) % 360 - 180)
-            current_time = time.time()
-            dt = current_time - prev_time  # Time difference
-            prev_time = current_time
-            gyro_data = self.imu.get_gyro_data()
-            gyro_z = gyro_data['z'] - self.imu_offsets['z']
-            # Integrate angular velocity over time
-            self.turning_angle += gyro_z * dt
             error = abs((a - angle)/angle)
         pc4.stop()
     def turn_left(self, angle=-90, speed=30):
