@@ -4,7 +4,9 @@ import time
 import math
 from functools import reduce
 import sys
-from mpu6050 import mpu6050
+import board
+import busio
+from adafruit_mpu6050 import MPU6050
 import threading
 
 import traceback
@@ -24,7 +26,8 @@ class AvoidObjects():
     RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
     left_encoder_count = 0
     right_encoder_count = 0
-    imu = mpu6050(0x68)
+    i2c = busio.I2C(board.SCL, board.SDA)
+    imu = MPU6050(i2c)
     turning_angle = 0.0  # Initial angle in degrees
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
     forward_dist = .5
@@ -59,9 +62,9 @@ class AvoidObjects():
         y = 0
         while time.time() < future:
             g = self.imu.get_gyro_data()
-            x += g['x']
-            y += g['y']
-            z += g['z']
+            x += g[0]
+            y += g[1]
+            z += g[2]
             counter += 1
         self.imu_offsets['x'] = x / counter
         self.imu_offsets['y'] = y / counter
@@ -215,7 +218,7 @@ class AvoidObjects():
             dt = current_time - prev_time  # Time difference
             prev_time = current_time
             gyro_data = self.imu.get_gyro_data()
-            gyro_z = gyro_data['z'] - self.imu_offsets['z']
+            gyro_z = gyro_data[2] - self.imu_offsets['z']
             # Integrate angular velocity over time
             self.turning_angle += gyro_z * dt
             time.sleep(0.05)  # Adjust sleep time for desired rate
