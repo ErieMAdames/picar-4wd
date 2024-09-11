@@ -60,7 +60,6 @@ def scan_i2c_bus(i2c_controller, bus_number=1, timeout=0.1):
     for address in range(0x03, 0x78):  # Addresses from 0x03 to 0x77
         i2c = i2c_controller.get_port(address)
         try:
-            print(address)
             i2c.write(address, b'')
             devices.append(address)
         except Exception as e:
