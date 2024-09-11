@@ -31,6 +31,8 @@ class Map():
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
+        while True:
+            pc4.get_distance_at(float(input()))
         pygame.init()
         self.screen = pygame.display.set_mode((500, 500))
         self.scan()
@@ -61,6 +63,7 @@ class Map():
         grid_size = 100
         map_grid = np.zeros((grid_size, grid_size), dtype=int)
         for _ in range(360):
+            print(self.current_angle)
             distance = pc4.get_distance_at(self.current_angle)
             if distance > 0:
                 dx = int(distance * np.cos(np.radians(self.current_angle + 90))) + 50
