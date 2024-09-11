@@ -219,6 +219,7 @@ class AvoidObjects():
             prev_time = current_time
             gyro_data = self.imu.gyro
             gyro_z = gyro_data[2] - self.imu_offsets['z']
+            print(gyro_z)
             # Integrate angular velocity over time
             self.turning_angle += gyro_z * dt
             time.sleep(0.05)  # Adjust sleep time for desired rate
