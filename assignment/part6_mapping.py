@@ -3,7 +3,6 @@ import picar_4wd as pc4
 import RPi.GPIO as GPIO
 import time
 import sys
-import pygame
 import cv2
 from flask import Flask, Response
 import threading
@@ -41,8 +40,6 @@ class Map:
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
-        # pygame.init()
-        # self.screen = pygame.display.set_mode((500, 500))
 
     def calibrate_turn_speed(self):
         start = time.time()
@@ -73,21 +70,21 @@ class Map:
             distance = pc4.get_distance_at(self.current_angle)
             if distance > 0:
                 dx = int(distance * np.cos(np.radians(self.current_angle + 90))) + 50
-                dy = int(distance * np.sin(np.radians(self.current_angle + 90)))# + 50
+                dy = int(distance * np.sin(np.radians(self.current_angle + 90))) + 50
                 
                 if 0 <= dx < 100 and 0 <= dy < 100:
                     map_grid[dy, dx] = 1
 
+                # Create and process the image with OpenCV
                 image = np.zeros((100, 100, 3), dtype=np.uint8)
-                image[map_grid == 0] = [0, 255, 0]
-                image[map_grid == 1] = [255, 0, 0]
+                image[map_grid == 0] = [0, 255, 0]  # Green for 0
+                image[map_grid == 1] = [255, 0, 0]  # Red for 1
+
                 enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
                 rotated_image = cv2.rotate(enlarged_image, cv2.ROTATE_90_CLOCKWISE)
-                frame_surface = pygame.surfarray.make_surface(rotated_image)
 
-                # self.screen.blit(frame_surface, (0, 0))
-                # pygame.display.update()
-                frame = cv2.flip(cv2.rotate(cv2.cvtColor(pygame.surfarray.array3d(frame_surface), cv2.COLOR_RGB2BGR), cv2.ROTATE_90_CLOCKWISE), 1)  # Correct the rotation for streaming
+                # Prepare the frame for streaming
+                frame = cv2.flip(rotated_image, 1)  # Flip the frame horizontally
 
             self.current_angle += self.us_step
             self.distances.append(distance)
