@@ -73,14 +73,14 @@ class Map:
             distance = pc4.get_distance_at(self.current_angle)
             if distance > 0:
                 dx = int(distance * np.cos(np.radians(self.current_angle + 90))) + 50
-                dy = int(distance * np.sin(np.radians(self.current_angle + 90))) + 50
+                dy = int(distance * np.sin(np.radians(self.current_angle + 90)))# + 50
                 
                 if 0 <= dx < 100 and 0 <= dy < 100:
                     map_grid[dy, dx] = 1
 
                 image = np.zeros((100, 100, 3), dtype=np.uint8)
-                image[map_grid == 0] = [255, 0, 0]
-                image[map_grid == 1] = [0, 0, 255]
+                image[map_grid == 0] = [0, 255, 0]
+                image[map_grid == 1] = [255, 0, 0]
                 enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
                 rotated_image = cv2.rotate(enlarged_image, cv2.ROTATE_90_CLOCKWISE)
                 frame_surface = pygame.surfarray.make_surface(rotated_image)
