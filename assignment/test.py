@@ -11,14 +11,10 @@ frame = None
 
 def run_detection():
     global frame
-    try:
-        # Start the camera
-        picam2 = Picamera2()
-        picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
-        picam2.start()
-    except Picamera2Error as e:
-        print(f"Camera initialization failed: {e}")
-        return
+      # Start the camera
+    picam2 = Picamera2()
+    picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
+    picam2.start()
 
     time.sleep(2)  # Allow the camera to warm up
 
