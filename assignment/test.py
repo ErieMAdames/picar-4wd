@@ -2,7 +2,7 @@ import cv2
 import time
 import numpy as np
 from flask import Flask, Response
-from picamera2 import Picamera2, Picamera2Error
+from picamera2 import Picamera2
 import threading
 
 # Initialize the Flask app
