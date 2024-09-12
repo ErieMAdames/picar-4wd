@@ -71,7 +71,7 @@ class Map:
             distance = pc4.get_distance_at(self.current_angle)
             if distance > 0:
                 dx = int(distance * np.cos(np.radians(self.current_angle + 90 + self.angle_offset))) + 50
-                dy = int(distance * np.sin(np.radians(self.current_angle + 90 + self.angle_offset))) + 50
+                dy = int(distance * np.sin(np.radians(self.current_angle + 90 + self.angle_offset)))
                 
                 if 0 <= dx < 100 and 0 <= dy < 100:
                     map_grid[dy, dx] = 1
