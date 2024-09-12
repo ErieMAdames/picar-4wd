@@ -31,6 +31,7 @@ class Map:
     left_encoder_count = 0
     right_encoder_count = 0
     forward_dist = .5
+    angle_offset = -10
 
     # Setup GPIO
     def __init__(self):
@@ -69,8 +70,8 @@ class Map:
         for _ in range(180):
             distance = pc4.get_distance_at(self.current_angle)
             if distance > 0:
-                dx = int(distance * np.cos(np.radians(self.current_angle + 90))) + 50
-                dy = int(distance * np.sin(np.radians(self.current_angle + 90))) + 50
+                dx = int(distance * np.cos(np.radians(self.current_angle + 90 + self.angle_offset))) + 50
+                dy = int(distance * np.sin(np.radians(self.current_angle + 90 + self.angle_offset))) + 50
                 
                 if 0 <= dx < 100 and 0 <= dy < 100:
                     map_grid[dy, dx] = 1
