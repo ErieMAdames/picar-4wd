@@ -29,6 +29,7 @@ class AvoidObjects():
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
     forward_dist = .75
     read = False
+    angle_offset = -10
     # Setup GPIO
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
