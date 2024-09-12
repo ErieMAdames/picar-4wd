@@ -4,7 +4,6 @@ class Motor():
     STEP = 10
     DELAY = 0.1
     def __init__(self, pwm_pin, dir_pin, is_reversed=False):
-        print('motores')
         self.pwm_pin = pwm_pin
         self.dir_pin = dir_pin
         self._is_reversed = is_reversed

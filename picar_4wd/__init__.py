@@ -12,7 +12,6 @@ from .utils import *
 import time
 import threading
 from .version import __version__
-print('here')
 soft_reset()
 time.sleep(0.2)
 
