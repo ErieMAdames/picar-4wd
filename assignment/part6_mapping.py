@@ -91,7 +91,7 @@ class Map:
                 # Convert Pygame surface to OpenCV format and rotate to fix stream orientation
                 frame = pygame.surfarray.array3d(frame_surface)
                 frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-                frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)  # Correct the rotation for streaming
+                frame =  cv2.flip(cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE), 1)  # Correct the rotation for streaming
 
             self.current_angle += self.us_step
             self.distances.append(distance)
