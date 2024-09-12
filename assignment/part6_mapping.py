@@ -93,7 +93,7 @@ class Map:
         for x in np.flip(map_grid, 0):
             x_str = np.array_repr(x).replace('\n', '').replace(' ', '').replace('array([', '').replace('])', '').replace('0','_').replace('1','@')
             print(x_str)
-        self.distances = []
+        self.distances = []0
 
     def turn_right(self, angle=90, speed=30):
         pc4.turn_right(speed)
