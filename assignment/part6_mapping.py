@@ -81,10 +81,10 @@ class Map:
                 image[map_grid == 1] = [255, 0, 0]  # Red for 1
 
                 enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
-                rotated_image = cv2.rotate(enlarged_image, cv2.ROTATE_90_CLOCKWISE)
+                # rotated_image = cv2.rotate(enlarged_image, cv2.ROTATE_90_CLOCKWISE)
 
                 # Prepare the frame for streaming
-                frame = cv2.flip(rotated_image, 1)  # Flip the frame horizontally
+                frame = cv2.flip(enlarged_image, 1)  # Flip the frame horizontally
 
             self.current_angle += self.us_step
             self.distances.append(distance)
