@@ -73,7 +73,7 @@ class Map:
                 dy = int(distance * np.sin(np.radians(self.current_angle + 90))) + 50
                 
                 if 0 <= dx < 100 and 0 <= dy < 100:
-                    print(self.current_angle, dx, dy)
+                    print(self.current_angle, dx, dy, distance)
                     map_grid[dy, dx] = 1
 
                 # Create and process the image with OpenCV
