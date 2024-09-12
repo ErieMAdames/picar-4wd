@@ -3,7 +3,7 @@ import picar_4wd as pc4
 def main():
     while True:
         current_angle = int(input())
-        distance = pc4.get_distance_at(current_angle)
+        print(pc4.get_distance_at(current_angle))
         
 
 
