@@ -41,8 +41,8 @@ class Map:
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
-        pygame.init()
-        self.screen = pygame.display.set_mode((500, 500))
+        # pygame.init()
+        # self.screen = pygame.display.set_mode((500, 500))
 
     def calibrate_turn_speed(self):
         start = time.time()
@@ -85,13 +85,9 @@ class Map:
                 rotated_image = cv2.rotate(enlarged_image, cv2.ROTATE_90_CLOCKWISE)
                 frame_surface = pygame.surfarray.make_surface(rotated_image)
 
-                self.screen.blit(frame_surface, (0, 0))
-                pygame.display.update()
-
-                # # Convert Pygame surface to OpenCV format and rotate to fix stream orientation
-                # frame = pygame.surfarray.array3d(frame_surface)
-                # frame = cv2.cvtColor(pygame.surfarray.array3d(frame_surface), cv2.COLOR_RGB2BGR)
-                frame = cv2.flip(cv2.rotate( cv2.cvtColor(pygame.surfarray.array3d(frame_surface), cv2.COLOR_RGB2BGR), cv2.ROTATE_90_CLOCKWISE), 1)  # Correct the rotation for streaming
+                # self.screen.blit(frame_surface, (0, 0))
+                # pygame.display.update()
+                frame = cv2.flip(cv2.rotate(cv2.cvtColor(pygame.surfarray.array3d(frame_surface), cv2.COLOR_RGB2BGR), cv2.ROTATE_90_CLOCKWISE), 1)  # Correct the rotation for streaming
 
             self.current_angle += self.us_step
             self.distances.append(distance)
