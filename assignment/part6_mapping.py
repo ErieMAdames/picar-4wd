@@ -136,7 +136,9 @@ if __name__ == "__main__":
         flask_thread.start()
 
         # Run the scan method in the main thread
-        map_instance.scan()
+        while True:
+            map_instance.scan()
+            input()
 
     except KeyboardInterrupt:
         print('\nStopping')
