@@ -9,18 +9,16 @@ import sys
 import time
 import threading
 
-# if geteuid() != 0:
-#     print("Script must be run as root. Try ' python3 setup.y install'")
-#     sys.exit(1)
-print('sys.path.append("./picar_4wd")')
+if geteuid() != 0:
+    print("Script must be run as root. Try 'sudo python3 setup.y install'")
+    sys.exit(1)
+
 sys.path.append("./picar_4wd")
 from version import __version__
 
 # Get the long description from the relevant file
-print('here = path.abspath(path.dirname(__file__))')
 here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'DESCRIPTION.rst'), encoding='utf-8') as f:
-    print(here)
     long_description = f.read()
 
 #
@@ -163,18 +161,18 @@ PIP_INSTALL_LIST = [
 ]
 
 def install():
-    user_name = 'raspberry'#getlogin()
+    user_name = getlogin()
 
     if "--no-dep" not in options:
         # =============================
-        print("Install dependencies with sudo apt-get:")
-        # update sudo apt-get
-        do(msg="update sudo apt-get",
-            cmd=' sudo apt-get update')
+        print("Install dependencies with apt-get:")
+        # update apt-get
+        do(msg="update apt-get",
+            cmd='sudo apt-get update')
         #
         for dep in APT_INSTALL_LIST:
             do(msg=f"install {dep}",
-                cmd=f' sudo apt-get install {dep} -y')
+                cmd=f'sudo apt-get install {dep} -y')
 
         # =============================
         print("Install dependencies with pip3:")
@@ -205,15 +203,15 @@ def install():
     # =============================
     if ".picar-4wd" not in listdir(f"/home/{user_name}"):
         do(msg="create .picar-4wd directory",
-            cmd=f' mkdir /home/{user_name}/.picar-4wd/') 
+            cmd=f'sudo mkdir /home/{user_name}/.picar-4wd/') 
     do(msg="copy picar-4wd-config",
-        cmd=f' cp ./data/config /home/{user_name}/.picar-4wd/config')
+        cmd=f'sudo cp ./data/config /home/{user_name}/.picar-4wd/config')
     do(msg="change directory owner",
-        cmd=f' chown -R {user_name}:{user_name} /home/{user_name}/.picar-4wd/')
+        cmd=f'sudo chown -R {user_name}:{user_name} /home/{user_name}/.picar-4wd/')
 
     print("Setup picar-4wd web-example service")
     do(msg="copy picar-4wd web-example file",
-        cmd=' cp ./bin/picar-4wd-web-example /etc/init.d/picar-4wd-web-example')
+        cmd='sudo cp ./bin/picar-4wd-web-example /etc/init.d/picar-4wd-web-example')
     do(msg="add excutable mode for picar-4wd-web-example",
         cmd='sudo chmod +x /etc/init.d/picar-4wd-web-example')
 
