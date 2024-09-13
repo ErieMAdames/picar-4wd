@@ -191,15 +191,15 @@ def install():
         #
         for dep in PIP_INSTALL_LIST:
             do(msg=f"install {dep}",
-                cmd=f' pip3 install {dep} {_is_bsps}')
+                cmd=f'sudo pip3 install {dep} {_is_bsps}')
 
     # Setup interfaces
     # =============================
     print("Setup interfaces")
     do(msg="turn on I2C",
-        cmd=' raspi-config nonint do_i2c 0')
+        cmd='sudo raspi-config nonint do_i2c 0')
     do(msg="turn on SPI",
-        cmd=' raspi-config nonint do_spi 0')
+        cmd='sudo raspi-config nonint do_spi 0')
 
     # cp service file
     # =============================
