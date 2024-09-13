@@ -215,7 +215,7 @@ def install():
     do(msg="copy picar-4wd web-example file",
         cmd=' cp ./bin/picar-4wd-web-example /etc/init.d/picar-4wd-web-example')
     do(msg="add excutable mode for picar-4wd-web-example",
-        cmd=' chmod +x /etc/init.d/picar-4wd-web-example')
+        cmd='sudo chmod +x /etc/init.d/picar-4wd-web-example')
 
     # Report error
     # =============================
