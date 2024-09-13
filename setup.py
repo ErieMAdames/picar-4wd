@@ -9,9 +9,9 @@ import sys
 import time
 import threading
 
-if geteuid() != 0:
-    print("Script must be run as root. Try ' python3 setup.y install'")
-    sys.exit(1)
+# if geteuid() != 0:
+#     print("Script must be run as root. Try ' python3 setup.y install'")
+#     sys.exit(1)
 
 sys.path.append("./picar_4wd")
 from version import __version__
