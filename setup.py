@@ -167,14 +167,14 @@ def install():
 
     if "--no-dep" not in options:
         # =============================
-        print("Install dependencies with apt-get:")
-        # update apt-get
-        do(msg="update apt-get",
-            cmd=' apt-get update')
+        print("Install dependencies with sudo apt-get:")
+        # update sudo apt-get
+        do(msg="update sudo apt-get",
+            cmd=' sudo apt-get update')
         #
         for dep in APT_INSTALL_LIST:
             do(msg=f"install {dep}",
-                cmd=f' apt-get install {dep} -y')
+                cmd=f' sudo apt-get install {dep} -y')
 
         # =============================
         print("Install dependencies with pip3:")
