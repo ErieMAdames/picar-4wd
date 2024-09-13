@@ -1,11 +1,11 @@
 import numpy as np
 import picar_4wd as pc4
-import RPi.GPIO as GPIO
 import time
 import sys
 import cv2
 from flask import Flask, Response
 import threading
+import RPi.GPIO as GPIO
 
 # Initialize the Flask app
 app = Flask(__name__)
