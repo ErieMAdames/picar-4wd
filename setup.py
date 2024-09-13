@@ -226,7 +226,7 @@ def install():
             key = input().lower()
             if key == 'y':
                 print("System reboot now")
-                run_command(" reboot")
+                run_command("sudo reboot")
             elif key == 'N' or key == 'n':
                 print("reboot cancel")
                 sys.exit(0)
