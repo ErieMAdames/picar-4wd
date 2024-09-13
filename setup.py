@@ -12,7 +12,7 @@ import threading
 # if geteuid() != 0:
 #     print("Script must be run as root. Try ' python3 setup.y install'")
 #     sys.exit(1)
-
+print('sys.path.append("./picar_4wd")')
 sys.path.append("./picar_4wd")
 from version import __version__
 
