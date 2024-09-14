@@ -71,6 +71,12 @@ class Map:
         picam2.stop()
     def visualize(image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
         """Draws bounding boxes on the input image."""
+        # Constants
+        _MARGIN = 10  # pixels
+        _ROW_SIZE = 10  # pixels
+        _FONT_SIZE = 2
+        _FONT_THICKNESS = 1
+        _TEXT_COLOR = (0, 0, 255)  # red
         for detection in detection_result.detections:
             print(detection)
             category = detection.categories[0]
