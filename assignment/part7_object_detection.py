@@ -35,7 +35,7 @@ class DetectObject():
     options = vision.ObjectDetectorOptions(base_options=base_options, detection_options=detection_options)
     detector = vision.ObjectDetector.create_from_options(options)
     picam2 = Picamera2()
-    width, height = 320, 240  # Reduce resolution for better FPS
+    width, height = 1280, 960  # Reduce resolution for better FPS
     config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (width, height)})
     picam2.align_configuration(config)
     picam2.configure(config)
@@ -85,7 +85,7 @@ class DetectObject():
         while left_distance < dist or right_distance < dist:
             for detection in self.detect():
                 if not stopped:
-                    if detection.categories[0].index == 12 and (detection.bounding_box.width >= 100 or detection.bounding_box.height >=100):
+                    if detection.categories[0].index == 12 and (detection.bounding_box.width >= 150 or detection.bounding_box.height >=150):
                         stopped = True
                         pc4.stop()
                         time.sleep(3)
@@ -96,9 +96,6 @@ class DetectObject():
             pc4.forward(self.speed)
             left_distance = calculate_distance(self.left_encoder_count)
             right_distance = calculate_distance(self.right_encoder_count)
-            # print(left_distance)
-            # print(right_distance)
-            # print('----')
         pc4.stop()
         time.sleep(.5)
         return min(left_distance, right_distance)
