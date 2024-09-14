@@ -38,7 +38,30 @@ def visualize(image: np.ndarray, detection_result: processor.DetectionResult) ->
             cv2.putText(image, result_text, text_location, cv2.FONT_HERSHEY_PLAIN,
                         _FONT_SIZE, _TEXT_COLOR, _FONT_THICKNESS)
     return image
+def yuv420_to_rgb(yuv_image, width, height):
+    """Convert YUV420 image to RGB format."""
+    # Calculate sizes for Y, U, and V planes
+    y_size = width * height
+    uv_size = (width // 2) * (height // 2)
 
+    # Extract the Y plane (full resolution)
+    y_plane = yuv_image[0:y_size].reshape((height, width))
+
+    # Extract the U and V planes (quarter resolution)
+    u_plane = yuv_image[y_size:y_size + uv_size].reshape((height // 2, width // 2))
+    v_plane = yuv_image[y_size + uv_size:].reshape((height // 2, width // 2))
+
+    # Upsample U and V planes to full resolution
+    u_plane_up = cv2.resize(u_plane, (width, height), interpolation=cv2.INTER_LINEAR)
+    v_plane_up = cv2.resize(v_plane, (width, height), interpolation=cv2.INTER_LINEAR)
+
+    # Stack Y, U, and V planes into a single YUV image
+    yuv_full = np.stack((y_plane, u_plane_up, v_plane_up), axis=-1)
+
+    # Convert YUV to BGR (since OpenCV uses BGR by default)
+    bgr_image = cv2.cvtColor(yuv_full, cv2.COLOR_YUV2BGR)
+
+    return bgr_image
 # Initialize object detection model with optimizations
 base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
 detection_options = processor.DetectionOptions(max_results=1, score_threshold=0.5)  # Limit to 1 result for speed
@@ -66,8 +89,9 @@ start_time = time.time()
 running = True
 while running:
     # Capture frame from the camera
-    image = picam2.capture_array("lores")
-    image = cv2.flip(image, 0)
+    yuv_image = picam2.capture_array("lores").flatten()
+    rgb_image = yuv420_to_rgb(yuv_image, lwidth, lheight)
+    # image = cv2.flip(image, 0)
 
     # Calculate FPS
     counter += 1
@@ -78,7 +102,7 @@ while running:
 
     # Convert to RGB for TensorFlow model
     # rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    rgb_image = cv2.cvtColor(image, cv2.COLOR_YUV2BGR_I420)
+    # rgb_image = cv2.cvtColor(image, cv2.COLOR_YUV2BGR_I420)
     input_tensor = vision.TensorImage.create_from_array(rgb_image)
 
     # Run object detection
