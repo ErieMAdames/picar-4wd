@@ -123,7 +123,7 @@ while running:
     #     frame_surface = pygame.surfarray.make_surface(np.rot90(rgb_image))
     #     screen.blit(frame_surface, (0, 0))
     #     pygame.display.update()
-    image = picam2.capture_array("lores")
+    image = picam2.capture_array("main")
     image = cv2.flip(image, 0)
 
     # Calculate FPS
