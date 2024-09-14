@@ -109,9 +109,9 @@ while running:
     rgb_image = visualize(rgb_image, detection_result)
     # Display FPS
     fps_text = f'FPS = {fps:.1f}'
+    rgb_image = cv2.flip(rgb_image, 0)
     cv2.putText(rgb_image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
 
-    rgb_image = cv2.flip(rgb_image, 0)
     # Convert RGB to Pygame format
     rgb_image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2RGB) 
     # Ensure image is of shape (height, width, 3) for Pygame
