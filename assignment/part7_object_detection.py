@@ -5,7 +5,6 @@ import math
 from functools import reduce
 import sys
 import cv2
-import pygame
 import time
 from picamera2 import Picamera2
 import numpy as np
