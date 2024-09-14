@@ -78,6 +78,7 @@ def process_frames():
 
 def display_frames():
     global frame
+    global running
     while running:
         if frame is not None:
             with frame_lock:
@@ -94,7 +95,6 @@ def display_frames():
         # Check for quit events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                global running
                 running = False
 
 def visualize(image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
