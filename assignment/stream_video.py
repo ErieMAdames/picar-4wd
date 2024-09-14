@@ -69,7 +69,7 @@ class Map:
             pygame_frame = image
 
         picam2.stop()
-    def visualize(image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
+    def visualize(self, image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
         """Draws bounding boxes on the input image."""
         # Constants
         _MARGIN = 10  # pixels
