@@ -15,10 +15,16 @@ _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 0, 255)  # red
 
 width, height = 1280, 960  # Reduce resolution for better FPS
-# width, height = 320, 240  # Reduce resolution for better FPS
 
 # FPS parameters
 fps_avg_frame_count = 10
+
+# Time tracking variables
+total_capture_time = 0
+total_detection_time = 0
+total_visualize_time = 0
+total_iterations = 0
+
 def visualize(image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
     """Draws bounding boxes on the input image."""
     for detection in detection_result.detections:
@@ -44,7 +50,7 @@ detector = vision.ObjectDetector.create_from_options(options)
 
 # Initialize the camera
 picam2 = Picamera2()
-config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (width, height)})#, lores={"size": (int(width / 2), int(height/2))})
+config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (width, height)})
 picam2.align_configuration(config)
 picam2.configure(config)
 picam2.start()
@@ -61,8 +67,14 @@ start_time = time.time()
 # Main loop
 running = True
 while running:
+    total_iterations += 1
+
+    # Measure capture time
+    capture_start = time.time()
     image = picam2.capture_array("main")
     image = cv2.flip(image, 0)
+    capture_end = time.time()
+    total_capture_time += capture_end - capture_start
 
     # Calculate FPS
     counter += 1
@@ -71,30 +83,36 @@ while running:
         fps = fps_avg_frame_count / (end_time - start_time)
         start_time = time.time()
 
-    # Convert to RGB for TensorFlow model
+    # Measure object detection time
+    detection_start = time.time()
     rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    # rgb_image = cv2.cvtColor(image, cv2.COLOR_YUV2BGR_I420)
     input_tensor = vision.TensorImage.create_from_array(rgb_image)
-
-    # Run object detection
     detection_result = detector.detect(input_tensor)
-    image = visualize(image, detection_result)
+    detection_end = time.time()
+    total_detection_time += detection_end - detection_start
 
-    # # Display FPS
+    # Measure visualization time
+    visualize_start = time.time()
+    image = visualize(image, detection_result)
+    visualize_end = time.time()
+    total_visualize_time += visualize_end - visualize_start
+
+    # Display FPS
     fps_text = f'FPS = {fps:.1f}'
     print(fps_text)
     cv2.putText(image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
 
-    # # Convert image from BGR to RGB format required by Pygame (already in RGB format for TFLite)
+    # Convert image from BGR to RGB format required by Pygame
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    # print(fps_text)
     image = cv2.flip(image, 1)
+
     # Ensure image is of shape (height, width, 3) for Pygame
     if image.shape[2] == 3:
         # Convert image to 3D surface (pygame expects (width, height, channels))
         frame_surface = pygame.surfarray.make_surface(np.rot90(image))
         screen.blit(frame_surface, (0, 0))
         pygame.display.update()
+
     # Check for quit events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -102,3 +120,13 @@ while running:
 
 # Clean up and exit
 pygame.quit()
+
+# Print average times
+avg_capture_time = total_capture_time / total_iterations
+avg_detection_time = total_detection_time / total_iterations
+avg_visualize_time = total_visualize_time / total_iterations
+
+print(f"Average capture time: {avg_capture_time:.4f} seconds")
+print(f"Average detection time: {avg_detection_time:.4f} seconds")
+print(f"Average visualize time: {avg_visualize_time:.4f} seconds")
+print(f"Total iterations: {total_iterations}")
