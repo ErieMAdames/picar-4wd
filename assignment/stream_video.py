@@ -2,8 +2,9 @@ import numpy as np
 import time
 import sys
 import cv2
-from flask import Flask, Response
+import argparse
 import threading
+from flask import Flask, Response
 from picamera2 import Picamera2
 import pygame
 
@@ -14,10 +15,12 @@ app = Flask(__name__)
 frame = None
 pygame_frame = None
 
+# Event to signal the threads to stop
+stop_event = threading.Event()
+
 np.set_printoptions(threshold=sys.maxsize)
 
 class Map:
-    speed = 30
     width = 640 * 2
     height = 480 * 2
 
@@ -33,7 +36,7 @@ class Map:
         # FPS calculation variables
         prev_frame_time = time.time()
 
-        while True:
+        while not stop_event.is_set():
             # Capture frame from camera
             image = picam2.capture_array("main")
 
@@ -55,9 +58,11 @@ class Map:
             frame = image
             pygame_frame = image
 
+        picam2.stop()
+
 def generate_frames():
     global frame
-    while True:
+    while not stop_event.is_set():
         if frame is not None:
             ret, jpeg = cv2.imencode('.jpg', frame)
             if ret:
@@ -81,9 +86,10 @@ def run_pygame():
     pygame.display.set_caption("Camera Stream")
     clock = pygame.time.Clock()
 
-    while True:
+    while not stop_event.is_set():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                stop_event.set()
                 pygame.quit()
                 return
 
@@ -96,7 +102,9 @@ def run_pygame():
         pygame.display.update()
         clock.tick(30)  # 30 FPS cap for Pygame
 
-if __name__ == "__main__":
+    pygame.quit()
+
+def main(stream_flask, display_pygame):
     try:
         print('Starting camera stream with Flask and Pygame')
 
@@ -104,15 +112,35 @@ if __name__ == "__main__":
         map_instance = Map()
 
         # Create threads for Flask server and Pygame display
-        flask_thread = threading.Thread(target=run_flask)
-        pygame_thread = threading.Thread(target=run_pygame)
-        flask_thread.start()
-        pygame_thread.start()
+        threads = []
+        if stream_flask:
+            flask_thread = threading.Thread(target=run_flask)
+            threads.append(flask_thread)
+        if display_pygame:
+            pygame_thread = threading.Thread(target=run_pygame)
+            threads.append(pygame_thread)
+
+        for thread in threads:
+            thread.start()
 
         # Run the scan method in the main thread
         map_instance.scan()
 
     except KeyboardInterrupt:
-        print('\nStopping')
+        print('\nStopping...')
+
     finally:
-        pygame.quit()
+        stop_event.set()  # Signal all threads to stop
+        for thread in threads:
+            thread.join()  # Wait for threads to finish
+        print("Program exited gracefully.")
+
+if __name__ == "__main__":
+    # Command-line argument parsing
+    parser = argparse.ArgumentParser(description="Camera Stream with Flask and Pygame.")
+    parser.add_argument('--flask', action='store_true', help="Stream the video feed via Flask")
+    parser.add_argument('--pygame', action='store_true', help="Display the video feed on a Pygame window")
+    args = parser.parse_args()
+
+    # Run the main function with the selected options
+    main(stream_flask=args.flask, display_pygame=args.pygame)
