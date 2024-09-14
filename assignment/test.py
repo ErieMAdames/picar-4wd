@@ -7,130 +7,96 @@ from tflite_support.task import core
 from tflite_support.task import processor
 from tflite_support.task import vision
 
+# Constants
 _MARGIN = 10  # pixels
 _ROW_SIZE = 10  # pixels
 _FONT_SIZE = 2
 _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 0, 255)  # red
 
-width = 640 * 2
-height = 480 * 2
- # Visualization parameters
-row_size = 20  # pixelssud
-left_margin = 24  # pixels
-text_color = (0, 0, 255)  # red
-font_size = 1
-font_thickness = 1
+width, height = 640, 480  # Reduce resolution for better FPS
+
+# FPS parameters
 fps_avg_frame_count = 10
-def visualize(
-    image: np.ndarray,
-    detection_result: processor.DetectionResult,
-) -> np.ndarray:
-  """Draws bounding boxes on the input image and return it.
 
-  Args:
-    image: The input RGB image.
-    detection_result: The list of all "Detection" entities to be visualize.
+def visualize(image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
+    """Draws bounding boxes on the input image."""
+    for detection in detection_result.detections:
+        category = detection.categories[0]
+        category_name = category.category_name
+        if category_name == 'stop sign':
+            bbox = detection.bounding_box
+            start_point = bbox.origin_x, bbox.origin_y
+            end_point = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
+            cv2.rectangle(image, start_point, end_point, _TEXT_COLOR, 3)
 
-  Returns:
-    Image with bounding boxes.
-  """
-  for detection in detection_result.detections:
-    category = detection.categories[0]
-    category_name = category.category_name
-    print(detection.categories)
-    print(category_name)
-    # Draw bounding_box
-    if (category_name == 'stop sign'):
-      bbox = detection.bounding_box
-      start_point = bbox.origin_x, bbox.origin_y
-      end_point = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
-      cv2.rectangle(image, start_point, end_point, _TEXT_COLOR, 3)
+            # Draw label and score
+            probability = round(category.score, 2)
+            result_text = f"{category_name} ({probability})"
+            text_location = (_MARGIN + bbox.origin_x, _MARGIN + _ROW_SIZE + bbox.origin_y)
+            cv2.putText(image, result_text, text_location, cv2.FONT_HERSHEY_PLAIN,
+                        _FONT_SIZE, _TEXT_COLOR, _FONT_THICKNESS)
+    return image
 
-      # Draw label and score
-      category = detection.categories[0]
-      category_name = category.category_name
-      probability = round(category.score, 2)
-      result_text = category_name + ' (' + str(probability) + ')'
-      text_location = (_MARGIN + bbox.origin_x,
-                      _MARGIN + _ROW_SIZE + bbox.origin_y)
-      cv2.putText(image, result_text, text_location, cv2.FONT_HERSHEY_PLAIN,
-                  _FONT_SIZE, _TEXT_COLOR, _FONT_THICKNESS)
-
-  return image
-# Initialize the object detection model
-base_options = core.BaseOptions(
-    file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
-detection_options = processor.DetectionOptions(
-    max_results=3, score_threshold=0.3)
-options = vision.ObjectDetectorOptions(
-    base_options=base_options, detection_options=detection_options)
+# Initialize object detection model with optimizations
+base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
+detection_options = processor.DetectionOptions(max_results=1, score_threshold=0.5)  # Limit to 1 result for speed
+options = vision.ObjectDetectorOptions(base_options=base_options, detection_options=detection_options)
 detector = vision.ObjectDetector.create_from_options(options)
+
+# Initialize the camera
 picam2 = Picamera2()
 picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (width, height)}))
 picam2.start()
 
-time.sleep(2)
-# # Variables to calculate FPS
+# Initialize Pygame
+pygame.init()
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Object Detection Stream")
+
+# FPS calculation variables
 counter, fps = 0, 0
 start_time = time.time()
 
-# Visualization parameters
-row_size = 20  # pixels
-left_margin = 24  # pixels
-text_color = (0, 0, 255)  # red
-font_size = 1
-font_thickness = 1
-fps_avg_frame_count = 10
-pygame.init()
-screen = pygame.display.set_mode((width, height))
-
-# Continuously capture images from the camera and run inference
-while True:
+# Main loop
+running = True
+while running:
+    # Capture frame from the camera
     image = picam2.capture_array("main")
 
+    # Calculate FPS
     counter += 1
-    image = cv2.flip(image, 0)
+    if counter % fps_avg_frame_count == 0:
+        end_time = time.time()
+        fps = fps_avg_frame_count / (end_time - start_time)
+        start_time = time.time()
 
-    # Convert the image from BGR to RGB as required by the TFLite model.
+    # Convert to RGB for TensorFlow model
     rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
-    # Create a TensorImage object from the RGB image.
     input_tensor = vision.TensorImage.create_from_array(rgb_image)
 
-    # Run object detection estimation using the model.
+    # Run object detection
     detection_result = detector.detect(input_tensor)
-
-    # Draw keypoints and edges on input image
     image = visualize(image, detection_result)
 
-    # Calculate the FPS
-    if counter % fps_avg_frame_count == 0:
-      end_time = time.time()
-      fps = fps_avg_frame_count / (end_time - start_time)
-      start_time = time.time()
+    # Display FPS
+    fps_text = f'FPS = {fps:.1f}'
+    cv2.putText(image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
 
-    # Show the FPS
-    fps_text = 'FPS = {:.1f}'.format(fps)
-    text_location = (left_margin, row_size)
-
-    cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
-                font_size, text_color, font_thickness)
-
-    # Stop the program if the ESC key is pressed.
-    if cv2.waitKey(1) == 27:
-      break
-
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    # Display in Pygame window
     frame_surface = pygame.surfarray.make_surface(image)
-    frame_surface = pygame.transform.rotate(frame_surface, -90)
-    frame_surface = pygame.transform.flip(frame_surface, True, False)
-
-    # Display the frame on the pygame window
+    frame_surface = pygame.transform.rotate(frame_surface, -90)  # Rotate for display
     screen.blit(frame_surface, (0, 0))
     pygame.display.update()
 
-    # Check for events (like the window close button)
+    # Check for quit events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+    # Exit on pressing ESC key
+    if cv2.waitKey(1) == 27:
+        break
+
+# Clean up and exit
+pygame.quit()
