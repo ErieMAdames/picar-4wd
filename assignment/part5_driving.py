@@ -4,10 +4,9 @@ import time
 import math
 from functools import reduce
 import sys
-from mpu6050 import mpu6050
-import threading
-
-import traceback
+import board
+import busio
+import adafruit_icm20x
 
 class AvoidObjects():
     current_car_angle = 0
@@ -24,7 +23,8 @@ class AvoidObjects():
     RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
     left_encoder_count = 0
     right_encoder_count = 0
-    imu = mpu6050(0x68)
+    i2c = busio.I2C(board.SCL, board.SDA)
+    sensor = adafruit_icm20x.ICM20948(i2c)
     turning_angle = 0.0  # Initial angle in degrees
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
     forward_dist = .75
@@ -39,6 +39,19 @@ class AvoidObjects():
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
         print('calibrating')
+        while True:
+            # Read accelerometer (m/s^2) and magnetometer (µT) values
+            accel = self.sensor.acceleration  # Gives (x, y, z) in m/s^2
+            mag = self.sensor.magnetic  # Gives (x, y, z) in microteslas
+
+            # Calculate pitch, roll, yaw
+            pitch, roll, yaw = self.calculate_angles(accel, mag)
+
+            # Output the angles
+            print(f"Pitch: {pitch:.2f} degrees, Roll: {roll:.2f} degrees, Yaw: {yaw:.2f} degrees")
+
+            # Sleep for a bit before the next reading
+            time.sleep(0.1)
         self.calibrate(3)
         print(self.imu_offsets)
         print('Done calibrating. Offsets:')
@@ -52,6 +65,25 @@ class AvoidObjects():
         if traveled < 1:
             retrace_steps = self.avoid()
             exit()
+    def calculate_angles(self, accel, mag):
+    # Accelerometer values
+        accel_x, accel_y, accel_z = accel
+        # Magnetometer values
+        mag_x, mag_y, mag_z = mag
+
+        # Calculate pitch and roll from the accelerometer data
+        pitch = math.atan2(accel_y, accel_z) * 180 / math.pi
+        roll = math.atan2(-accel_x, math.sqrt(accel_y ** 2 + accel_z ** 2)) * 180 / math.pi
+
+        # Calculate yaw (heading) from the magnetometer data
+        # Adjust heading based on pitch and roll
+        heading = math.atan2(mag_y * math.cos(pitch) - mag_z * math.sin(pitch),
+                                mag_x * math.cos(roll) + mag_y * math.sin(roll) * math.sin(pitch) + mag_z * math.sin(roll) * math.cos(pitch)) * 180 / math.pi
+
+        # Normalize heading to 0-360 degrees
+        heading = (heading + 360) % 360
+
+        return pitch, roll, heading
     def calibrate(self, duration):
         now = time.time()
         future = now + duration
