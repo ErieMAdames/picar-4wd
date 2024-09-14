@@ -66,7 +66,7 @@ class Map:
             cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
             image = cv2.flip(image, 1)
             for detection in detection_result.detections:
-                if detection.categories[0].index == 12:
+                if detection.categories[0].index == 12 and (detection.bounding_box.width >= 200 or detection.bounding_box.height >= 200):
                     pc4.stop()
             # Update global frames for Flask and Pygame
             frame = image
