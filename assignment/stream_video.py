@@ -38,7 +38,6 @@ class Map:
             image = picam2.capture_array("main")
 
             # Flip the image and convert to RGB
-            image = cv2.flip(image, 1)
             image = cv2.flip(image, 0)
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
@@ -50,6 +49,7 @@ class Map:
             # Display FPS on the frame
             fps_text = 'FPS = {:.1f}'.format(fps)
             cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
+            image = cv2.flip(image, 1)
 
             # Update global frames for Flask and Pygame
             frame = image
