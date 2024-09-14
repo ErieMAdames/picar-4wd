@@ -115,11 +115,12 @@ while running:
     # Convert RGB to Pygame format
     rgb_image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2RGB) 
     # Ensure image is of shape (height, width, 3) for Pygame
-    if image.shape[2] == 3:
-        # Convert image to 3D surface (pygame expects (width, height, channels))
-        frame_surface = pygame.surfarray.make_surface(np.rot90(image))
+    if rgb_image.shape[2] == 3:
+        # Convert image to 3D surface (Pygame expects (width, height, channels))
+        frame_surface = pygame.surfarray.make_surface(np.rot90(rgb_image))
         screen.blit(frame_surface, (0, 0))
         pygame.display.update()
+
     # Check for quit events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
