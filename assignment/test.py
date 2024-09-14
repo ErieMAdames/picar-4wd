@@ -14,7 +14,8 @@ _FONT_SIZE = 2
 _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 0, 255)  # red
 
-width, height = 2048, 1536  # Reduce resolution for better FPS
+width, height = 1280, 960  # Reduce resolution for better FPS
+lwidth, lheight = 640 / 2, 480 / 2  # Reduce resolution for better FPS
 
 # FPS parameters
 fps_avg_frame_count = 10
@@ -46,13 +47,15 @@ detector = vision.ObjectDetector.create_from_options(options)
 
 # Initialize the camera
 picam2 = Picamera2()
-picam2.configure(picam2.create_preview_configuration(main={"size": (2048, 1536)}, lores={"size": (320, 240)}, encode="lores"))
+picam2.configure(picam2.create_preview_configuration(main={"size": (width, height)}, lores={"size": (lwidth, lheight)}, encode="lores"))
 picam2.start()
 
 # Initialize Pygame
 pygame.init()
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Object Detection Stream")
+screenl = pygame.display.set_mode((lwidth, lheight))
+pygame.display.set_caption("Object Detection Stream lores")
 
 # FPS calculation variables
 counter, fps = 0, 0
@@ -62,8 +65,10 @@ start_time = time.time()
 running = True
 while running:
     # Capture frame from the camera
-    image = picam2.capture_array("lores")
+    image = picam2.capture_array("main")
+    imagel = picam2.capture_array("lores")
     image = cv2.flip(image, 0)
+    imagel = cv2.flip(imagel, 0)
 
     # Calculate FPS
     counter += 1
@@ -74,25 +79,37 @@ while running:
 
     # Convert to RGB for TensorFlow model
     rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    rgb_imagel = cv2.cvtColor(imagel, cv2.COLOR_BGR2RGB)
     input_tensor = vision.TensorImage.create_from_array(rgb_image)
+    input_tensorl = vision.TensorImage.create_from_array(rgb_imagel)
 
     # Run object detection
     detection_result = detector.detect(input_tensor)
     image = visualize(image, detection_result)
+    detection_resultl = detector.detect(input_tensorl)
+    imagel = visualize(imagel, detection_resultl)
 
     # Display FPS
     fps_text = f'FPS = {fps:.1f}'
     cv2.putText(image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
+    cv2.putText(imagel, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
 
     # Convert image from BGR to RGB format required by Pygame (already in RGB format for TFLite)
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    imagel = cv2.cvtColor(imagel, cv2.COLOR_RGB2BGR)
     # print(fps_text)
     image = cv2.flip(image, 1)
+    imagel = cv2.flip(imagel, 1)
     # Ensure image is of shape (height, width, 3) for Pygame
     if image.shape[2] == 3:
         # Convert image to 3D surface (pygame expects (width, height, channels))
         frame_surface = pygame.surfarray.make_surface(np.rot90(image))
         screen.blit(frame_surface, (0, 0))
+        pygame.display.update()
+    if imagel.shape[2] == 3:
+        # Convert image to 3D surface (pygame expects (width, height, channels))
+        frame_surface = pygame.surfarray.make_surface(np.rot90(imagel))
+        screenl.blit(frame_surface, (0, 0))
         pygame.display.update()
 
     # Check for quit events
