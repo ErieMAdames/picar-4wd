@@ -47,7 +47,7 @@ detector = vision.ObjectDetector.create_from_options(options)
 
 # Initialize the camera
 picam2 = Picamera2()
-config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (width, height)}, lores={"size": (lwidth, lheight)},  display="lores")
+config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (width, height)}, lores={"size": (lwidth, lheight)},  display="lores",  encode="lores")
 picam2.align_configuration(config)
 picam2.configure(config)
 picam2.start()
