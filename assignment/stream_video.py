@@ -74,6 +74,7 @@ class Map:
         fps_avg_frame_count = 10
         start_time = time.time()
         while True:
+            image = picam2.capture_array("main")
             if counter % fps_avg_frame_count == 0:
                 end_time = time.time()
                 fps = fps_avg_frame_count / (end_time - start_time)
