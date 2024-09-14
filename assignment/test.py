@@ -83,11 +83,15 @@ while running:
     fps_text = f'FPS = {fps:.1f}'
     cv2.putText(image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
 
-    # Display in Pygame window
-    frame_surface = pygame.surfarray.make_surface(image)
-    frame_surface = pygame.transform.rotate(frame_surface, -90)  # Rotate for display
-    screen.blit(frame_surface, (0, 0))
-    pygame.display.update()
+    # Convert image from BGR to RGB format required by Pygame (already in RGB format for TFLite)
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+    # Ensure image is of shape (height, width, 3) for Pygame
+    if image.shape[2] == 3:
+        # Convert image to 3D surface (pygame expects (width, height, channels))
+        frame_surface = pygame.surfarray.make_surface(np.rot90(image))
+        screen.blit(frame_surface, (0, 0))
+        pygame.display.update()
 
     # Check for quit events
     for event in pygame.event.get():
