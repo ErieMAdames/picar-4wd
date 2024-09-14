@@ -35,7 +35,7 @@ class Map:
     def scan(self):
         global frame, pygame_frame
         picam2 = Picamera2()
-        config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (width, height)})
+        config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (self.width, self.height)})
         picam2.align_configuration(config)
         picam2.configure(config)
         picam2.start()
