@@ -13,7 +13,7 @@ from tflite_support.task import processor
 from tflite_support.task import vision
 
 class DetectObject():
-    speed = 30
+    speed = 10
     turning_time = .9
     current_angle = 0
     us_step = pc4.STEP

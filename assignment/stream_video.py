@@ -174,6 +174,7 @@ def main(stream_flask, display_pygame):
             shutdown_flask()
 
     finally:
+        pc4.stop()
         for thread in threads:
             thread.join()  # Wait for threads to finish
         print("Program exited gracefully.")
