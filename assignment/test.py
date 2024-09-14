@@ -89,9 +89,10 @@ start_time = time.time()
 running = True
 while running:
     # Capture frame from the camera
-    yuv_image = picam2.capture_array("lores").flatten()
+    yuv_image = picam2.capture_array("lores").flatten()  # Flatten to 1D for easier processing
+
+    # Convert YUV to RGB
     rgb_image = yuv420_to_rgb(yuv_image, lwidth, lheight)
-    # image = cv2.flip(image, 0)
 
     # Calculate FPS
     counter += 1
@@ -100,23 +101,19 @@ while running:
         fps = fps_avg_frame_count / (end_time - start_time)
         start_time = time.time()
 
-    # Convert to RGB for TensorFlow model
-    # rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    # rgb_image = cv2.cvtColor(image, cv2.COLOR_YUV2BGR_I420)
+    # Convert to TensorFlow tensor
     input_tensor = vision.TensorImage.create_from_array(rgb_image)
 
     # Run object detection
     detection_result = detector.detect(input_tensor)
-    image = visualize(image, detection_result)
+    rgb_image = visualize(rgb_image, detection_result)
 
     # Display FPS
     fps_text = f'FPS = {fps:.1f}'
-    cv2.putText(image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
+    cv2.putText(rgb_image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
 
-    # Convert image from BGR to RGB format required by Pygame (already in RGB format for TFLite)
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    # print(fps_text)
-    image = cv2.flip(image, 1)
+    # Convert RGB to Pygame format
+    rgb_image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2RGB) 
     # Ensure image is of shape (height, width, 3) for Pygame
     if image.shape[2] == 3:
         # Convert image to 3D surface (pygame expects (width, height, channels))
