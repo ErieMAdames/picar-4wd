@@ -39,20 +39,6 @@ class AvoidObjects():
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
         print('calibrating')
-        while True:
-            # Read accelerometer (m/s^2) and magnetometer (µT) values
-            accel = self.sensor.acceleration  # Gives (x, y, z) in m/s^2
-            mag = self.sensor.magnetic  # Gives (x, y, z) in microteslas
-
-            # Calculate pitch, roll, yaw
-            pitch, roll, yaw = self.calculate_angles(accel, mag)
-
-            # Output the angles
-            print(f"Pitch: {pitch:.2f} degrees, Roll: {roll:.2f} degrees, Yaw: {yaw:.2f} degrees")
-
-            # Sleep for a bit before the next reading
-            time.sleep(0.1)
-        self.calibrate(3)
         print(self.imu_offsets)
         print('Done calibrating. Offsets:')
         # imu_thread = threading.Thread(target=self.calculate_turning_angle)
@@ -65,8 +51,17 @@ class AvoidObjects():
         if traveled < 1:
             retrace_steps = self.avoid()
             exit()
-    def calculate_angles(self, accel, mag):
-    # Accelerometer values
+    def calculate_angles(self):
+        accel = self.sensor.acceleration  # Gives (x, y, z) in m/s^2
+        mag = self.sensor.magnetic  # Gives (x, y, z) in microteslas
+
+        # Calculate pitch, roll, yaw
+        pitch, roll, yaw = self.calculate_angles(accel, mag)
+
+        # Output the angles
+        print(f"Pitch: {pitch:.2f} degrees, Roll: {roll:.2f} degrees, Yaw: {yaw:.2f} degrees")
+
+        # Sleep for a bit before the next reading
         accel_x, accel_y, accel_z = accel
         # Magnetometer values
         mag_x, mag_y, mag_z = mag
@@ -214,6 +209,7 @@ class AvoidObjects():
         right_distance = calculate_distance(self.right_encoder_count)
         
         while left_distance < dist or right_distance < dist:
+            self.ccalculate_angles()
             stop = self.scan()
             if stop:
                 break
