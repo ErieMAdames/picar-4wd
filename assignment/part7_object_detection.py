@@ -71,11 +71,18 @@ class DetectObject():
 
         left_distance = calculate_distance(self.left_encoder_count)
         right_distance = calculate_distance(self.right_encoder_count)
+        stopped = False
         while left_distance < dist or right_distance < dist:
-            image = self.picam2.capture_array("main")
-            rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            input_tensor = vision.TensorImage.create_from_array(rgb_image)
-            detection_result = self.detector.detect(input_tensor)
+            if not stopped:
+                image = self.picam2.capture_array("main")
+                rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                input_tensor = vision.TensorImage.create_from_array(rgb_image)
+                detection_result = self.detector.detect(input_tensor)
+                for detection in detection_result.detections:
+                    if detection.categories[0].index == 12 and detection.categories[0].width >= 110 and detection.categories[0].height >=110:
+                        stopped = True
+                        pc4.stop()
+                        time.sleep(3)
             pc4.forward(self.speed)
             left_distance = calculate_distance(self.left_encoder_count)
             right_distance = calculate_distance(self.right_encoder_count)
@@ -98,7 +105,7 @@ class DetectObject():
 if __name__ == "__main__":
     try:
         print('Starting Part 5: Move around object')
-        AvoidObjects()
+        DetectObject()
     except KeyboardInterrupt:
         print('\nStopping')
     finally:
