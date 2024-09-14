@@ -50,9 +50,9 @@ picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888',
 picam2.start()
 
 # Initialize Pygame
-# pygame.init()
-# screen = pygame.display.set_mode((width, height))
-# pygame.display.set_caption("Object Detection Stream")
+pygame.init()
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Object Detection Stream")
 
 # FPS calculation variables
 counter, fps = 0, 0
@@ -86,19 +86,19 @@ while running:
 
     # Convert image from BGR to RGB format required by Pygame (already in RGB format for TFLite)
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    print(fps_text)
+    # print(fps_text)
     image = cv2.flip(image, 1)
     # Ensure image is of shape (height, width, 3) for Pygame
-    # if image.shape[2] == 3:
-    #     # Convert image to 3D surface (pygame expects (width, height, channels))
-    #     frame_surface = pygame.surfarray.make_surface(np.rot90(image))
-    #     screen.blit(frame_surface, (0, 0))
-    #     pygame.display.update()
+    if image.shape[2] == 3:
+        # Convert image to 3D surface (pygame expects (width, height, channels))
+        frame_surface = pygame.surfarray.make_surface(np.rot90(image))
+        screen.blit(frame_surface, (0, 0))
+        pygame.display.update()
 
-    # # Check for quit events
-    # for event in pygame.event.get():
-    #     if event.type == pygame.QUIT:
-    #         running = False
+    # Check for quit events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
 # Clean up and exit
-# pygame.quit()
+pygame.quit()
