@@ -29,7 +29,6 @@ def visualize(image: np.ndarray, detection_result: processor.DetectionResult) ->
             start_point = bbox.origin_x, bbox.origin_y
             end_point = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
             cv2.rectangle(image, start_point, end_point, _TEXT_COLOR, 3)
-
             # Draw label and score
             probability = round(category.score, 2)
             result_text = f"{category_name} ({probability})"

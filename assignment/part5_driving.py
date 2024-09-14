@@ -4,7 +4,7 @@ import time
 import math
 from functools import reduce
 import sys
-# from mpu6050 import mpu6050
+from mpu6050 import mpu6050
 import threading
 
 import traceback
@@ -24,7 +24,7 @@ class AvoidObjects():
     RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
     left_encoder_count = 0
     right_encoder_count = 0
-    imu = 00 #mpu6050(0x68)
+    imu = mpu6050(0x68)
     turning_angle = 0.0  # Initial angle in degrees
     imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
     forward_dist = .75
@@ -39,7 +39,8 @@ class AvoidObjects():
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
         print('calibrating')
-        # self.calibrate(3)
+        self.calibrate(3)
+        print(self.imu_offsets)
         print('Done calibrating. Offsets:')
         # imu_thread = threading.Thread(target=self.calculate_turning_angle)
         # imu_thread.daemon = True
@@ -51,22 +52,22 @@ class AvoidObjects():
         if traveled < 1:
             retrace_steps = self.avoid()
             exit()
-    # def calibrate(self, duration):
-    #     now = time.time()
-    #     future = now + duration
-    #     counter = 0
-    #     x = 0
-    #     z = 0
-    #     y = 0
-    #     while time.time() < future:
-    #         g = self.imu.get_gyro_data()
-    #         x += g['x']
-    #         y += g['y']
-    #         z += g['z']
-    #         counter += 1
-    #     self.imu_offsets['x'] = x / counter
-    #     self.imu_offsets['y'] = y / counter
-    #     self.imu_offsets['z'] = z / counter
+    def calibrate(self, duration):
+        now = time.time()
+        future = now + duration
+        counter = 0
+        x = 0
+        z = 0
+        y = 0
+        while time.time() < future:
+            g = self.imu.get_gyro_data()
+            x += g['x']
+            y += g['y']
+            z += g['z']
+            counter += 1
+        self.imu_offsets['x'] = x / counter
+        self.imu_offsets['y'] = y / counter
+        self.imu_offsets['z'] = z / counter
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
