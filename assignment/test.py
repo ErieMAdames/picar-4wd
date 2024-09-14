@@ -47,7 +47,7 @@ detector = vision.ObjectDetector.create_from_options(options)
 
 # Initialize the camera
 picam2 = Picamera2()
-picam2.configure(picam2.create_preview_configuration(main={"format":"RGB888", "size": (width, height)}, lores={"size": (lwidth, lheight)}))
+picam2.configure(picam2.create_video_configuration(main={"format":"RGB888", "size": (width, height)}, lores={"size": (lwidth, lheight)},  display="lores"))
 picam2.start()
 
 # Initialize Pygame
