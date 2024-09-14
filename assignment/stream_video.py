@@ -39,6 +39,7 @@ class Map:
 
             # Flip the image and convert to RGB
             image = cv2.flip(image, 1)
+            image = cv2.flip(image, 0)
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
             # Calculate FPS
