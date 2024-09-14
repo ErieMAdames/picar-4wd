@@ -77,7 +77,7 @@ picam2.start()
 
 # Initialize Pygame
 pygame.init()
-screen = pygame.display.set_mode((width, height))
+# screen = pygame.display.set_mode((width, height))
 screen = pygame.display.set_mode((lwidth, lheight))
 pygame.display.set_caption("Object Detection Stream")
 
@@ -92,7 +92,7 @@ while running:
     yuv_image = picam2.capture_array("lores").flatten()  # Flatten to 1D for easier processing
 
     # Convert YUV to RGB
-    rgb_image = cv2.flip(yuv420_to_rgb(yuv_image, lwidth, lheight), 0)
+    rgb_image = yuv420_to_rgb(yuv_image, lwidth, lheight)
 
     # Calculate FPS
     counter += 1
@@ -107,7 +107,7 @@ while running:
     # Run object detection
     detection_result = detector.detect(input_tensor)
     rgb_image = visualize(rgb_image, detection_result)
-
+    rgb_image = cv2.flip(rgb_image, 0)
     # Display FPS
     fps_text = f'FPS = {fps:.1f}'
     cv2.putText(rgb_image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
