@@ -14,7 +14,7 @@ _FONT_SIZE = 2
 _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 0, 255)  # red
 
-width, height = 640, 480  # Reduce resolution for better FPS
+width, height = 320, 240  # Reduce resolution for better FPS
 
 # FPS parameters
 fps_avg_frame_count = 10
@@ -30,7 +30,6 @@ def visualize(image: np.ndarray, detection_result: processor.DetectionResult) ->
     for detection in detection_result.detections:
         category = detection.categories[0]
         category_name = category.category_name
-        print(category_name)
         bbox = detection.bounding_box
         start_point = bbox.origin_x, bbox.origin_y
         end_point = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
@@ -99,7 +98,6 @@ while running:
 
     # Display FPS
     fps_text = f'FPS = {fps:.1f}'
-    print(fps_text)
     cv2.putText(image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
 
     # Convert image from BGR to RGB format required by Pygame
