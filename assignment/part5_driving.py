@@ -4,9 +4,6 @@ import time
 import math
 from functools import reduce
 import sys
-import board
-import busio
-import adafruit_icm20x
 
 class AvoidObjects():
     current_car_angle = 0
@@ -23,10 +20,7 @@ class AvoidObjects():
     RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
     left_encoder_count = 0
     right_encoder_count = 0
-    i2c = busio.I2C(board.SCL, board.SDA)
-    sensor = adafruit_icm20x.ICM20948(i2c)
     turning_angle = 0.0  # Initial angle in degrees
-    imu_offsets = { 'x' : 0, 'y' : 0, 'z' : 0 }
     forward_dist = .75
     read = False
     angle_offset = -10
@@ -38,62 +32,10 @@ class AvoidObjects():
         GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
         GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
-        print('calibrating')
-        print(self.imu_offsets)
-        print('Done calibrating. Offsets:')
-        # imu_thread = threading.Thread(target=self.calculate_turning_angle)
-        # imu_thread.daemon = True
-        # imu_thread.start()
-        # # self.turn_right(90)
-        # self.turn_left()
-        # exit()
         traveled = self.go_distance(10, True)
         if traveled < 1:
             retrace_steps = self.avoid()
             exit()
-    def calculate_angles(self):
-        accel = self.sensor.acceleration  # Gives (x, y, z) in m/s^2
-        mag = self.sensor.magnetic  # Gives (x, y, z) in microteslas
-
-        # Calculate pitch, roll, yaw
-
-        # Output the angles
-
-        # Sleep for a bit before the next reading
-        accel_x, accel_y, accel_z = accel
-        # Magnetometer values
-        mag_x, mag_y, mag_z = mag
-
-        # Calculate pitch and roll from the accelerometer data
-        pitch = math.atan2(accel_y, accel_z) * 180 / math.pi
-        roll = math.atan2(-accel_x, math.sqrt(accel_y ** 2 + accel_z ** 2)) * 180 / math.pi
-
-        # Calculate yaw (heading) from the magnetometer data
-        # Adjust heading based on pitch and roll
-        heading = math.atan2(mag_y * math.cos(pitch) - mag_z * math.sin(pitch),
-                                mag_x * math.cos(roll) + mag_y * math.sin(roll) * math.sin(pitch) + mag_z * math.sin(roll) * math.cos(pitch)) * 180 / math.pi
-
-        # Normalize heading to 0-360 degrees
-        heading = (heading + 360) % 360
-        print(f"Pitch: {pitch:.2f} degrees, Roll: {roll:.2f} degrees, Yaw: {heading:.2f} degrees")
-
-        return pitch, roll, heading
-    def calibrate(self, duration):
-        now = time.time()
-        future = now + duration
-        counter = 0
-        x = 0
-        z = 0
-        y = 0
-        while time.time() < future:
-            g = self.imu.get_gyro_data()
-            x += g['x']
-            y += g['y']
-            z += g['z']
-            counter += 1
-        self.imu_offsets['x'] = x / counter
-        self.imu_offsets['y'] = y / counter
-        self.imu_offsets['z'] = z / counter
     # Variables to store encoder counts
     # Callback functions to increment counts
     def left_encoder_callback(self, channel):
@@ -223,56 +165,15 @@ class AvoidObjects():
             # print('----')
         pc4.stop()
         time.sleep(.5)
-        return min(left_distance,right_distance)
-    # def calculate_turning_angle(self):
-    #     """Calculates the turning angle from gyroscope data."""
-    #     prev_time = time.time()
-    #     while True:
-    #         if self.read:
-    #             current_time = time.time()
-    #             dt = current_time - prev_time  # Time difference
-    #             prev_time = current_time
-    #             gyro_data = self.imu.get_gyro_data()
-    #             gyro_z = gyro_data['z'] - self.imu_offsets['z']
-    #             # Integrate angular velocity over time
-    #             self.turning_angle += gyro_z * dt
-    #             print(self.turning_angle)
-    #             time.sleep(0.05)  # Adjust sleep time for desired rate
+        return min(left_distance, right_distance)
 
     def turn_right(self,  angle=90, speed=30):
-        # prev_time = time.time()
-        # start_angle = 0
-        # a = 0
-        # a = abs((a + 180) % 360 - 180)
         pc4.turn_right(speed)
         input()
-        # self.read = True
-        # while a < angle:
-        #     a = self.turning_angle - start_angle
-        #     a = abs((a + 180) % 360 - 180)
-        #     print(a)
-        #     error = abs((a - angle)/angle)
-        # self.read = False
-        # time.sleep(.1)
         pc4.stop()
     def turn_left(self, angle=-90, speed=30):
-        # prev_time = time.time()
-        # start_angle = 0
-        # a = 0
-        # a = abs((a + 180) % 360 - 180)
         pc4.turn_left(speed)
         input()
-        # while a > angle:
-        #     a = self.turning_angle - start_angle
-        #     a = abs((a + 180) % 360 - 180)
-        #     current_time = time.time()
-        #     dt = current_time - prev_time  # Time difference
-        #     prev_time = current_time
-        #     gyro_data = self.imu.get_gyro_data()
-        #     gyro_z = gyro_data['z'] - self.imu_offsets['z']
-        #     # Integrate angular velocity over time
-        #     self.turning_angle += gyro_z * dt
-        #     error = abs((a - angle)/angle)
         pc4.stop()
 
 if __name__ == "__main__":
