@@ -7,12 +7,14 @@ import cv2
 from flask import Flask, Response
 import threading
 from picamera2 import Picamera2
+import pygame
 
 # Initialize the Flask app
 app = Flask(__name__)
 
 # Set up global variables for streaming
 frame = None
+pygame_frame = None
 
 np.set_printoptions(threshold=sys.maxsize)
 
@@ -59,7 +61,7 @@ class Map:
         self.right_encoder_count += 1
 
     def scan(self):
-        global frame
+        global frame, pygame_frame
         picam2 = Picamera2()
         picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (self.width, self.height)}))
         picam2.start()
@@ -87,32 +89,9 @@ class Map:
 
             cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
                         font_size, text_color, font_thickness)
-            # Create and process the image with OpenCV
-            # image = np.zeros((100, 100, 3), dtype=np.uint8)
-            # image[map_grid == 0] = [0, 255, 0]  # Green for 0
-            # image[map_grid == 1] = [255, 0, 0]  # Red for 1
-
-            # enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
-            # rotated_image = cv2.rotate(enlarged_image, cv2.ROTATE_90_CLOCKWISE)
-
-            # Prepare the frame for streaming
-            frame = image #cv2.flip(image, 0)  # Flip the frame horizontally
-
-        time.sleep(10)
-        for x in np.flip(map_grid, 0):
-            x_str = np.array_repr(x).replace('\n', '').replace(' ', '').replace('array([', '').replace('])', '').replace('0','_').replace('1','@')
-            print(x_str)
-        self.distances = []
-
-    def turn_right(self, angle=90, speed=30):
-        pc4.turn_right(speed)
-        time.sleep(self.turning_time)
-        pc4.stop()
-
-    def turn_left(self, angle=90, speed=30):
-        pc4.turn_left(speed)
-        time.sleep(self.turning_time)
-        pc4.stop()
+            # Prepare the frame for streaming and pygame display
+            frame = image
+            pygame_frame = image
 
 def generate_frames():
     global frame
@@ -133,6 +112,28 @@ def run_flask():
     # Start Flask server
     app.run(host='0.0.0.0', port=5000, threaded=True)
 
+def run_pygame():
+    global pygame_frame
+    pygame.init()
+    screen = pygame.display.set_mode((1280, 960))  # Same resolution as the camera stream
+    pygame.display.set_caption("Camera Stream")
+    clock = pygame.time.Clock()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+
+        if pygame_frame is not None:
+            frame_rgb = cv2.cvtColor(pygame_frame, cv2.COLOR_BGR2RGB)
+            frame_rgb = np.rot90(frame_rgb)  # Rotate if needed for correct orientation
+            frame_surface = pygame.surfarray.make_surface(frame_rgb)
+            screen.blit(frame_surface, (0, 0))
+
+        pygame.display.update()
+        clock.tick(30)  # 30 FPS cap for Pygame
+
 if __name__ == "__main__":
     try:
         print('Starting Part 5: Move around object')
@@ -140,9 +141,11 @@ if __name__ == "__main__":
         # Create a Map object
         map_instance = Map()
 
-        # Create a thread for the Flask server
+        # Create threads for Flask server and Pygame display
         flask_thread = threading.Thread(target=run_flask)
+        pygame_thread = threading.Thread(target=run_pygame)
         flask_thread.start()
+        pygame_thread.start()
 
         # Run the scan method in the main thread
         while True:
@@ -154,3 +157,4 @@ if __name__ == "__main__":
     finally:
         pc4.stop()
         GPIO.cleanup()
+        pygame.quit()
