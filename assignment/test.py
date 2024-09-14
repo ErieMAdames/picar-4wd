@@ -14,7 +14,7 @@ _FONT_SIZE = 2
 _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 0, 255)  # red
 
-width, height = 640 / 2, 480 / 2  # Reduce resolution for better FPS
+width, height = 2048, 1536  # Reduce resolution for better FPS
 
 # FPS parameters
 fps_avg_frame_count = 10
@@ -46,7 +46,7 @@ detector = vision.ObjectDetector.create_from_options(options)
 
 # Initialize the camera
 picam2 = Picamera2()
-picam2.configure(picam2.create_preview_configuration(main={"format": 'RGB888', "size": (width, height)}))
+picam2.configure(picam2.create_preview_configuration(main={"size": (2048, 1536)}, lores={"size": (320, 240)}, encode="lores"))
 picam2.start()
 
 # Initialize Pygame
