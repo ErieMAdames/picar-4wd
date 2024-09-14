@@ -24,17 +24,17 @@ def visualize(image: np.ndarray, detection_result: processor.DetectionResult) ->
     for detection in detection_result.detections:
         category = detection.categories[0]
         category_name = category.category_name
-        if category_name == 'stop sign':
-            print("stop sign")
-            bbox = detection.bounding_box
-            start_point = bbox.origin_x, bbox.origin_y
-            end_point = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
-            cv2.rectangle(image, start_point, end_point, _TEXT_COLOR, 3)
-            # Draw label and score
-            probability = round(category.score, 2)
-            result_text = f"{category_name} ({probability})"
-            text_location = (_MARGIN + bbox.origin_x, _MARGIN + _ROW_SIZE + bbox.origin_y)
-            cv2.putText(image, result_text, text_location, cv2.FONT_HERSHEY_PLAIN, _FONT_SIZE, _TEXT_COLOR, _FONT_THICKNESS)
+        # if category_name == 'stop sign':
+            # print("stop sign")
+        bbox = detection.bounding_box
+        start_point = bbox.origin_x, bbox.origin_y
+        end_point = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
+        cv2.rectangle(image, start_point, end_point, _TEXT_COLOR, 3)
+        # Draw label and score
+        probability = round(category.score, 2)
+        result_text = f"{category_name} ({probability})"
+        text_location = (_MARGIN + bbox.origin_x, _MARGIN + _ROW_SIZE + bbox.origin_y)
+        cv2.putText(image, result_text, text_location, cv2.FONT_HERSHEY_PLAIN, _FONT_SIZE, _TEXT_COLOR, _FONT_THICKNESS)
     return image
 def yuv420_to_rgb(yuv_image, width, height, target_width, target_height):
     """Convert YUV420 image to RGB format and resize it to target dimensions."""
