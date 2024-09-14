@@ -84,6 +84,7 @@ class DetectObject():
         stopped = False
         while left_distance < dist or right_distance < dist:
             for detection in self.detect():
+                print(detection)
                 if not stopped:
                     if detection.categories[0].index == 12 and (detection.bounding_box.width >= 150 or detection.bounding_box.height >=150):
                         stopped = True
