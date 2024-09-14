@@ -209,7 +209,7 @@ class AvoidObjects():
         right_distance = calculate_distance(self.right_encoder_count)
         
         while left_distance < dist or right_distance < dist:
-            self.ccalculate_angles()
+            self.calculate_angles()
             stop = self.scan()
             if stop:
                 break
