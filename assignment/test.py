@@ -28,6 +28,7 @@ total_iterations = 0
 def visualize(image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
     """Draws bounding boxes on the input image."""
     for detection in detection_result.detections:
+        print(detection)
         category = detection.categories[0]
         category_name = category.category_name
         bbox = detection.bounding_box
@@ -118,13 +119,3 @@ while running:
 
 # Clean up and exit
 pygame.quit()
-
-# Print average times
-avg_capture_time = total_capture_time / total_iterations
-avg_detection_time = total_detection_time / total_iterations
-avg_visualize_time = total_visualize_time / total_iterations
-
-print(f"Average capture time: {avg_capture_time:.4f} seconds")
-print(f"Average detection time: {avg_detection_time:.4f} seconds")
-print(f"Average visualize time: {avg_visualize_time:.4f} seconds")
-print(f"Total iterations: {total_iterations}")
