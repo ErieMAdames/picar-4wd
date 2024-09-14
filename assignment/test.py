@@ -92,7 +92,7 @@ while running:
     yuv_image = picam2.capture_array("lores").flatten()  # Flatten to 1D for easier processing
 
     # Convert YUV to RGB
-    rgb_image = yuv420_to_rgb(yuv_image, lwidth, lheight)
+    rgb_image = cv2.flip(yuv420_to_rgb(yuv_image, lwidth, lheight), 0)
 
     # Calculate FPS
     counter += 1
