@@ -25,6 +25,7 @@ def visualize(image: np.ndarray, detection_result: processor.DetectionResult) ->
     for detection in detection_result.detections:
         category = detection.categories[0]
         category_name = category.category_name
+        print(category_name)
         if category_name == 'stop sign':
             print("stop sign")
             bbox = detection.bounding_box
