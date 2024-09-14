@@ -11,6 +11,7 @@ import os
 from tflite_support.task import core
 from tflite_support.task import processor
 from tflite_support.task import vision
+import picar_4wd as pc4
 # Initialize the Flask app
 app = Flask(__name__)
 
@@ -30,6 +31,7 @@ class Map:
     options = vision.ObjectDetectorOptions(base_options=base_options, detection_options=detection_options)
     detector = vision.ObjectDetector.create_from_options(options)
     def __init__(self):
+        pc4.forward(30)
         print('Starting camera stream')
 
     def scan(self):

@@ -6,7 +6,7 @@ import numpy as np
 from tflite_support.task import core
 from tflite_support.task import processor
 from tflite_support.task import vision
-import picar_4wd as pc4
+
 # Constants
 _MARGIN = 10  # pixels
 _ROW_SIZE = 10  # pixels
@@ -63,7 +63,6 @@ pygame.display.set_caption("Object Detection Stream")
 # FPS calculation variables
 counter, fps = 0, 0
 start_time = time.time()
-pc4.forward(30)
 # Main loop
 running = True
 while running:
