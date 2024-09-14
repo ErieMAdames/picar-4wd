@@ -19,24 +19,22 @@ width, height = 1280, 960  # Reduce resolution for better FPS
 
 # FPS parameters
 fps_avg_frame_count = 10
-print('in script')
 def visualize(image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
     """Draws bounding boxes on the input image."""
     for detection in detection_result.detections:
         category = detection.categories[0]
         category_name = category.category_name
-        print(category_name)
-        # if category_name == 'stop sign':
-        #     print("stop sign")
-        bbox = detection.bounding_box
-        start_point = bbox.origin_x, bbox.origin_y
-        end_point = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
-        cv2.rectangle(image, start_point, end_point, _TEXT_COLOR, 3)
-        # Draw label and score
-        probability = round(category.score, 2)
-        result_text = f"{category_name} ({probability})"
-        text_location = (_MARGIN + bbox.origin_x, _MARGIN + _ROW_SIZE + bbox.origin_y)
-        cv2.putText(image, result_text, text_location, cv2.FONT_HERSHEY_PLAIN, _FONT_SIZE, _TEXT_COLOR, _FONT_THICKNESS)
+        if category_name == 'stop sign':
+            print("stop sign")
+            bbox = detection.bounding_box
+            start_point = bbox.origin_x, bbox.origin_y
+            end_point = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
+            cv2.rectangle(image, start_point, end_point, _TEXT_COLOR, 3)
+            # Draw label and score
+            probability = round(category.score, 2)
+            result_text = f"{category_name} ({probability})"
+            text_location = (_MARGIN + bbox.origin_x, _MARGIN + _ROW_SIZE + bbox.origin_y)
+            cv2.putText(image, result_text, text_location, cv2.FONT_HERSHEY_PLAIN, _FONT_SIZE, _TEXT_COLOR, _FONT_THICKNESS)
     return image
 def yuv420_to_rgb(yuv_image, width, height, target_width, target_height):
     """Convert YUV420 image to RGB format and resize it to target dimensions."""
@@ -91,41 +89,11 @@ start_time = time.time()
 # Main loop
 running = True
 while running:
-    # Capture frame from the camera
-    yuv_image = picam2.capture_array("lores").flatten()  # Flatten to 1D for easier processing
+    # # Capture frame from the camera
+    # yuv_image = picam2.capture_array("lores").flatten()  # Flatten to 1D for easier processing
 
-    # Convert YUV to RGB
-    rgb_image = yuv420_to_rgb(yuv_image, int(width / 2), int(height/2), width, height)
-
-    # Calculate FPS
-    counter += 1
-    if counter % fps_avg_frame_count == 0:
-        end_time = time.time()
-        fps = fps_avg_frame_count / (end_time - start_time)
-        start_time = time.time()
-
-    # Convert to TensorFlow tensor
-    input_tensor = vision.TensorImage.create_from_array(rgb_image)
-
-    # Run object detection
-    detection_result = detector.detect(input_tensor)
-    rgb_image = visualize(rgb_image, detection_result)
-    # Display FPS
-    fps_text = f'FPS = {fps:.1f}'
-    rgb_image = cv2.flip(rgb_image, 0)
-    cv2.putText(rgb_image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
-    rgb_image = cv2.flip(rgb_image, 1)
-
-    # Convert RGB to Pygame format
-    rgb_image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2RGB) 
-    # Ensure image is of shape (height, width, 3) for Pygame
-    if rgb_image.shape[2] == 3:
-        # Convert image to 3D surface (Pygame expects (width, height, channels))
-        frame_surface = pygame.surfarray.make_surface(np.rot90(rgb_image))
-        screen.blit(frame_surface, (0, 0))
-        pygame.display.update()
-    # image = picam2.capture_array("main")
-    # image = cv2.flip(image, 0)
+    # # Convert YUV to RGB
+    # rgb_image = yuv420_to_rgb(yuv_image, int(width / 2), int(height/2), width, height)
 
     # # Calculate FPS
     # counter += 1
@@ -134,17 +102,48 @@ while running:
     #     fps = fps_avg_frame_count / (end_time - start_time)
     #     start_time = time.time()
 
-    # # Convert to RGB for TensorFlow model
-    # rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    # # rgb_image = cv2.cvtColor(image, cv2.COLOR_YUV2BGR_I420)
+    # # Convert to TensorFlow tensor
     # input_tensor = vision.TensorImage.create_from_array(rgb_image)
 
     # # Run object detection
     # detection_result = detector.detect(input_tensor)
+    # rgb_image = visualize(rgb_image, detection_result)
+    # # Display FPS
+    # fps_text = f'FPS = {fps:.1f}'
+    # rgb_image = cv2.flip(rgb_image, 0)
+    # cv2.putText(rgb_image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
+    # rgb_image = cv2.flip(rgb_image, 1)
+
+    # # Convert RGB to Pygame format
+    # rgb_image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2RGB) 
+    # # Ensure image is of shape (height, width, 3) for Pygame
+    # if rgb_image.shape[2] == 3:
+    #     # Convert image to 3D surface (Pygame expects (width, height, channels))
+    #     frame_surface = pygame.surfarray.make_surface(np.rot90(rgb_image))
+    #     screen.blit(frame_surface, (0, 0))
+    #     pygame.display.update()
+    image = picam2.capture_array("main")
+    image = cv2.flip(image, 0)
+
+    # Calculate FPS
+    counter += 1
+    if counter % fps_avg_frame_count == 0:
+        end_time = time.time()
+        fps = fps_avg_frame_count / (end_time - start_time)
+        start_time = time.time()
+
+    # Convert to RGB for TensorFlow model
+    rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    # rgb_image = cv2.cvtColor(image, cv2.COLOR_YUV2BGR_I420)
+    input_tensor = vision.TensorImage.create_from_array(rgb_image)
+
+    # Run object detection
+    detection_result = detector.detect(input_tensor)
     # image = visualize(image, detection_result)
 
     # # Display FPS
-    # fps_text = f'FPS = {fps:.1f}'
+    fps_text = f'FPS = {fps:.1f}'
+    print(fps_text)
     # cv2.putText(image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
 
     # # Convert image from BGR to RGB format required by Pygame (already in RGB format for TFLite)
