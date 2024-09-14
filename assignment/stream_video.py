@@ -62,12 +62,13 @@ class Map:
 def generate_frames():
     global frame
     while not stop_event.is_set():
+        print('not set')
         if frame is not None:
             ret, jpeg = cv2.imencode('.jpg', frame)
             if ret:
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n')
-        time.sleep(0.1)  # Control the frame rate
+        # time.sleep(0.1)  # Control the frame rate
     exit()
 
 @app.route('/video_feed')
