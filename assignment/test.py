@@ -134,8 +134,8 @@ while running:
         start_time = time.time()
 
     # Convert to RGB for TensorFlow model
-    # rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    rgb_image = cv2.cvtColor(image, cv2.COLOR_YUV2BGR_I420)
+    rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    # rgb_image = cv2.cvtColor(image, cv2.COLOR_YUV2BGR_I420)
     input_tensor = vision.TensorImage.create_from_array(rgb_image)
 
     # Run object detection
