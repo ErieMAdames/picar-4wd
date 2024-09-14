@@ -129,8 +129,10 @@ def main(stream_flask, display_pygame):
         print('\nStopping...')
 
     finally:
+        print('stop_event')
         stop_event.set()  # Signal all threads to stop
         for thread in threads:
+            print('thread 1')
             thread.join()  # Wait for threads to finish
         print("Program exited gracefully.")
 
