@@ -62,7 +62,7 @@ start_time = time.time()
 running = True
 while running:
     # Capture frame from the camera
-    image = picam2.capture_array("main")
+    image = picam2.capture_array("lores")
     image = cv2.flip(image, 0)
 
     # Calculate FPS
