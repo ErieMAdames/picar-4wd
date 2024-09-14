@@ -79,7 +79,7 @@ class DetectObject():
                 input_tensor = vision.TensorImage.create_from_array(rgb_image)
                 detection_result = self.detector.detect(input_tensor)
                 for detection in detection_result.detections:
-                    if detection.categories[0].index == 12 and (detection.categories[0].width >= 100 or detection.categories[0].height >=100):
+                    if detection.categories[0].index == 12 and (detection.bounding_box.width >= 100 or detection.bounding_box.height >=100):
                         stopped = True
                         pc4.stop()
                         time.sleep(3)
