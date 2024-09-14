@@ -14,8 +14,7 @@ _FONT_SIZE = 2
 _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 0, 255)  # red
 
-width, height = 1280, 480  # Reduce resolution for better FPS
-lwidth, lheight = 320, 120  # Reduce resolution for better FPS
+width, height = 1280, 240  # Reduce resolution for better FPS
 # width, height = 320, 240  # Reduce resolution for better FPS
 
 # FPS parameters
@@ -75,7 +74,7 @@ detector = vision.ObjectDetector.create_from_options(options)
 
 # Initialize the camera
 picam2 = Picamera2()
-config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (width, height)}, lores={"size": (lwidth, lheight)},  display="lores",  encode="lores")
+config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (width, height)})
 picam2.align_configuration(config)
 picam2.configure(config)
 picam2.start()
@@ -83,7 +82,6 @@ picam2.start()
 # Initialize Pygame
 pygame.init()
 screen = pygame.display.set_mode((width, height))
-# screen = pygame.display.set_mode((lwidth, lheight))
 pygame.display.set_caption("Object Detection Stream")
 
 # FPS calculation variables
