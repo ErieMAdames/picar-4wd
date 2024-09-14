@@ -15,7 +15,7 @@ _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 0, 255)  # red
 
 width, height = 1280, 960  # Reduce resolution for better FPS
-lwidth, lheight = 640 / 2, 480 / 2  # Reduce resolution for better FPS
+lwidth, lheight = 320, 240  # Reduce resolution for better FPS
 
 # FPS parameters
 fps_avg_frame_count = 10
