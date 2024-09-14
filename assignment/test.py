@@ -53,6 +53,7 @@ picam2.start()
 # Initialize Pygame
 pygame.init()
 screen = pygame.display.set_mode((width, height))
+screen = pygame.display.set_mode((lwidth, lheight))
 pygame.display.set_caption("Object Detection Stream")
 
 # FPS calculation variables
@@ -63,7 +64,7 @@ start_time = time.time()
 running = True
 while running:
     # Capture frame from the camera
-    image = picam2.capture_array("main")
+    image = picam2.capture_array("lores")
     image = cv2.flip(image, 0)
 
     # Calculate FPS
@@ -74,7 +75,8 @@ while running:
         start_time = time.time()
 
     # Convert to RGB for TensorFlow model
-    rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    # rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    rgb_image = cv2.cvtColor(image, cv2.COLOR_YUV2BGR_I420)
     input_tensor = vision.TensorImage.create_from_array(rgb_image)
 
     # Run object detection
