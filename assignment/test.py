@@ -19,7 +19,7 @@ lwidth, lheight = 320, 240  # Reduce resolution for better FPS
 
 # FPS parameters
 fps_avg_frame_count = 10
-
+print('in script')
 def visualize(image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
     """Draws bounding boxes on the input image."""
     for detection in detection_result.detections:
