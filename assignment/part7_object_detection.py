@@ -64,12 +64,12 @@ class DetectObject():
         image = self.picam2.capture_array("main")
         rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         input_tensor = vision.TensorImage.create_from_array(rgb_image)
-        return self.detector.detect(input_tensor)
+        return self.detector.detect(input_tensor).detections
     def detect_person(self):
         image = self.picam2.capture_array("main")
         rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         input_tensor = vision.TensorImage.create_from_array(rgb_image)
-        for detection in  self.detector.detect(input_tensor):
+        for detection in  self.detector.detect(input_tensor).detections:
             if detection.categories[0].index == 0:
                 return True
     def go_distance(self, dist, forward=True):
