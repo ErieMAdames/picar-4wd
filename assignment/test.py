@@ -15,6 +15,7 @@ _FONT_SIZE = 2
 _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 0, 255)  # red
 
+running = True
 width, height = 640, 480  # Reduce resolution for better FPS
 
 # FPS parameters
@@ -115,7 +116,6 @@ def visualize(image: np.ndarray, detection_result: processor.DetectionResult) ->
     return image
 
 # Main loop setup
-running = True
 capture_thread = threading.Thread(target=capture_frames)
 process_thread = threading.Thread(target=process_frames)
 display_thread = threading.Thread(target=display_frames)
