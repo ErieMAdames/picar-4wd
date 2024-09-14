@@ -56,10 +56,8 @@ class AvoidObjects():
         mag = self.sensor.magnetic  # Gives (x, y, z) in microteslas
 
         # Calculate pitch, roll, yaw
-        pitch, roll, yaw = self.calculate_angles(accel, mag)
 
         # Output the angles
-        print(f"Pitch: {pitch:.2f} degrees, Roll: {roll:.2f} degrees, Yaw: {yaw:.2f} degrees")
 
         # Sleep for a bit before the next reading
         accel_x, accel_y, accel_z = accel
@@ -77,6 +75,7 @@ class AvoidObjects():
 
         # Normalize heading to 0-360 degrees
         heading = (heading + 360) % 360
+        print(f"Pitch: {pitch:.2f} degrees, Roll: {roll:.2f} degrees, Yaw: {heading:.2f} degrees")
 
         return pitch, roll, heading
     def calibrate(self, duration):
