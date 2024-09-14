@@ -25,6 +25,7 @@ def visualize(image: np.ndarray, detection_result: processor.DetectionResult) ->
         category = detection.categories[0]
         category_name = category.category_name
         if category_name == 'stop sign':
+            print("stop sign")
             bbox = detection.bounding_box
             start_point = bbox.origin_x, bbox.origin_y
             end_point = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
