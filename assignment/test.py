@@ -64,7 +64,7 @@ while running:
     # Capture frame from the camera
     image = picam2.capture_array("main")
     image = cv2.flip(image, 1)
-    
+
     # Calculate FPS
     counter += 1
     if counter % fps_avg_frame_count == 0:
@@ -86,7 +86,7 @@ while running:
 
     # Convert image from BGR to RGB format required by Pygame (already in RGB format for TFLite)
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    image = cv2.flip(image, 0)
+    # image = cv2.flip(image, 0)
     
     # Ensure image is of shape (height, width, 3) for Pygame
     if image.shape[2] == 3:
