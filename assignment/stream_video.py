@@ -82,6 +82,7 @@ class Map:
                 fps = fps_avg_frame_count / (end_time - start_time)
                 start_time = time.time()
             image = cv2.flip(image, 1)
+            image = cv2.flip(image, 0)
 
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             fps_text = 'FPS = {:.1f}'.format(fps)
