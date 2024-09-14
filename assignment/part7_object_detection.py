@@ -60,7 +60,18 @@ class DetectObject():
         self.right_encoder_count += 1
 
                 
-
+    def detect(self):
+        image = self.picam2.capture_array("main")
+        rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        input_tensor = vision.TensorImage.create_from_array(rgb_image)
+        return self.detector.detect(input_tensor)
+    def detect_person(self):
+        image = self.picam2.capture_array("main")
+        rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        input_tensor = vision.TensorImage.create_from_array(rgb_image)
+        for detection in  self.detector.detect(input_tensor):
+            if detection.categories[0].index == 0:
+                return True
     def go_distance(self, dist, forward=True):
         self.left_encoder_count = 0
         self.right_encoder_count = 0
@@ -73,16 +84,16 @@ class DetectObject():
         right_distance = calculate_distance(self.right_encoder_count)
         stopped = False
         while left_distance < dist or right_distance < dist:
-            if not stopped:
-                image = self.picam2.capture_array("main")
-                rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                input_tensor = vision.TensorImage.create_from_array(rgb_image)
-                detection_result = self.detector.detect(input_tensor)
-                for detection in detection_result.detections:
+            for detection in self.detect():
+                if not stopped:
                     if detection.categories[0].index == 12 and (detection.bounding_box.width >= 100 or detection.bounding_box.height >=100):
                         stopped = True
                         pc4.stop()
                         time.sleep(3)
+                if detection.categories[0].index == 0:
+                    pc4.stop()
+                    while self.detect_person():
+                        time.sleep(1)
             pc4.forward(self.speed)
             left_distance = calculate_distance(self.left_encoder_count)
             right_distance = calculate_distance(self.right_encoder_count)
