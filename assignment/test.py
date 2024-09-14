@@ -63,7 +63,6 @@ running = True
 while running:
     # Capture frame from the camera
     image = picam2.capture_array("main")
-    image = cv2.flip(image, 1)
     image = cv2.flip(image, 0)
 
     # Calculate FPS
@@ -88,6 +87,7 @@ while running:
     # Convert image from BGR to RGB format required by Pygame (already in RGB format for TFLite)
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     
+    image = cv2.flip(image, 1)
     # Ensure image is of shape (height, width, 3) for Pygame
     if image.shape[2] == 3:
         # Convert image to 3D surface (pygame expects (width, height, channels))
