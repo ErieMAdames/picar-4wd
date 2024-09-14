@@ -35,11 +35,6 @@ class Map:
 
     # Setup GPIO
     def __init__(self):
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setup(self.RIGHT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        # GPIO.setup(self.LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        # GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
-        # GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
         print('starting')
 
     def calibrate_turn_speed(self):
@@ -79,7 +74,7 @@ class Map:
                 # Create and process the image with OpenCV
                 image = np.zeros((100, 100, 3), dtype=np.uint8)
                 image[map_grid == 0] = [0, 255, 0]  # Green for 0
-                image[map_grid == 1] = [255, 0, 0]  # Red for 1
+                image[map_grid == 1] = [0, 0, 255]  # Red for 1
 
                 enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
                 # rotated_image = cv2.rotate(enlarged_image, cv2.ROTATE_90_CLOCKWISE)
