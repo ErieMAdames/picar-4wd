@@ -4,9 +4,11 @@ import sys
 import cv2
 import argparse
 import threading
-from flask import Flask, Response
+from flask import Flask, Response, request
 from picamera2 import Picamera2
 import pygame
+import signal
+import os
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -52,29 +54,35 @@ class Map:
             # Display FPS on the frame
             fps_text = 'FPS = {:.1f}'.format(fps)
             cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
+            image = cv2.flip(image, 1)
 
             # Update global frames for Flask and Pygame
             frame = image
-            pygame_frame = cv2.flip(image, 1)
+            pygame_frame = image
 
         picam2.stop()
 
 def generate_frames():
     global frame
     while not stop_event.is_set():
-        print('not set')
         if frame is not None:
             ret, jpeg = cv2.imencode('.jpg', frame)
             if ret:
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n')
-        # time.sleep(0.1)  # Control the frame rate
-    exit()
+        time.sleep(0.1)  # Control the frame rate
 
 @app.route('/video_feed')
 def video_feed():
     return Response(generate_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/shutdown', methods=['POST'])
+def shutdown():
+    shutdown_func = request.environ.get('werkzeug.server.shutdown')
+    if shutdown_func:
+        shutdown_func()
+    return 'Shutting down Flask server...'
 
 def run_flask():
     # Start Flask server
@@ -129,14 +137,22 @@ def main(stream_flask, display_pygame):
 
     except KeyboardInterrupt:
         print('\nStopping...')
+        stop_event.set()  # Signal all threads to stop
+        if stream_flask:
+            shutdown_flask()
 
     finally:
-        print('stop_event')
-        stop_event.set()  # Signal all threads to stop
         for thread in threads:
-            print('thread 1')
             thread.join()  # Wait for threads to finish
         print("Program exited gracefully.")
+
+def shutdown_flask():
+    """Send a request to Flask to shut it down."""
+    import requests
+    try:
+        requests.post('http://127.0.0.1:5000/shutdown')
+    except Exception as e:
+        print(f"Error shutting down Flask: {e}")
 
 if __name__ == "__main__":
     # Command-line argument parsing
