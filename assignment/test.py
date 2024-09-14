@@ -144,22 +144,22 @@ while running:
     # # Display FPS
     fps_text = f'FPS = {fps:.1f}'
     print(fps_text)
-    # cv2.putText(image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
+    cv2.putText(image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, _TEXT_COLOR, 2)
 
     # # Convert image from BGR to RGB format required by Pygame (already in RGB format for TFLite)
-    # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    # # print(fps_text)
-    # image = cv2.flip(image, 1)
-    # # Ensure image is of shape (height, width, 3) for Pygame
-    # if image.shape[2] == 3:
-    #     # Convert image to 3D surface (pygame expects (width, height, channels))
-    #     frame_surface = pygame.surfarray.make_surface(np.rot90(image))
-    #     screen.blit(frame_surface, (0, 0))
-    #     pygame.display.update()
-    # # Check for quit events
-    # for event in pygame.event.get():
-    #     if event.type == pygame.QUIT:
-    #         running = False
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    # print(fps_text)
+    image = cv2.flip(image, 1)
+    # Ensure image is of shape (height, width, 3) for Pygame
+    if image.shape[2] == 3:
+        # Convert image to 3D surface (pygame expects (width, height, channels))
+        frame_surface = pygame.surfarray.make_surface(np.rot90(image))
+        screen.blit(frame_surface, (0, 0))
+        pygame.display.update()
+    # Check for quit events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
 # Clean up and exit
 pygame.quit()
