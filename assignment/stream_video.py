@@ -23,8 +23,8 @@ stop_event = threading.Event()
 
 np.set_printoptions(threshold=sys.maxsize)
 
+width, height = 640, 480
 class Map:
-    width, height = 640, 480
     base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
     detection_options = processor.DetectionOptions(max_results=1, score_threshold=0.5)  # Limit to 1 result for speed
     options = vision.ObjectDetectorOptions(base_options=base_options, detection_options=detection_options)
@@ -35,7 +35,7 @@ class Map:
     def scan(self):
         global frame, pygame_frame
         picam2 = Picamera2()
-        config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (self.width, self.height)})
+        config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (width, height)})
         picam2.align_configuration(config)
         picam2.configure(config)
         picam2.start()
@@ -121,7 +121,7 @@ def run_flask():
 def run_pygame():
     global pygame_frame
     pygame.init()
-    screen = pygame.display.set_mode((1280, 960))  # Same resolution as the camera stream
+    screen = pygame.display.set_mode((width, height))  # Same resolution as the camera stream
     pygame.display.set_caption("Camera Stream")
     clock = pygame.time.Clock()
 
