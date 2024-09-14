@@ -72,6 +72,7 @@ class Map:
         font_size = 1
         font_thickness = 1
         fps_avg_frame_count = 10
+        start_time = time.time()
         while True:
             if counter % fps_avg_frame_count == 0:
                 end_time = time.time()
