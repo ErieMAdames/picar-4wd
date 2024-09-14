@@ -68,6 +68,7 @@ def generate_frames():
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n')
         time.sleep(0.1)  # Control the frame rate
+    exit()
 
 @app.route('/video_feed')
 def video_feed():
