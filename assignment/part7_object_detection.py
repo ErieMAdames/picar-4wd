@@ -35,7 +35,7 @@ class DetectObject():
     options = vision.ObjectDetectorOptions(base_options=base_options, detection_options=detection_options)
     detector = vision.ObjectDetector.create_from_options(options)
     picam2 = Picamera2()
-    width, height = 1280, 960  # Reduce resolution for better FPS
+    width, height = 640, 480  # Reduce resolution for better FPS
     config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (width, height)})
     picam2.align_configuration(config)
     picam2.configure(config)
@@ -86,7 +86,7 @@ class DetectObject():
             for detection in self.detect():
                 print(detection)
                 if not stopped:
-                    if detection.categories[0].index == 12 and (detection.bounding_box.width >= 150 or detection.bounding_box.height >=150):
+                    if detection.categories[0].index == 12 and (detection.bounding_box.width >= 200 or detection.bounding_box.height >=200):
                         stopped = True
                         pc4.stop()
                         time.sleep(3)
