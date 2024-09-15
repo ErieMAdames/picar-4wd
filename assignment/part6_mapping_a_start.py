@@ -37,12 +37,6 @@ class Map:
     # Setup GPIO
     def __init__(self):
         print('starting')
-    def go_distance(self, dist, forward=True):
-        # pc4.forward(1)
-        print('forward dist: ' + str(dist) + ' cm | time ' + str((dist/100) * 4.2) + ' seconds')
-        # time.sleep((dist/100) * 4.2)
-        # pc4.stop()
-        # time.sleep(.5)
     def calibrate_turn_speed(self):
         start = time.time()
         try:
@@ -103,30 +97,34 @@ class Map:
             enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
             frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
         if path:
-            print(path)
-            prev = path[0]
-            x_travel = 0
-            y_travel = 0
-            distances_to_travel = []
-            for p in path[1:]:
-                if p[0] == prev[0]:
-                    if x_travel > 0:
-                        distances_to_travel.append(('y', x_travel))
-                    x_travel = 0
-                    y_travel += p[1] - prev[1]
-                if p[1] == prev[1]:
-                    if y_travel > 0:
-                        distances_to_travel.append(('x', y_travel))
-                    y_travel = 0
-                    x_travel += p[0] - prev[0]
-                prev = p
+            directions = {
+                (1, 0): "up",
+                (-1, 0): "down",
+                (0, 1): "right",
+                (0, -1): "left"
+            }
+            def get_direction(p1, p2):
+                return (p2[0] - p1[0], p2[1] - p1[1])
             
-            if x_travel > 0:
-                distances_to_travel.append(('y', x_travel))
-            if y_travel > 0:
-                distances_to_travel.append(('x', y_travel))
-            print(distances_to_travel)
-            return distances_to_travel
+            travel_instructions = []
+            current_direction = None
+            steps = 0
+            for i in range(1, len(path)):
+                prev_point = path[i - 1]
+                current_point = path[i]
+                new_direction = get_direction(prev_point, current_point)
+                if new_direction != current_direction:
+                    if current_direction is not None:
+                        direction_name = directions[current_direction]
+                        travel_instructions.append((steps, direction_name))
+                    current_direction = new_direction
+                    steps = 1
+                else:
+                    steps += 1
+            if current_direction is not None:
+                direction_name = directions[current_direction]
+                travel_instructions.append((steps, direction_name))
+            return travel_instructions
         self.distances = []
     def add_obstacle_buffer(self, grid, radius=10):
     # Get the shape of the grid
@@ -213,7 +211,12 @@ class Map:
         # pc4.turn_left(speed)
         # input()
         # pc4.stop()
-
+    def go_distance(self, dist):
+        # pc4.forward(1)
+        print('forward dist: ' + str(dist) + ' cm | time ' + str((dist/100) * 4.2) + ' seconds')
+        # time.sleep((dist/100) * 4.2)
+        # pc4.stop()
+        # time.sleep(.5)
 def generate_frames():
     global frame
     while True:
@@ -249,15 +252,20 @@ if __name__ == "__main__":
 
         # Run the scan method in the main thread
         while True:
-            to_travel = map_instance.scan()
-            if to_travel is not None:
-                for t in to_travel:
-                    if t[0] == 'x':
-                        if t[1] < 0:
-                            map_instance.turn_left()
-                        else:
-                            map_instance.turn_right()
-                        map_instance.go_distance(abs(t[1]))
+            travel_instructions = map_instance.scan()
+            if travel_instructions is not None:
+                for t in travel_instructions:
+                    if t[0] == 'up':
+                        map_instance.go_distance(t[1])
+                    elif t[0] == 'down':
+                        map_instance.go_distance(-t[1])
+                    elif t[0] == 'left':
+                        map_instance.turn_left()
+                        map_instance.go_distance(t[1])
+                    elif t[0] == 'right':
+                        map_instance.turn_left()
+                        map_instance.go_distance(t[1])
+                    
             pc4.stop()
             input()
 
