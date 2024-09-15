@@ -246,7 +246,7 @@ class SelfDrive:
                 if detection.categories[0].index == 12 and (detection.bounding_box.width >= 200 or detection.bounding_box.height >= 200):
                     if pause_timer == 0:
                         pause_timer = time.time()
-                    pause += time.time() - pause_timer
+                    pause = time.time() - pause_timer
                     pc4.stop()
                 else:
                     pause_timer = 0
