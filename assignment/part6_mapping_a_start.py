@@ -66,10 +66,10 @@ class Map:
         map_grid = np.zeros((grid_size, grid_size), dtype=int)
         for _ in range(90):
             distance = pc4.get_distance_at(self.current_angle)
+            print(self.current_angle, distance)
             if distance > 0:
                 dx = int(distance * np.cos(np.radians(self.current_angle + 90 + self.angle_offset))) + 49
                 dy = int(distance * np.sin(np.radians(self.current_angle + 90 + self.angle_offset)))
-                
                 if 0 <= dx < 100 and 0 <= dy < 100:
                     map_grid[dy, dx] = 1
                 temp_map_grid = self.add_obstacle_buffer(map_grid, 10)
@@ -83,7 +83,7 @@ class Map:
                 # Prepare the frame for streaming
                 frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
             self.current_angle += self.us_step
-        temp_map_grid = self.add_obstacle_buffer(map_grid, 5)
+        temp_map_grid =map_grid# self.add_obstacle_buffer(map_grid, 5)
         path = self.a_star(temp_map_grid, (0, 49), (99, 99))
         if path:
             for p in path:
@@ -123,7 +123,7 @@ class Map:
             if current_direction is not None:
                 direction_name = directions[current_direction]
                 travel_instructions.append((direction_name, steps))
-            return travel_instructions
+            return None#travel_instructions
         self.distances = []
     def add_obstacle_buffer(self, grid, radius=10):
     # Get the shape of the grid
