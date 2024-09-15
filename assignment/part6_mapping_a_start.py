@@ -86,8 +86,17 @@ class Map:
         path = self.a_star(map_grid, (49, 0), (99, 99))
         if path:
             for p in path:
-                print(map_grid[p[0], p[1]])
+                map_grid[p[0], p[1]] = 2
+            image = np.zeros((100, 100, 3), dtype=np.uint8)
+            image[map_grid == 0] = [0, 255, 0]  # Green for 0
+            image[map_grid == 1] = [0, 0, 255]  # Red for 1
+            image[map_grid == 2] = [255, 0, 0]  # Red for 1
 
+            enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
+            # rotated_image = cv2.rotate(enlarged_image, cv2.ROTATE_90_CLOCKWISE)
+
+            # Prepare the frame for streaming
+            frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
         for x in np.flip(map_grid, 0):
             x_str = np.array_repr(x).replace('\n', '').replace(' ', '').replace('array([', '').replace('])', '').replace('0','_').replace('1','@')
             print(x_str)
