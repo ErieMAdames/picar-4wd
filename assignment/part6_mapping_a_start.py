@@ -193,13 +193,13 @@ class Map:
 
     def turn_right(self):
         print('turnging right')
-        pc4.turn_right(30)
+        pc4.turn_right(1000)
         input()
         pc4.stop()
 
     def turn_left(self):
         print('turnging left')
-        pc4.turn_left(30)
+        pc4.turn_left(1000)
         input()
         pc4.stop()
     def go_distance(self, dist):
