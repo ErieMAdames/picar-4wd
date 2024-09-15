@@ -124,51 +124,69 @@ class Map:
         return new_grid
     def a_star(self, grid, start, goal):
         # Heuristic: Manhattan distance (L1 norm)
-        def heuristic(start_coords, goal_coords):
-            x1, y1 = start_coords
-            x2, y2 = goal_coords
+        def heuristic(x1, y1, x2, y2):
             return abs(x1 - x2) + abs(y1 - y2)
 
+        # Get the direction based on the movement from one cell to the next
+        def get_direction(from_pos, to_pos):
+            dx, dy = to_pos[0] - from_pos[0], to_pos[1] - from_pos[1]
+            if dx == -1 and dy == 0:
+                return 'up'
+            elif dx == 1 and dy == 0:
+                return 'down'
+            elif dx == 0 and dy == -1:
+                return 'left'
+            elif dx == 0 and dy == 1:
+                return 'right'
+            return None
+        DIRECTIONS = {
+            'up': (-1, 0),
+            'down': (1, 0),
+            'left': (0, -1),
+            'right': (0, 1)
+        }
         # Valid neighbors (up, down, left, right)
         def get_neighbors(pos):
-            neighbors = [
-                (pos[0] - 1, pos[1]),  # Up
-                (pos[0] + 1, pos[1]),  # Down
-                (pos[0], pos[1] - 1),  # Left
-                (pos[0], pos[1] + 1)   # Right
-            ]
-            # Filter neighbors to be within bounds and not obstacles
-            valid_neighbors = [(r, c) for r, c in neighbors if 0 <= r < grid.shape[0] and 0 <= c < grid.shape[1] and grid[r, c] == 0]
-            return valid_neighbors
+            neighbors = []
+            for direction, (dr, dc) in DIRECTIONS.items():
+                new_pos = (pos[0] + dr, pos[1] + dc)
+                if 0 <= new_pos[0] < grid.shape[0] and 0 <= new_pos[1] < grid.shape[1] and grid[new_pos[0], new_pos[1]] == 0:
+                    neighbors.append((new_pos, direction))
+            return neighbors
 
         # A* Search
         open_set = []
-        heappush(open_set, (0, start))  # (f_score, position)
+        heappush(open_set, (0, start, None))  # (f_score, position, direction)
         
         came_from = {}  # To reconstruct the path
         g_score = {start: 0}
-        f_score = {start: heuristic(start, goal)}
+        f_score = {start: heuristic(start[0], start[1], goal[0], goal[1])}
         
         while open_set:
-            current = heappop(open_set)[1]
+            current_f_score, current, current_direction = heappop(open_set)
             
             if current == goal:
                 # Reconstruct path
                 path = []
                 while current in came_from:
                     path.append(current)
-                    current = came_from[current]
+                    current = came_from[current][0]
                 path.append(start)  # Add the start point
                 return path[::-1]  # Return reversed path
             
-            for neighbor in get_neighbors(current):
-                tentative_g_score = g_score[current] + 1  # Each move costs 1
+            for neighbor, direction in get_neighbors(current):
+                # Penalize turning by adding a cost when direction changes
+                tentative_g_score = g_score[current] + 1  # Base move cost is 1
+                
+                # If changing direction, add a penalty for turning
+                if current_direction is not None and current_direction != direction:
+                    tentative_g_score += 1  # Penalty for turning
                 
                 if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
-                    came_from[neighbor] = current
+                    came_from[neighbor] = (current, direction)
                     g_score[neighbor] = tentative_g_score
-                    f_score[neighbor] = tentative_g_score + heuristic(neighbor, goal)
-                    heappush(open_set, (f_score[neighbor], neighbor))
+                    f_score[neighbor] = tentative_g_score + heuristic(neighbor[0], neighbor[1], goal[0], goal[1])
+                    heappush(open_set, (f_score[neighbor], neighbor, direction))
         
         return None  # No path found
     
