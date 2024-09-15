@@ -75,7 +75,7 @@ class Map:
                 temp_map_grid = self.add_obstacle_buffer(map_grid, 5)
                 # Create and process the image with OpenCV
                 image = np.zeros((100, 100, 3), dtype=np.uint8)
-                image[temp_map_grid == 0] = [0, 255, 0]  # Green for 0
+                image[temp_map_grid == 0] = [34, 139, 34]  # Green for 0
                 image[temp_map_grid == 1] = [0, 165, 255]  # Red for 1
 
                 enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
