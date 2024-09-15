@@ -74,11 +74,11 @@ class Map:
                     map_grid[dy, dx] = 1
                 temp_map_grid = self.add_obstacle_buffer(map_grid, 5)
                 # Create and process the image with OpenCV
-                # image = np.zeros((100, 100, 3), dtype=np.uint8)
-                # image[temp_map_grid == 0] = [34, 139, 34]  # Green for 0
-                # image[temp_map_grid == 1] = [0, 0, 255]  # Red for 1
+                image = np.zeros((100, 100, 3), dtype=np.uint8)
+                image[temp_map_grid == 0] = [0, 255, 0]  # Green for 0
+                image[temp_map_grid == 1] = [0, 165, 255]  # Red for 1
 
-                enlarged_image = cv2.resize(temp_map_grid, (500, 500), interpolation=cv2.INTER_NEAREST)
+                enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
 
                 # Prepare the frame for streaming
                 frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
@@ -90,7 +90,7 @@ class Map:
                 temp_map_grid[p[0], p[1]] = 2
             image = np.zeros((100, 100, 3), dtype=np.uint8)
             image[temp_map_grid == 0] = [34, 139, 34]  # Green for 0
-            image[temp_map_grid == 1] = [0, 0, 255]  # Red for 1
+            image[temp_map_grid == 1] = [0, 265, 255]  # Red for 1
             image[temp_map_grid == 2] = [255, 0, 0]  # Red for 1
 
             enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
@@ -125,29 +125,25 @@ class Map:
                 travel_instructions.append((steps, direction_name))
             return travel_instructions
         self.distances = []
-    def apply_gradient_to_buffer(self, image, obstacle, radius):
-        (x, y) = obstacle
-        inner_color = [255, 0, 0]
-        outer_color = [255, 165, 0]
-        rows, cols, _ = image.shape
-        
-        for i in range(max(0, x - radius), min(rows, x + radius + 1)):
-            for j in range(max(0, y - radius), min(cols, y + radius + 1)):
-                dist = np.sqrt((x - i) ** 2 + (y - j) ** 2)
-                if dist <= radius:
-                    t = dist / radius  # Interpolation factor based on the distance from the obstacle
-                    # Linear interpolation between outer_color (far) and inner_color (close)
-                    image[i, j] = (1 - t) * np.array(inner_color) + t * np.array(outer_color)
     def add_obstacle_buffer(self, grid, radius=10):
+    # Get the shape of the grid
         rows, cols = grid.shape
-        image = np.zeros((rows, cols, 3), dtype=np.uint8)
-        image[grid == 0] = [34, 139, 34]
+        # Create a copy of the grid to modify
+        new_grid = np.copy(grid)
+        # Find all the positions where there are obstacles
         obstacle_positions = np.argwhere(grid == 1)
         
         for obstacle in obstacle_positions:
-            self.apply_gradient_to_buffer(image, obstacle, radius)
-        
-        return image
+            x, y = obstacle
+            
+            # Iterate through all the cells within a square surrounding the obstacle
+            for i in range(max(0, x - radius), min(rows, x + radius + 1)):
+                for j in range(max(0, y - radius), min(cols, y + radius + 1)):
+                    # Calculate the Euclidean distance to the obstacle
+                    if np.sqrt((x - i) ** 2 + (y - j) ** 2) <= radius:
+                        new_grid[i, j] = 1  # Mark as obstacle
+
+        return new_grid
     def a_star(self, grid, start, goal):
         # Heuristic: Manhattan distance (L1 norm)
         def heuristic(x1, y1, x2, y2):
