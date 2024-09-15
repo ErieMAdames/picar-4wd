@@ -223,7 +223,7 @@ if __name__ == "__main__":
 
         # Run the scan method in the main thread
         while True:
-            drive.go_to(99, 99)
+            drive.go_to(150, 150)
             input()
 
     except KeyboardInterrupt:
