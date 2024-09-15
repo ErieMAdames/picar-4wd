@@ -266,8 +266,10 @@ class SelfDrive:
                     pc4.forward(1)
                 else:
                     pc4.backward(1)
-            elapsed_time = time.time() - start
+            if stop_detected:
+                continue
             print(start, elapsed_time, travel_time)
+            elapsed_time = time.time() - start
         print(elapsed_time)
         print(pause)
         print(elapsed_time - pause)
