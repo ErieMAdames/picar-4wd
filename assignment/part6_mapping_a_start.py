@@ -76,9 +76,9 @@ class SelfDrive:
                 elif t[0] == 'left':
                     if direction == 'n':
                         direction = 'w'
-                    if direction == 'e':
+                    elif direction == 'e':
                         direction = 'n'
-                    if direction == 'w':
+                    elif direction == 'w':
                         direction = 's'
                     prev_dir = 'left'
                     self.turn_left()
@@ -86,9 +86,9 @@ class SelfDrive:
                 elif t[0] == 'right':
                     if direction == 'n':
                         direction = 'e'
-                    if direction == 'w':
+                    elif direction == 'w':
                         direction = 'n'
-                    if direction == 'e':
+                    elif direction == 'e':
                         direction = 's'
                     prev_dir = 'right'
                     self.turn_right()
