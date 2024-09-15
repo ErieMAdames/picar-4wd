@@ -201,21 +201,24 @@ class Map:
 
     def turn_right(self, angle=90, speed=30):
         print('turnging right')
-        # pc4.turn_right(speed)
-        # input()
-        # pc4.stop()
+        pc4.turn_right(speed)
+        input()
+        pc4.stop()
 
     def turn_left(self, angle=90, speed=30):
         print('turnging left')
-        # pc4.turn_left(speed)
-        # input()
-        # pc4.stop()
+        pc4.turn_left(speed)
+        input()
+        pc4.stop()
     def go_distance(self, dist):
-        # pc4.forward(1)
-        print('forward dist: ' + str(dist) + ' cm | time ' + str((dist/100) * 4.2) + ' seconds')
-        # time.sleep((dist/100) * 4.2)
-        # pc4.stop()
-        # time.sleep(.5)
+        if dist > 0:
+            pc4.forward(1)
+        else:
+            pc4.backward(1)
+        print('forward dist: ' + str(dist) + ' cm | time ' + str(abs(dist/100) * 4.2) + ' seconds')
+        time.sleep(abs(dist/100) * 4.2)
+        pc4.stop()
+        time.sleep(.5)
 def generate_frames():
     global frame
     while True:
