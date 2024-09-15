@@ -115,7 +115,7 @@ class Map:
                 if new_direction != current_direction:
                     if current_direction is not None:
                         direction_name = directions[current_direction]
-                        travel_instructions.append((steps, direction_name))
+                        travel_instructions.append((direction_name, steps))
                     current_direction = new_direction
                     steps = 1
                 else:
