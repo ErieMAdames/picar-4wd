@@ -248,7 +248,7 @@ if __name__ == "__main__":
         while True:
             travel_instructions = map_instance.scan()
             print(travel_instructions)
-            if False and travel_instructions is not None:
+            if travel_instructions is not None:
                 prev_dir = ''
                 for t in travel_instructions:
                     print(t)
