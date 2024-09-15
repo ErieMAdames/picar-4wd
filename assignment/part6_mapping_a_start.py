@@ -38,10 +38,11 @@ class Map:
     def __init__(self):
         print('starting')
     def go_distance(self, dist, forward=True):
-        pc4.forward(1)
-        time.sleep((dist/100) * 4.2)
-        pc4.stop()
-        time.sleep(.5)
+        # pc4.forward(1)
+        print('forward dist: ' + str(dist) + ' cm | time' + str((dist/100) * 4.2))
+        # time.sleep((dist/100) * 4.2)
+        # pc4.stop()
+        # time.sleep(.5)
     def calibrate_turn_speed(self):
         start = time.time()
         try:
@@ -213,14 +214,16 @@ class Map:
     
 
     def turn_right(self, angle=90, speed=30):
-        pc4.turn_right(speed)
-        input()
-        pc4.stop()
+        print('turnging right')
+        # pc4.turn_right(speed)
+        # input()
+        # pc4.stop()
 
     def turn_left(self, angle=90, speed=30):
-        pc4.turn_left(speed)
-        input()
-        pc4.stop()
+        print('turnging left')
+        # pc4.turn_left(speed)
+        # input()
+        # pc4.stop()
 
 def generate_frames():
     global frame
@@ -262,12 +265,9 @@ if __name__ == "__main__":
                 for t in to_travel:
                     if t[0] == 'x':
                         if t[1] < 0:
-                            print('turning left')
                             map_instance.turn_left()
                         else:
-                            print('turning right')
                             map_instance.turn_right()
-                        print('going ' + str(t[1]))
                         map_instance.go_distance(abs(t[1]))
             pc4.stop()
             input()
