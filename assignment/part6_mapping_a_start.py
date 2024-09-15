@@ -238,7 +238,7 @@ class SelfDrive:
         elapsed_time = time.time() - start
         stop_detected = False
         # print('forward dist: ' + str(dist) + ' cm | time ' + str(abs(dist/100) * 4.2) + ' seconds')
-        while travel_time >= (elapsed_time - pause):
+        while travel_time >= elapsed_time:
             image = self.picam2.capture_array("main")
             image = cv2.flip(image, 0)
             rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
