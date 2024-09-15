@@ -256,16 +256,28 @@ if __name__ == "__main__":
         while True:
             travel_instructions = map_instance.scan()
             if travel_instructions is not None:
+                prev_dir = ''
                 for t in travel_instructions:
-                    print(t)
                     if t[0] == 'up':
+                        if prev_dir == 'left':
+                            pc4.turn_right()
+                        if prev_dir == 'right':
+                            pc4.turn_left()
+                        prev_dir = 'up'
                         map_instance.go_distance(t[1])
                     elif t[0] == 'down':
+                        if prev_dir == 'left':
+                            pc4.turn_right()
+                        if prev_dir == 'right':
+                            pc4.turn_left()
+                        prev_dir = 'down'
                         map_instance.go_distance(-t[1])
                     elif t[0] == 'left':
+                        prev_dir = 'left'
                         map_instance.turn_left()
                         map_instance.go_distance(t[1])
                     elif t[0] == 'right':
+                        prev_dir = 'right'
                         map_instance.turn_left()
                         map_instance.go_distance(t[1])
                     
