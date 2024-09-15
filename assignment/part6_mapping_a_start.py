@@ -125,7 +125,7 @@ class SelfDrive:
         frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
     def scan(self):
         current_angle = -90
-        granularity = 180
+        granularity = 90
         us_step = int(180 / granularity)
         grid_size = 100
         map = np.zeros((grid_size, grid_size), dtype=int)
