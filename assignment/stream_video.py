@@ -81,7 +81,8 @@ class Map:
         _FONT_THICKNESS = 1
         _TEXT_COLOR = (0, 0, 255)  # red
         for detection in detection_result.detections:
-            print(detection)
+            if detection.categories[0].index == 12:
+                print("STOP!!!")
             category = detection.categories[0]
             category_name = category.category_name
             bbox = detection.bounding_box
