@@ -68,7 +68,7 @@ class Map:
                 if detection.categories[0].index == 12 and (detection.bounding_box.width >= 200 or detection.bounding_box.height >= 200):
                     pc4.stop()
             # Update global frames for Flask and Pygame
-            frame = image
+            frame = cv2.flip(image, 0)
             pygame_frame = image
 
         picam2.stop()
@@ -84,6 +84,7 @@ class Map:
             if detection.categories[0].index == 12:
                 print("STOP!!!")
             category = detection.categories[0]
+            print(category)
             category_name = category.category_name
             bbox = detection.bounding_box
             start_point = bbox.origin_x, bbox.origin_y
