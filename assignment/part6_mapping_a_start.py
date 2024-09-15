@@ -245,6 +245,7 @@ class SelfDrive:
             detection_result =  self.detector.detect(input_tensor)
             for detection in detection_result.detections:
                 if detection.categories[0].index == 12 and (detection.bounding_box.width >= 150 or detection.bounding_box.height >= 150):
+                    print('STOP!!')
                     if pause_timer == 0:
                         pause_timer = time.time()
                     pause = time.time() - pause_timer
