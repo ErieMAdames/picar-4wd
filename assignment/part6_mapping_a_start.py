@@ -72,7 +72,7 @@ class Map:
                 dy = int(distance * np.sin(np.radians(self.current_angle + 90 + self.angle_offset)))
                 if 0 <= dx < 100 and 0 <= dy < 100:
                     map_grid[dy, dx] = 1
-                temp_map_grid = self.add_obstacle_buffer(map_grid, 7)
+                temp_map_grid = self.add_obstacle_buffer(map_grid)
                 image = np.zeros((100, 100, 3), dtype=np.uint8)
                 image[temp_map_grid == 0] = [34, 139, 34]  # Green for 0
                 image[temp_map_grid == 1] = [0, 36, 255]  # Red for 1
@@ -80,7 +80,7 @@ class Map:
                 enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
                 frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
             self.current_angle += us_step
-        temp_map_grid = self.add_obstacle_buffer(map_grid, 7)
+        temp_map_grid = self.add_obstacle_buffer(map_grid)
         path = self.a_star(temp_map_grid, (0, 49), (99, 99))
         if path:
             for p in path:
