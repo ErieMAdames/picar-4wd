@@ -232,6 +232,8 @@ class SelfDrive:
         else:
             pc4.backward(1)
         travel_time = abs(dist/100) * 4.2
+        print('----')
+        print(travel_time)
         elapsed_time = time.time() - start
         # print('forward dist: ' + str(dist) + ' cm | time ' + str(abs(dist/100) * 4.2) + ' seconds')
         while travel_time >= (elapsed_time - pause):
@@ -253,6 +255,9 @@ class SelfDrive:
                     else:
                         pc4.backward(1)
             elapsed_time = time.time() - start
+        print(elapsed_time)
+        print(pause)
+        print(elapsed_time - pause)
         pc4.stop()
         time.sleep(.5)
 def generate_frames():
