@@ -58,6 +58,7 @@ class SelfDrive:
             prev_dir = ''
             direction = 'n'
             for t in travel_instructions:
+                print(direction)
                 if t[0] == 'up':
                     if prev_dir == 'left':
                         self.turn_right()
