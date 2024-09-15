@@ -95,16 +95,29 @@ class Map:
             image[temp_map_grid == 2] = [255, 0, 0]  # Red for 1
 
             enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
-            # Prepare the frame for streaming
             frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
+        if path:
+            prev = path[0]
+            x_travel = 0
+            y_travel = 0
+            for p in path[1:]:
+                if p[0] == prev[0]:
+                    if x_travel > 0:
+                        print(x_travel)
+                    x_travel = 0
+                    y_travel += p[1] - prev[1]
+                if p[1] == prev[1]:
+                    if y_travel > 0:
+                        print(y_travel)
+                    y_travel = 0
+                    x_travel += p[0] - prev[0]
+                prev = p
         self.distances = []
     def add_obstacle_buffer(self, grid, radius=10):
     # Get the shape of the grid
         rows, cols = grid.shape
-
         # Create a copy of the grid to modify
         new_grid = np.copy(grid)
-
         # Find all the positions where there are obstacles
         obstacle_positions = np.argwhere(grid == 1)
         
