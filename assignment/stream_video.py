@@ -31,7 +31,7 @@ class Map:
     options = vision.ObjectDetectorOptions(base_options=base_options, detection_options=detection_options)
     detector = vision.ObjectDetector.create_from_options(options)
     def __init__(self):
-        pc4.forward(1)
+        # pc4.forward(1)
         print('Starting camera stream')
 
     def scan(self):
