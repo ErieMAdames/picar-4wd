@@ -36,31 +36,12 @@ class Map:
 
     # Setup GPIO
     def __init__(self):
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.RIGHT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.setup(self.LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
-        GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
-        
         print('starting')
     def go_distance(self, dist, forward=True):
-        self.left_encoder_count = 0
-        self.right_encoder_count = 0
-        def calculate_distance(counts):
-            wheel_circumference = self.WHEEL_DIAMETER * 3.14159
-            distance = (counts / self.PPR) * wheel_circumference
-            return distance
-
-        left_distance = calculate_distance(self.left_encoder_count)
-        right_distance = calculate_distance(self.right_encoder_count)
-        while left_distance < dist and right_distance < dist:
-            print(left_distance, right_distance)
-            pc4.forward(self.speed)
-            left_distance = calculate_distance(self.left_encoder_count)
-            right_distance = calculate_distance(self.right_encoder_count)
+        pc4.forward(1)
+        time.sleep(dist * 4.2)
         pc4.stop()
         time.sleep(.5)
-        return min(left_distance, right_distance)
     def calibrate_turn_speed(self):
         start = time.time()
         try:
