@@ -259,6 +259,8 @@ if __name__ == "__main__":
             if travel_instructions is not None:
                 prev_dir = ''
                 for t in travel_instructions:
+                    print(t)
+                    print('-------')
                     if t[0] == 'up':
                         if prev_dir == 'left':
                             map_instance.turn_right()
