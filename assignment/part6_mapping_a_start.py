@@ -255,6 +255,7 @@ if __name__ == "__main__":
         # Run the scan method in the main thread
         while True:
             travel_instructions = map_instance.scan()
+            print(travel_instructions)
             if travel_instructions is not None:
                 prev_dir = ''
                 for t in travel_instructions:
