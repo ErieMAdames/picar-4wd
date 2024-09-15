@@ -54,6 +54,7 @@ class Map:
         left_distance = calculate_distance(self.left_encoder_count)
         right_distance = calculate_distance(self.right_encoder_count)
         while left_distance < dist or right_distance < dist:
+            print(left_distance, right_distance)
             pc4.forward(self.speed)
             left_distance = calculate_distance(self.left_encoder_count)
             right_distance = calculate_distance(self.right_encoder_count)
