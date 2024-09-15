@@ -257,6 +257,7 @@ if __name__ == "__main__":
             travel_instructions = map_instance.scan()
             if travel_instructions is not None:
                 for t in travel_instructions:
+                    print(t)
                     if t[0] == 'up':
                         map_instance.go_distance(t[1])
                     elif t[0] == 'down':
