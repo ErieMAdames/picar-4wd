@@ -41,11 +41,11 @@ class Map:
         start = time.time()
         try:
             while True:
-                pc4.turn_left(self.speed)
+                pc4.turn_left()
         except KeyboardInterrupt:
             pc4.stop()
             self.turning_time = time.time() - start
-            pc4.turn_right(self.speed)
+            pc4.turn_right()
             time.sleep(self.turning_time)
             pc4.stop()
 
@@ -199,15 +199,15 @@ class Map:
         return None  # No path found
     
 
-    def turn_right(self, angle=90, speed=30):
+    def turn_right(self):
         print('turnging right')
-        pc4.turn_right(speed)
+        pc4.turn_right(30)
         input()
         pc4.stop()
 
-    def turn_left(self, angle=90, speed=30):
+    def turn_left(self):
         print('turnging left')
-        pc4.turn_left(speed)
+        pc4.turn_left(30)
         input()
         pc4.stop()
     def go_distance(self, dist):
@@ -278,7 +278,7 @@ if __name__ == "__main__":
                         map_instance.go_distance(t[1])
                     elif t[0] == 'right':
                         prev_dir = 'right'
-                        map_instance.turn_left()
+                        map_instance.turn_right()
                         map_instance.go_distance(t[1])
                     
             pc4.stop()
