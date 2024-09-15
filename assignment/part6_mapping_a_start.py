@@ -242,21 +242,31 @@ class SelfDrive:
             image = cv2.flip(image, 0)
             rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             input_tensor = vision.TensorImage.create_from_array(rgb_image)
-            detection_result =  self.detector.detect(input_tensor)
+            detection_result = self.detector.detect(input_tensor)
+
+            # Check for stop sign detection
             for detection in detection_result.detections:
                 if detection.categories[0].index == 12 and (detection.bounding_box.width >= 150 or detection.bounding_box.height >= 150):
                     print('STOP!!')
-                    if pause_timer == 0:
-                        pause_timer = time.time()
-                    pause = time.time() - pause_timer
-                    pc4.stop()
+                    if not stop_detected:
+                        stop_detected = True
+                        stop_timer = time.time()  # Start the stop timer
+                    pause = time.time() - stop_timer
+                    pc4.stop()  # Stop the car
+                    break  # Exit the detection loop when a stop sign is detected
+            else:
+                # No stop sign detected
+                if stop_detected:
+                    print('Stop sign removed, resuming...')
+                    stop_detected = False
+                    start += pause  # Adjust start time to account for the paused duration
+                # Continue moving in the original direction
+                if dist > 0:
+                    pc4.forward(1)
                 else:
-                    pause_timer = 0
-                    if dist > 0:
-                        pc4.forward(1)
-                    else:
-                        pc4.backward(1)
-            elapsed_time = time.time() - start
+                    pc4.backward(1)
+
+        elapsed_time = time.time() - start
         print(elapsed_time)
         print(pause)
         print(elapsed_time - pause)
