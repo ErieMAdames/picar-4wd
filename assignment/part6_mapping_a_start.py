@@ -236,6 +236,7 @@ class SelfDrive:
         print(travel_time)
         elapsed_time = time.time() - start
         stop_detected = False
+        stop_timer = 0
         # print('forward dist: ' + str(dist) + ' cm | time ' + str(abs(dist/100) * 4.2) + ' seconds')
         while travel_time >= elapsed_time:
             image = self.picam2.capture_array("main")
@@ -253,6 +254,7 @@ class SelfDrive:
                         stop_timer = time.time()  # Start the stop timer
                     pause = time.time() - stop_timer
                     pc4.stop()  # Stop the car
+                    break  # Exit the detection loop when a stop sign is detected
             else:
                 # No stop sign detected
                 if stop_detected:
