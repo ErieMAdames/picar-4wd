@@ -100,18 +100,25 @@ class Map:
             prev = path[0]
             x_travel = 0
             y_travel = 0
+            distances_to_travel = []
             for p in path[1:]:
                 if p[0] == prev[0]:
                     if x_travel > 0:
-                        print(x_travel)
+                        distances_to_travel.append(('x', x_travel))
                     x_travel = 0
                     y_travel += p[1] - prev[1]
                 if p[1] == prev[1]:
                     if y_travel > 0:
-                        print(y_travel)
+                        distances_to_travel.append(('y', y_travel))
                     y_travel = 0
                     x_travel += p[0] - prev[0]
                 prev = p
+            
+            if x_travel > 0:
+                distances_to_travel.append(('x', x_travel))
+            if y_travel > 0:
+                distances_to_travel.append(('y', y_travel))
+            print(distances_to_travel)
         self.distances = []
     def add_obstacle_buffer(self, grid, radius=10):
     # Get the shape of the grid
