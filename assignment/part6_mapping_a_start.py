@@ -73,6 +73,7 @@ class SelfDrive:
                 # print('----------')
                 # print(t)
                 # print(direction)
+                continue
                 if t[0] == 'up':
                     direction = 'n'
                     if prev_dir == 'left':
@@ -111,11 +112,11 @@ class SelfDrive:
                     self.go_distance(t[1])
                 # print(direction)
                 # print('-------')
-            if direction == 'e':
-                self.turn_left()
-            if direction == 'w':
-                self.turn_right()
-            pc4.stop()
+            # if direction == 'e':
+            #     self.turn_left()
+            # if direction == 'w':
+            #     self.turn_right()
+            # pc4.stop()
         # print(str(x) + ', ' + str(y))
         # print(str(x_closest) + ', ' + str(y_closest))
         if x != x_closest or y != y_closest:
