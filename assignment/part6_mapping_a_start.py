@@ -87,7 +87,6 @@ class Map:
         path = self.a_star(temp_map_grid, (0, 49), (99, 99))
         if path:
             for p in path:
-                print(p)
                 temp_map_grid[p[0], p[1]] = 2
             image = np.zeros((100, 100, 3), dtype=np.uint8)
             image[temp_map_grid == 0] = [0, 255, 0]  # Green for 0
@@ -96,6 +95,7 @@ class Map:
 
             enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
             frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
+            print(frame)
         if path:
             directions = {
                 (1, 0): "up",
