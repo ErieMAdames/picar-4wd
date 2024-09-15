@@ -76,7 +76,7 @@ class Map:
                 # Create and process the image with OpenCV
                 image = np.zeros((100, 100, 3), dtype=np.uint8)
                 image[temp_map_grid == 0] = [34, 139, 34]  # Green for 0
-                image[temp_map_grid == 1] = [0, 165, 255]  # Red for 1
+                image[temp_map_grid == 1] = [0, 36, 255]  # Red for 1
 
                 enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
 
@@ -90,7 +90,7 @@ class Map:
                 temp_map_grid[p[0], p[1]] = 2
             image = np.zeros((100, 100, 3), dtype=np.uint8)
             image[temp_map_grid == 0] = [34, 139, 34]  # Green for 0
-            image[temp_map_grid == 1] = [0, 265, 255]  # Red for 1
+            image[temp_map_grid == 1] = [0, 36, 255]  # Red for 1
             image[temp_map_grid == 2] = [255, 0, 0]  # Red for 1
 
             enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
