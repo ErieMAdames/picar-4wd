@@ -248,7 +248,7 @@ class SelfDrive:
 
             # Check for stop sign detection
             for detection in detection_result.detections:
-                if detection.categories[0].index == 12 and (detection.bounding_box.width >= 150 or detection.bounding_box.height >= 150):
+                if detection.categories[0].index == 0 or (detection.categories[0].index == 12 and (detection.bounding_box.width >= 150 or detection.bounding_box.height >= 150)):
                     print('STOP!!')
                     if not stop_detected:
                         stop_detected = True
