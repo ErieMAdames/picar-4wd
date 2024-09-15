@@ -151,7 +151,7 @@ class SelfDrive:
             self.create_frame(map)
             current_angle += us_step
         return map
-    def add_obstacle_buffer(self, grid, radius=13):
+    def add_obstacle_buffer(self, grid, radius=1):
         rows, cols = grid.shape
         new_grid = np.copy(grid)
         obstacle_positions = np.argwhere(grid == 1)
