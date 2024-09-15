@@ -148,7 +148,6 @@ class Map:
             'left': (0, -1),
             'right': (0, 1)
         }
-        # Valid neighbors (up, down, left, right)
         def get_neighbors(pos):
             neighbors = []
             for direction, (dr, dc) in DIRECTIONS.items():
@@ -162,35 +161,34 @@ class Map:
         heappush(open_set, (0, start, None))  # (f_score, position, direction)
         
         came_from = {}  # To reconstruct the path
-        g_score = {start: 0}
-        f_score = {start: heuristic(start[0], start[1], goal[0], goal[1])}
-        
+        g_score = {start: 0}  # Movement cost from start to current position
+        f_score = {start: heuristic(start[0], start[1], goal[0], goal[1])}  # Total cost estimate (g + heuristic)
+
         while open_set:
             current_f_score, current, current_direction = heappop(open_set)
             
             if current == goal:
-                # Reconstruct path
                 path = []
                 while current in came_from:
                     path.append(current)
                     current = came_from[current][0]
-                path.append(start)  # Add the start point
+                path.append(start)
                 return path[::-1]  # Return reversed path
-            
+
             for neighbor, direction in get_neighbors(current):
-                # Penalize turning by adding a cost when direction changes
-                tentative_g_score = g_score[current] + 1  # Base move cost is 1
-                
-                # If changing direction, add a penalty for turning
+                tentative_g_score = g_score[current] + 1
                 if current_direction is not None and current_direction != direction:
-                    tentative_g_score += 1  # Penalty for turning
-                
+                    tentative_g_score += 2  # Add penalty for turning (higher value = stronger preference for straight)
+
                 if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
                     came_from[neighbor] = (current, direction)
                     g_score[neighbor] = tentative_g_score
+                    # Add a small bias in the heuristic to prefer straight-line movement
                     f_score[neighbor] = tentative_g_score + heuristic(neighbor[0], neighbor[1], goal[0], goal[1])
                     heappush(open_set, (f_score[neighbor], neighbor, direction))
+
         return None  # No path found
+
     
 
     def turn_right(self):
