@@ -236,6 +236,7 @@ class SelfDrive:
         print('----')
         print(travel_time)
         elapsed_time = time.time() - start
+        stop_detected = False
         # print('forward dist: ' + str(dist) + ' cm | time ' + str(abs(dist/100) * 4.2) + ' seconds')
         while travel_time >= (elapsed_time - pause):
             image = self.picam2.capture_array("main")
