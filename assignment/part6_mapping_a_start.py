@@ -62,6 +62,7 @@ class SelfDrive:
                 print(t)
                 print(direction)
                 if t[0] == 'up':
+                    direction = 'n'
                     if prev_dir == 'left':
                         self.turn_right()
                     if prev_dir == 'right':
@@ -69,6 +70,7 @@ class SelfDrive:
                     prev_dir = 'up'
                     self.go_distance(t[1])
                 elif t[0] == 'down':
+                    direction = 's'
                     if prev_dir == 'left':
                         self.turn_right()
                     if prev_dir == 'right':
