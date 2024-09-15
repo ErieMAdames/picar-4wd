@@ -4,7 +4,6 @@ import sys
 import cv2
 from flask import Flask, Response
 import threading
-import RPi.GPIO as GPIO
 import picar_4wd as pc4
 from heapq import heappop, heappush
 
@@ -16,82 +15,20 @@ frame = None
 
 np.set_printoptions(threshold=sys.maxsize)
 
-class Map:
-    current_car_angle = 0
-    speed = 30
-    turning_time = .9
-    current_angle = 0
-    us_step = 1
-    min_angle = -90
-    max_angle = 90
-    distances = []
-    WHEEL_DIAMETER = 0.0662  # Example wheel diameter in meters
-    PPR = 20  # Example pulses per revolution
-    LEFT_ENCODER_PIN = 25  # Replace with your GPIO pin number
-    RIGHT_ENCODER_PIN = 4  # Replace with your GPIO pin number
-    left_encoder_count = 0
-    right_encoder_count = 0
-    forward_dist = .5
+class SelfDrive:
     angle_offset = -10
 
     # Setup GPIO
     def __init__(self):
         print('starting')
-    def calibrate_turn_speed(self):
-        start = time.time()
-        try:
-            while True:
-                pc4.turn_left()
-        except KeyboardInterrupt:
-            pc4.stop()
-            self.turning_time = time.time() - start
-            pc4.turn_right()
-            time.sleep(self.turning_time)
-            pc4.stop()
-
-    def left_encoder_callback(self, channel):
-        self.left_encoder_count += 1
-        print(self.left_encoder_count)
-
-    def right_encoder_callback(self, channel): 
-        self.right_encoder_count += 1
-        print(self.right_encoder_count)
-
-    def scan(self):
-        global frame
-        print('scanning')
-        self.current_angle = -90
-        granularity = 180
-        us_step = int(180 / granularity)
-        grid_size = 100
-        map_grid = np.zeros((grid_size, grid_size), dtype=int)
-        for _ in range(granularity):
-            distance = pc4.get_distance_at(self.current_angle)
-            if distance > 0:
-                dx = int(distance * np.cos(np.radians(self.current_angle + 90 + self.angle_offset))) + 49
-                dy = int(distance * np.sin(np.radians(self.current_angle + 90 + self.angle_offset)))
-                if 0 <= dx < 100 and 0 <= dy < 100:
-                    map_grid[dy, dx] = 1
-                temp_map_grid = self.add_obstacle_buffer(map_grid)
-                image = np.zeros((100, 100, 3), dtype=np.uint8)
-                image[temp_map_grid == 0] = [34, 139, 34]  # Green for 0
-                image[temp_map_grid == 1] = [0, 36, 255]  # Red for 1
-
-                enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
-                frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
-            self.current_angle += us_step
-        temp_map_grid = self.add_obstacle_buffer(map_grid)
-        path = self.a_star(temp_map_grid, (0, 49), (99, 99))
+    def go_to(self, x, y):
+        map = self.scan()
+        temp_map = self.add_obstacle_buffer(map)
+        path = self.a_star(temp_map, (0, 49), (y, x))
         if path:
             for p in path:
-                temp_map_grid[p[0], p[1]] = 2
-            image = np.zeros((100, 100, 3), dtype=np.uint8)
-            image[temp_map_grid == 0] = [34, 139, 34]  # Green for 0
-            image[temp_map_grid == 1] = [0, 36, 255]  # Red for 1
-            image[temp_map_grid == 2] = [255, 0, 0]  # Red for 1
-
-            enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
-            frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
+                map[p[0], p[1]] = 2
+            temp_map = self.add_obstacle_buffer(map)
         if path:
             directions = {
                 (1, 0): "up",
@@ -99,16 +36,13 @@ class Map:
                 (0, 1): "right",
                 (0, -1): "left"
             }
-            def get_direction(p1, p2):
-                return (p2[0] - p1[0], p2[1] - p1[1])
-            
             travel_instructions = []
             current_direction = None
             steps = 0
             for i in range(1, len(path)):
                 prev_point = path[i - 1]
                 current_point = path[i]
-                new_direction = get_direction(prev_point, current_point)
+                new_direction = (current_point[0] - prev_point[0], current_point[1] - prev_point[1])
                 if new_direction != current_direction:
                     if current_direction is not None:
                         direction_name = directions[current_direction]
@@ -120,16 +54,60 @@ class Map:
             if current_direction is not None:
                 direction_name = directions[current_direction]
                 travel_instructions.append((direction_name, steps))
-            return travel_instructions
-        self.distances = []
+            prev_dir = ''
+            for t in travel_instructions:
+                if t[0] == 'up':
+                    if prev_dir == 'left':
+                        self.turn_right()
+                    if prev_dir == 'right':
+                        self.turn_left()
+                    prev_dir = 'up'
+                    self.go_distance(t[1])
+                elif t[0] == 'down':
+                    if prev_dir == 'left':
+                        self.turn_right()
+                    if prev_dir == 'right':
+                        self.turn_left()
+                    prev_dir = 'down'
+                    self.go_distance(-t[1])
+                elif t[0] == 'left':
+                    prev_dir = 'left'
+                    self.turn_left()
+                    self.go_distance(t[1])
+                elif t[0] == 'right':
+                    prev_dir = 'right'
+                    self.turn_right()
+                    self.go_distance(t[1])
+            pc4.stop()
+    def create_frame(self, map):
+        global frame
+        temp_map = self.add_obstacle_buffer(map)
+        image = np.zeros((100, 100, 3), dtype=np.uint8)
+        image[temp_map == 0] = [34, 139, 34]  # Green for 0
+        image[temp_map == 1] = [0, 36, 255]  # Red for 1
+        image[temp_map == 2] = [255, 0,   0]  # Blue for path
+        enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
+        frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
+    def scan(self):
+        current_angle = -90
+        granularity = 180
+        us_step = int(180 / granularity)
+        grid_size = 100
+        map = np.zeros((grid_size, grid_size), dtype=int)
+        for _ in range(granularity):
+            distance = pc4.get_distance_at(current_angle)
+            if distance > 0:
+                dx = int(distance * np.cos(np.radians(current_angle + 90 + self.angle_offset))) + 49
+                dy = int(distance * np.sin(np.radians(current_angle + 90 + self.angle_offset)))
+                if 0 <= dx < 100 and 0 <= dy < 100:
+                    map[dy, dx] = 1
+            self.create_frame(map)
+            current_angle += us_step
+        return map
     def add_obstacle_buffer(self, grid, radius=10):
-    # Get the shape of the grid
         rows, cols = grid.shape
-        # Create a copy of the grid to modify
         new_grid = np.copy(grid)
-        # Find all the positions where there are obstacles
         obstacle_positions = np.argwhere(grid == 1)
-        
         for obstacle in obstacle_positions:
             x, y = obstacle
             for i in range(max(0, x - radius), min(rows, x + radius + 1)):
@@ -186,10 +164,7 @@ class Map:
                     # Add a small bias in the heuristic to prefer straight-line movement
                     f_score[neighbor] = tentative_g_score + heuristic(neighbor[0], neighbor[1], goal[0], goal[1])
                     heappush(open_set, (f_score[neighbor], neighbor, direction))
-
         return None  # No path found
-
-    
 
     def turn_right(self):
         print('turnging right')
@@ -232,55 +207,18 @@ def run_flask():
 
 if __name__ == "__main__":
     try:
-        print('Starting Part 5: Move around object')
-
-        # Create a Map object
-        map_instance = Map()
-
-        # map_instance.go_distance(1)
-        # pc4.stop()
-        # exit()
+        # Create a SelfDrive object
+        drive = SelfDrive()
         # Create a thread for the Flask server
         flask_thread = threading.Thread(target=run_flask)
         flask_thread.start()
 
         # Run the scan method in the main thread
         while True:
-            travel_instructions = map_instance.scan()
-            print(travel_instructions)
-            if travel_instructions is not None:
-                prev_dir = ''
-                for t in travel_instructions:
-                    print(t)
-                    print('-------')
-                    if t[0] == 'up':
-                        if prev_dir == 'left':
-                            map_instance.turn_right()
-                        if prev_dir == 'right':
-                            map_instance.turn_left()
-                        prev_dir = 'up'
-                        map_instance.go_distance(t[1])
-                    elif t[0] == 'down':
-                        if prev_dir == 'left':
-                            map_instance.turn_right()
-                        if prev_dir == 'right':
-                            map_instance.turn_left()
-                        prev_dir = 'down'
-                        map_instance.go_distance(-t[1])
-                    elif t[0] == 'left':
-                        prev_dir = 'left'
-                        map_instance.turn_left()
-                        map_instance.go_distance(t[1])
-                    elif t[0] == 'right':
-                        prev_dir = 'right'
-                        map_instance.turn_right()
-                        map_instance.go_distance(t[1])
-                    
-            pc4.stop()
+            drive.go_to(99, 99)
             input()
 
     except KeyboardInterrupt:
         print('\nStopping')
     finally:
         pc4.stop()
-        GPIO.cleanup()
