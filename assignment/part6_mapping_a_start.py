@@ -36,8 +36,30 @@ class Map:
 
     # Setup GPIO
     def __init__(self):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.RIGHT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.LEFT_ENCODER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.add_event_detect(self.LEFT_ENCODER_PIN, GPIO.RISING, callback=self.left_encoder_callback)
+        GPIO.add_event_detect(self.RIGHT_ENCODER_PIN, GPIO.RISING, callback=self.right_encoder_callback)
+        
         print('starting')
+    def go_distance(self, dist, forward=True):
+        self.left_encoder_count = 0
+        self.right_encoder_count = 0
+        def calculate_distance(counts):
+            wheel_circumference = self.WHEEL_DIAMETER * 3.14159
+            distance = (counts / self.PPR) * wheel_circumference
+            return distance
 
+        left_distance = calculate_distance(self.left_encoder_count)
+        right_distance = calculate_distance(self.right_encoder_count)
+        while left_distance < dist or right_distance < dist:
+            pc4.forward(self.speed)
+            left_distance = calculate_distance(self.left_encoder_count)
+            right_distance = calculate_distance(self.right_encoder_count)
+        pc4.stop()
+        time.sleep(.5)
+        return min(left_distance, right_distance)
     def calibrate_turn_speed(self):
         start = time.time()
         try:
@@ -118,7 +140,7 @@ class Map:
                 distances_to_travel.append(('y', x_travel))
             if y_travel > 0:
                 distances_to_travel.append(('x', y_travel))
-            print(distances_to_travel)
+            return distances_to_travel
         self.distances = []
     def add_obstacle_buffer(self, grid, radius=10):
     # Get the shape of the grid
@@ -209,12 +231,12 @@ class Map:
 
     def turn_right(self, angle=90, speed=30):
         pc4.turn_right(speed)
-        time.sleep(self.turning_time)
+        input()
         pc4.stop()
 
     def turn_left(self, angle=90, speed=30):
         pc4.turn_left(speed)
-        time.sleep(self.turning_time)
+        input()
         pc4.stop()
 
 def generate_frames():
@@ -249,7 +271,16 @@ if __name__ == "__main__":
 
         # Run the scan method in the main thread
         while True:
-            map_instance.scan()
+            to_travel = map_instance.scan()
+            if to_travel is not None:
+                for t in to_travel:
+                    if t[0] == 'x':
+                        if t[1] < 0:
+                            map_instance.turn_left()
+                        else:
+                            map_instance.turn_right()
+                        map_instance.go_distance(abs(t[1]))
+            pc4.stop()
             input()
 
     except KeyboardInterrupt:
