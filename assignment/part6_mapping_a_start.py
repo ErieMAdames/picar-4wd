@@ -122,7 +122,7 @@ class Map:
                     steps += 1
             if current_direction is not None:
                 direction_name = directions[current_direction]
-                travel_instructions.append((steps, direction_name))
+                travel_instructions.append((direction_name, steps))
             return travel_instructions
         self.distances = []
     def add_obstacle_buffer(self, grid, radius=10):
