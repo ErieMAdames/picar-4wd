@@ -87,6 +87,7 @@ class Map:
         path = self.a_star(temp_map_grid, (0, 49), (99, 99))
         if path:
             for p in path:
+                print(p)
                 temp_map_grid[p[0], p[1]] = 2
             image = np.zeros((100, 100, 3), dtype=np.uint8)
             image[temp_map_grid == 0] = [0, 255, 0]  # Green for 0
@@ -96,10 +97,6 @@ class Map:
             enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
             # Prepare the frame for streaming
             frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
-        print(path)
-        # for x in np.flip(map_grid, 0):
-        #     x_str = np.array_repr(x).replace('\n', '').replace(' ', '').replace('array([', '').replace('])', '').replace('0','_').replace('1','@')
-        #     print(x_str)
         self.distances = []
     def add_obstacle_buffer(self, grid, radius=10):
     # Get the shape of the grid
