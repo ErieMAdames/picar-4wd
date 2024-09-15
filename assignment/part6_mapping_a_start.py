@@ -89,7 +89,7 @@ class Map:
             for p in path:
                 temp_map_grid[p[0], p[1]] = 2
             image = np.zeros((100, 100, 3), dtype=np.uint8)
-            image[temp_map_grid == 0] = [0, 255, 0]  # Green for 0
+            image[temp_map_grid == 0] = [34, 139, 34]  # Green for 0
             image[temp_map_grid == 1] = [0, 0, 255]  # Red for 1
             image[temp_map_grid == 2] = [255, 0, 0]  # Red for 1
 
