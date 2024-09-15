@@ -28,8 +28,7 @@ class SelfDrive:
         if path:
             for p in path:
                 map[p[0], p[1]] = 2
-            temp_map = self.add_obstacle_buffer(map)
-        if path:
+            self.create_frame(map)
             directions = {
                 (1, 0): "up",
                 (-1, 0): "down",
