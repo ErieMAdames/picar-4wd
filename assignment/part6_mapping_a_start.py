@@ -227,7 +227,6 @@ class SelfDrive:
         print('go distance')
         start = time.time()
         pause = 0
-        pause_timer = 0
         if dist > 0:
             pc4.forward(1)
         else:
@@ -254,7 +253,6 @@ class SelfDrive:
                         stop_timer = time.time()  # Start the stop timer
                     pause = time.time() - stop_timer
                     pc4.stop()  # Stop the car
-                    break  # Exit the detection loop when a stop sign is detected
             else:
                 # No stop sign detected
                 if stop_detected:
