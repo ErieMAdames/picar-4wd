@@ -60,10 +60,10 @@ class Map:
         global frame
         print('scanning')
         self.current_angle = -90
-        self.us_step = 1
+        self.us_step = 2
         grid_size = 100
         map_grid = np.zeros((grid_size, grid_size), dtype=int)
-        for _ in range(180):
+        for _ in range(90):
             distance = pc4.get_distance_at(self.current_angle)
             if distance > 0:
                 dx = int(distance * np.cos(np.radians(self.current_angle + 90 + self.angle_offset))) + 49
