@@ -260,16 +260,16 @@ if __name__ == "__main__":
                 for t in travel_instructions:
                     if t[0] == 'up':
                         if prev_dir == 'left':
-                            pc4.turn_right()
+                            map_instance.turn_right()
                         if prev_dir == 'right':
-                            pc4.turn_left()
+                            map_instance.turn_left()
                         prev_dir = 'up'
                         map_instance.go_distance(t[1])
                     elif t[0] == 'down':
                         if prev_dir == 'left':
-                            pc4.turn_right()
+                            map_instance.turn_right()
                         if prev_dir == 'right':
-                            pc4.turn_left()
+                            map_instance.turn_left()
                         prev_dir = 'down'
                         map_instance.go_distance(-t[1])
                     elif t[0] == 'left':
