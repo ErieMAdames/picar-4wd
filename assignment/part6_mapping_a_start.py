@@ -75,9 +75,11 @@ class Map:
 
     def left_encoder_callback(self, channel):
         self.left_encoder_count += 1
+        print(self.left_encoder_count)
 
     def right_encoder_callback(self, channel): 
         self.right_encoder_count += 1
+        print(self.right_encoder_count)
 
     def scan(self):
         global frame
@@ -265,6 +267,8 @@ if __name__ == "__main__":
         # Create a Map object
         map_instance = Map()
 
+        map_instance.go_distance(1)
+        exit()
         # Create a thread for the Flask server
         flask_thread = threading.Thread(target=run_flask)
         flask_thread.start()
