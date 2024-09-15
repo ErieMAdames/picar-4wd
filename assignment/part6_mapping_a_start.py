@@ -266,8 +266,7 @@ class SelfDrive:
                     pc4.forward(1)
                 else:
                     pc4.backward(1)
-
-        elapsed_time = time.time() - start
+            elapsed_time = time.time() - start
         print(elapsed_time)
         print(pause)
         print(elapsed_time - pause)
