@@ -74,11 +74,11 @@ class Map:
                     map_grid[dy, dx] = 1
                 temp_map_grid = self.add_obstacle_buffer(map_grid, 5)
                 # Create and process the image with OpenCV
-                image = np.zeros((100, 100, 3), dtype=np.uint8)
-                image[temp_map_grid == 0] = [34, 139, 34]  # Green for 0
-                image[temp_map_grid == 1] = [0, 0, 255]  # Red for 1
+                # image = np.zeros((100, 100, 3), dtype=np.uint8)
+                # image[temp_map_grid == 0] = [34, 139, 34]  # Green for 0
+                # image[temp_map_grid == 1] = [0, 0, 255]  # Red for 1
 
-                enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
+                enlarged_image = cv2.resize(temp_map_grid, (500, 500), interpolation=cv2.INTER_NEAREST)
 
                 # Prepare the frame for streaming
                 frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
@@ -128,7 +128,7 @@ class Map:
     def apply_gradient_to_buffer(self, image, obstacle, radius):
         (x, y) = obstacle
         inner_color = [255, 0, 0]
-        outer_color=[255, 165, 0]
+        outer_color = [255, 165, 0]
         rows, cols, _ = image.shape
         
         for i in range(max(0, x - radius), min(rows, x + radius + 1)):
