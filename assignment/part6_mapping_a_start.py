@@ -72,7 +72,7 @@ class Map:
                 
                 if 0 <= dx < 100 and 0 <= dy < 100:
                     map_grid[dy, dx] = 1
-                temp_map_grid = self.add_obstacle_buffer(map_grid, 5)
+                temp_map_grid = self.add_obstacle_buffer(map_grid, 10)
                 # Create and process the image with OpenCV
                 image = np.zeros((100, 100, 3), dtype=np.uint8)
                 image[temp_map_grid == 0] = [34, 139, 34]  # Green for 0
@@ -135,13 +135,10 @@ class Map:
         
         for obstacle in obstacle_positions:
             x, y = obstacle
-            
-            # Iterate through all the cells within a square surrounding the obstacle
             for i in range(max(0, x - radius), min(rows, x + radius + 1)):
                 for j in range(max(0, y - radius), min(cols, y + radius + 1)):
-                    # Calculate the Euclidean distance to the obstacle
                     if np.sqrt((x - i) ** 2 + (y - j) ** 2) <= radius:
-                        new_grid[i, j] = 1  # Mark as obstacle
+                        new_grid[i, j] = 1
 
         return new_grid
     def a_star(self, grid, start, goal):
