@@ -5,9 +5,9 @@ import cv2
 import argparse
 import threading
 from flask import Flask, Response, request
-from picamera2 import Picamera2
 import pygame
 import os
+from picamera2 import Picamera2
 from tflite_support.task import core
 from tflite_support.task import processor
 from tflite_support.task import vision
@@ -51,7 +51,6 @@ class Map:
 
             # Flip the image and convert to RGB
             image = cv2.flip(image, 0)
-            rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             input_tensor = vision.TensorImage.create_from_array(rgb_image)
             detection_result =  self.detector.detect(input_tensor)

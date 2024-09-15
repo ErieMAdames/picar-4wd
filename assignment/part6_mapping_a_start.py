@@ -6,6 +6,10 @@ from flask import Flask, Response
 import threading
 import picar_4wd as pc4
 from heapq import heappop, heappush
+from picamera2 import Picamera2
+from tflite_support.task import core
+from tflite_support.task import processor
+from tflite_support.task import vision
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -13,11 +17,18 @@ app = Flask(__name__)
 # Set up global variables for streaming
 frame = None
 
-np.set_printoptions(threshold=sys.maxsize)
-
 class SelfDrive:
     angle_offset = 0#-10
-
+    base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
+    detection_options = processor.DetectionOptions(max_results=1, score_threshold=0.5)  # Limit to 1 result for speed
+    options = vision.ObjectDetectorOptions(base_options=base_options, detection_options=detection_options)
+    detector = vision.ObjectDetector.create_from_options(options)
+    width, height = 640, 480
+    picam2 = Picamera2()
+    config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (width, height)})
+    picam2.align_configuration(config)
+    picam2.configure(config)
+    picam2.start()
     # Setup GPIO
     def __init__(self):
         print('starting')
@@ -58,9 +69,9 @@ class SelfDrive:
             prev_dir = ''
             direction = 'n'
             for t in travel_instructions:
-                print('----------')
-                print(t)
-                print(direction)
+                # print('----------')
+                # print(t)
+                # print(direction)
                 if t[0] == 'up':
                     direction = 'n'
                     if prev_dir == 'left':
@@ -97,21 +108,21 @@ class SelfDrive:
                     prev_dir = 'right'
                     self.turn_right()
                     self.go_distance(t[1])
-                print(direction)
-                print('-------')
+                # print(direction)
+                # print('-------')
             if direction == 'e':
                 self.turn_left()
             if direction == 'w':
                 self.turn_right()
             pc4.stop()
-        print(str(x) + ', ' + str(y))
-        print(str(x_closest) + ', ' + str(y_closest))
+        # print(str(x) + ', ' + str(y))
+        # print(str(x_closest) + ', ' + str(y_closest))
         if x != x_closest or y != y_closest:
             traveled_x = x_closest - 49
             traveled_y = y_closest
             new_dest_x = x - traveled_x
             new_dest_y = y - traveled_y
-            print(str(new_dest_x) + ', ' + str(new_dest_y))
+            # print(str(new_dest_x) + ', ' + str(new_dest_y))
             if new_dest_x > 2 or new_dest_y > 2:
                 self.go_to(new_dest_x, new_dest_y)
     def create_frame(self, map):
@@ -202,23 +213,46 @@ class SelfDrive:
         return None  # No path found
 
     def turn_right(self):
-        print('turnging right')
+        # print('turnging right')
         pc4.turn_right(1000)
         input()
         pc4.stop()
 
     def turn_left(self):
-        print('turnging left')
+        # print('turnging left')
         pc4.turn_left(1000)
         input()
         pc4.stop()
     def go_distance(self, dist):
+        start = time.time()
+        pause = 0
+        pause_timer = 0
         if dist > 0:
             pc4.forward(1)
         else:
             pc4.backward(1)
-        print('forward dist: ' + str(dist) + ' cm | time ' + str(abs(dist/100) * 4.2) + ' seconds')
-        time.sleep(abs(dist/100) * 4.2)
+        travel_time = abs(dist/100) * 4.2
+        elapsed_time = time.time() - start
+        # print('forward dist: ' + str(dist) + ' cm | time ' + str(abs(dist/100) * 4.2) + ' seconds')
+        while travel_time >= (elapsed_time - pause):
+            image = self.picam2.capture_array("main")
+            image = cv2.flip(image, 0)
+            rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            input_tensor = vision.TensorImage.create_from_array(rgb_image)
+            detection_result =  self.detector.detect(input_tensor)
+            for detection in detection_result.detections:
+                if detection.categories[0].index == 12 and (detection.bounding_box.width >= 200 or detection.bounding_box.height >= 200):
+                    if pause_timer == 0:
+                        pause_timer = time.time()
+                    pause = time.time() - pause_timer
+                    pc4.stop()
+                else:
+                    pause_timer = 0
+                    if dist > 0:
+                        pc4.forward(1)
+                    else:
+                        pc4.backward(1)
+            elapsed_time = time.time() - start
         pc4.stop()
         time.sleep(.5)
 def generate_frames():
