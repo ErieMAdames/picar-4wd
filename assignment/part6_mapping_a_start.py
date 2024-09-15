@@ -72,7 +72,7 @@ class Map:
                 dy = int(distance * np.sin(np.radians(self.current_angle + 90 + self.angle_offset)))
                 if 0 <= dx < 100 and 0 <= dy < 100:
                     map_grid[dy, dx] = 1
-                temp_map_grid = self.add_obstacle_buffer(map_grid, 10)
+                temp_map_grid = map_grid#self.add_obstacle_buffer(map_grid, 10)
                 # Create and process the image with OpenCV
                 image = np.zeros((100, 100, 3), dtype=np.uint8)
                 image[temp_map_grid == 0] = [34, 139, 34]  # Green for 0
@@ -83,7 +83,7 @@ class Map:
                 # Prepare the frame for streaming
                 frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
             self.current_angle += self.us_step
-        temp_map_grid =map_grid# self.add_obstacle_buffer(map_grid, 5)
+        temp_map_grid =map_grid# self.add_obstacle_buffer(map_grid, 10)
         path = self.a_star(temp_map_grid, (0, 49), (99, 99))
         if path:
             for p in path:
@@ -93,8 +93,8 @@ class Map:
             image[temp_map_grid == 1] = [0, 36, 255]  # Red for 1
             image[temp_map_grid == 2] = [255, 0, 0]  # Red for 1
 
-            enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
-            frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
+            # enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
+            frame = cv2.flip(image, 0)  # Flip the frame horizontally
         if path:
             directions = {
                 (1, 0): "up",
