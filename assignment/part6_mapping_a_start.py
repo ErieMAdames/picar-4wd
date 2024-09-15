@@ -61,11 +61,11 @@ class Map:
         global frame
         print('scanning')
         self.current_angle = -90
-        self.us_step = 1
-        steps = 180
+        granularity = 180
+        us_step = int(180 / granularity)
         grid_size = 100
         map_grid = np.zeros((grid_size, grid_size), dtype=int)
-        for _ in range(steps):
+        for _ in range(granularity):
             distance = pc4.get_distance_at(self.current_angle)
             if distance > 0:
                 dx = int(distance * np.cos(np.radians(self.current_angle + 90 + self.angle_offset))) + 49
@@ -79,7 +79,7 @@ class Map:
 
                 enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
                 frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
-            self.current_angle += self.us_step
+            self.current_angle += us_step
         temp_map_grid = self.add_obstacle_buffer(map_grid, 7)
         path = self.a_star(temp_map_grid, (0, 49), (99, 99))
         if path:
