@@ -84,7 +84,7 @@ class Map:
                 frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
             self.current_angle += self.us_step
         temp_map_grid = self.add_obstacle_buffer(map_grid)
-        path = self.a_star(temp_map_grid, (0, 49), (99, 49))
+        path = self.a_star(temp_map_grid, (0, 49), (99, 99))
         if path:
             for p in path:
                 temp_map_grid[p[0], p[1]] = 2
