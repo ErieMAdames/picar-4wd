@@ -16,7 +16,7 @@ frame = None
 np.set_printoptions(threshold=sys.maxsize)
 
 class SelfDrive:
-    angle_offset = -10
+    angle_offset = 0#-10
 
     # Setup GPIO
     def __init__(self):
