@@ -56,6 +56,7 @@ class SelfDrive:
                 direction_name = directions[current_direction]
                 travel_instructions.append((direction_name, steps))
             prev_dir = ''
+            direction = 'n'
             for t in travel_instructions:
                 if t[0] == 'up':
                     if prev_dir == 'left':
@@ -72,13 +73,26 @@ class SelfDrive:
                     prev_dir = 'down'
                     self.go_distance(-t[1])
                 elif t[0] == 'left':
+                    if direction == 'n':
+                        direction = 'w'
+                    if direction == 'e':
+                        direction = 'n'
+                    if direction == 'w':
+                        direction = 's'
                     prev_dir = 'left'
                     self.turn_left()
                     self.go_distance(t[1])
                 elif t[0] == 'right':
+                    if direction == 'n':
+                        direction = 'e'
+                    if direction == 'w':
+                        direction = 'n'
+                    if direction == 'e':
+                        direction = 's'
                     prev_dir = 'right'
                     self.turn_right()
                     self.go_distance(t[1])
+                print(direction)
             pc4.stop()
         if x != x_closest or y != y_closest:
             traveled_x = x_closest - 49
