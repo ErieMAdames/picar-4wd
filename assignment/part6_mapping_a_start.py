@@ -103,6 +103,7 @@ class Map:
             enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
             frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
         if path:
+            print(path)
             prev = path[0]
             x_travel = 0
             y_travel = 0
