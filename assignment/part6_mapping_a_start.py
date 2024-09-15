@@ -94,12 +94,12 @@ class Map:
             image[temp_map_grid == 2] = [255, 0, 0]  # Red for 1
 
             enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
-
             # Prepare the frame for streaming
             frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
-        for x in np.flip(map_grid, 0):
-            x_str = np.array_repr(x).replace('\n', '').replace(' ', '').replace('array([', '').replace('])', '').replace('0','_').replace('1','@')
-            print(x_str)
+        print(path)
+        # for x in np.flip(map_grid, 0):
+        #     x_str = np.array_repr(x).replace('\n', '').replace(' ', '').replace('array([', '').replace('])', '').replace('0','_').replace('1','@')
+        #     print(x_str)
         self.distances = []
     def add_obstacle_buffer(self, grid, radius=10):
     # Get the shape of the grid
@@ -187,7 +187,6 @@ class Map:
                     g_score[neighbor] = tentative_g_score
                     f_score[neighbor] = tentative_g_score + heuristic(neighbor[0], neighbor[1], goal[0], goal[1])
                     heappush(open_set, (f_score[neighbor], neighbor, direction))
-        
         return None  # No path found
     
 
