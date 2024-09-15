@@ -213,24 +213,25 @@ class SelfDrive:
         return None  # No path found
 
     def turn_right(self):
-        # print('turnging right')
-        pc4.turn_right(1000)
-        input()
-        pc4.stop()
+        print('turnging right')
+        # pc4.turn_right(1000)
+        # input()
+        # pc4.stop()
 
     def turn_left(self):
-        # print('turnging left')
-        pc4.turn_left(1000)
-        input()
-        pc4.stop()
+        print('turnging left')
+        # pc4.turn_left(1000)
+        # input()
+        # pc4.stop()
     def go_distance(self, dist):
+        print('go distance')
         start = time.time()
         pause = 0
         pause_timer = 0
-        if dist > 0:
-            pc4.forward(1)
-        else:
-            pc4.backward(1)
+        # if dist > 0:
+        #     pc4.forward(1)
+        # else:
+        #     pc4.backward(1)
         travel_time = abs(dist/100) * 4.2
         print('----')
         print(travel_time)
@@ -243,7 +244,7 @@ class SelfDrive:
             input_tensor = vision.TensorImage.create_from_array(rgb_image)
             detection_result =  self.detector.detect(input_tensor)
             for detection in detection_result.detections:
-                if detection.categories[0].index == 12 and (detection.bounding_box.width >= 200 or detection.bounding_box.height >= 200):
+                if detection.categories[0].index == 12 and (detection.bounding_box.width >= 150 or detection.bounding_box.height >= 150):
                     if pause_timer == 0:
                         pause_timer = time.time()
                     pause = time.time() - pause_timer
