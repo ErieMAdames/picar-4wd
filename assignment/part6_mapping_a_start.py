@@ -68,7 +68,7 @@ class SelfDrive:
                 travel_instructions.append((direction_name, steps))
             prev_dir = ''
             direction = 'n'
-            exit()
+            # exit()
             for t in travel_instructions:
                 # print('----------')
                 # print(t)
