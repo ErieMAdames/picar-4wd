@@ -38,10 +38,23 @@ class Map:
     def __init__(self):
         print('starting')
     def go_distance(self, dist, forward=True):
-        pc4.forward(1)
-        time.sleep(dist * 4.2)
+        self.left_encoder_count = 0
+        self.right_encoder_count = 0
+        def calculate_distance(counts):
+            wheel_circumference = self.WHEEL_DIAMETER * 3.14159
+            distance = (counts / self.PPR) * wheel_circumference
+            return distance
+
+        left_distance = calculate_distance(self.left_encoder_count)
+        right_distance = calculate_distance(self.right_encoder_count)
+        while left_distance < dist and right_distance < dist:
+            print(left_distance, right_distance)
+            pc4.forward(self.speed)
+            left_distance = calculate_distance(self.left_encoder_count)
+            right_distance = calculate_distance(self.right_encoder_count)
         pc4.stop()
         time.sleep(.5)
+        return min(left_distance, right_distance)
     def calibrate_turn_speed(self):
         start = time.time()
         try:
@@ -268,7 +281,7 @@ if __name__ == "__main__":
                             print('turning right')
                             map_instance.turn_right()
                         print('going ' + str(t[1]))
-                        map_instance.go_distance(abs(t[1]))
+                        map_instance.go_distance(abs(t[1]) / 100)
             pc4.stop()
             input()
 
