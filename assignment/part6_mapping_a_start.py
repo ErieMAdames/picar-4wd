@@ -99,7 +99,13 @@ class SelfDrive:
                     self.go_distance(t[1])
                 print(direction)
                 print('-------')
+            if direction == 'e':
+                self.turn_left()
+            if direction == 'w':
+                self.turn_right()
             pc4.stop()
+        print(str(x) + ', ' + str(y))
+        print(str(x_closest) + ', ' + str(y_closest))
         if x != x_closest or y != y_closest:
             traveled_x = x_closest - 49
             traveled_y = y_closest
