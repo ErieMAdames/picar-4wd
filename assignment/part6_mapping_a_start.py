@@ -83,12 +83,15 @@ class Map:
                 # Prepare the frame for streaming
                 frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
             self.current_angle += self.us_step
-        
+        path = self.a_star(map_grid, (49, 0), (99, 99))
+        if path:
+            for p in path:
+                print(map_grid[p[0], p[1]])
+
         for x in np.flip(map_grid, 0):
             x_str = np.array_repr(x).replace('\n', '').replace(' ', '').replace('array([', '').replace('])', '').replace('0','_').replace('1','@')
             print(x_str)
         self.distances = []
-        print(self.a_star(map_grid, (49, 0), (99, 99)))
     def a_star(self, grid, start, goal):
         # Heuristic: Manhattan distance (L1 norm)
         def heuristic(start_coords, goal_coords):
