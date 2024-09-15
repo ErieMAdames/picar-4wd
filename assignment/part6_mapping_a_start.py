@@ -83,7 +83,7 @@ class Map:
                 # Prepare the frame for streaming
                 frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
             self.current_angle += self.us_step
-        temp_map_grid =map_grid# self.add_obstacle_buffer(map_grid, 10)
+        temp_map_grid =map_grid# self.add_obstacle_buffer(map_grid, 5)
         path = self.a_star(temp_map_grid, (0, 49), (99, 99))
         if path:
             for p in path:
@@ -93,8 +93,8 @@ class Map:
             image[temp_map_grid == 1] = [0, 36, 255]  # Red for 1
             image[temp_map_grid == 2] = [255, 0, 0]  # Red for 1
 
-            # enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
-            frame = cv2.flip(image, 0)  # Flip the frame horizontally
+            enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
+            frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
         if path:
             directions = {
                 (1, 0): "up",
@@ -220,10 +220,10 @@ def generate_frames():
     global frame
     while True:
         if frame is not None:
-            ret, jpeg = cv2.imencode('.jpg', frame)
+            ret, png = cv2.imencode('.png', frame)
             if ret:
                 yield (b'--frame\r\n'
-                       b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n')
+                       b'Content-Type: image/png\r\n\r\n' + png.tobytes() + b'\r\n')
         time.sleep(0.1)  # Control the frame rate
 
 @app.route('/video_feed')
