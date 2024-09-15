@@ -59,6 +59,7 @@ class SelfDrive:
             direction = 'n'
             for t in travel_instructions:
                 print('----------')
+                print(t)
                 print(direction)
                 if t[0] == 'up':
                     if prev_dir == 'left':
