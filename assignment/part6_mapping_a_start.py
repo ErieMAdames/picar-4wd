@@ -39,7 +39,7 @@ class Map:
         print('starting')
     def go_distance(self, dist, forward=True):
         # pc4.forward(1)
-        print('forward dist: ' + str(dist) + ' cm | time' + str((dist/100) * 4.2))
+        print('forward dist: ' + str(dist) + ' cm | time ' + str((dist/100) * 4.2) + ' seconds')
         # time.sleep((dist/100) * 4.2)
         # pc4.stop()
         # time.sleep(.5)
@@ -124,6 +124,7 @@ class Map:
                 distances_to_travel.append(('y', x_travel))
             if y_travel > 0:
                 distances_to_travel.append(('x', y_travel))
+            print(distances_to_travel)
             return distances_to_travel
         self.distances = []
     def add_obstacle_buffer(self, grid, radius=10):
@@ -149,19 +150,6 @@ class Map:
         # Heuristic: Manhattan distance (L1 norm)
         def heuristic(x1, y1, x2, y2):
             return abs(x1 - x2) + abs(y1 - y2)
-
-        # Get the direction based on the movement from one cell to the next
-        def get_direction(from_pos, to_pos):
-            dx, dy = to_pos[0] - from_pos[0], to_pos[1] - from_pos[1]
-            if dx == -1 and dy == 0:
-                return 'up'
-            elif dx == 1 and dy == 0:
-                return 'down'
-            elif dx == 0 and dy == -1:
-                return 'left'
-            elif dx == 0 and dy == 1:
-                return 'right'
-            return None
         DIRECTIONS = {
             'up': (-1, 0),
             'down': (1, 0),
