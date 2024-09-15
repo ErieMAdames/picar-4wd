@@ -115,9 +115,9 @@ class Map:
                 prev = p
             
             if x_travel > 0:
-                distances_to_travel.append(('x', x_travel))
+                distances_to_travel.append(('y', x_travel))
             if y_travel > 0:
-                distances_to_travel.append(('y', y_travel))
+                distances_to_travel.append(('x', y_travel))
             print(distances_to_travel)
         self.distances = []
     def add_obstacle_buffer(self, grid, radius=10):
