@@ -100,7 +100,6 @@ class Map:
                 image[temp_map_grid == 1] = [0, 0, 255]  # Red for 1
 
                 enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
-                # rotated_image = cv2.rotate(enlarged_image, cv2.ROTATE_90_CLOCKWISE)
 
                 # Prepare the frame for streaming
                 frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
@@ -276,9 +275,12 @@ if __name__ == "__main__":
                 for t in to_travel:
                     if t[0] == 'x':
                         if t[1] < 0:
+                            print('turning left')
                             map_instance.turn_left()
                         else:
+                            print('turning right')
                             map_instance.turn_right()
+                        print('going ' + str(t[1]))
                         map_instance.go_distance(abs(t[1]))
             pc4.stop()
             input()
