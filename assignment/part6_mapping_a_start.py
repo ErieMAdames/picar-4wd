@@ -71,11 +71,11 @@ class Map:
                 
                 if 0 <= dx < 100 and 0 <= dy < 100:
                     map_grid[dy, dx] = 1
-
+                temp_map_grid = self.add_obstacle_buffer(map_grid)
                 # Create and process the image with OpenCV
                 image = np.zeros((100, 100, 3), dtype=np.uint8)
-                image[map_grid == 0] = [0, 255, 0]  # Green for 0
-                image[map_grid == 1] = [0, 0, 255]  # Red for 1
+                image[temp_map_grid == 0] = [0, 255, 0]  # Green for 0
+                image[temp_map_grid == 1] = [0, 0, 255]  # Red for 1
 
                 enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
                 # rotated_image = cv2.rotate(enlarged_image, cv2.ROTATE_90_CLOCKWISE)
@@ -83,14 +83,15 @@ class Map:
                 # Prepare the frame for streaming
                 frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
             self.current_angle += self.us_step
-        path = self.a_star(map_grid, (0, 49), (99, 99))
+        temp_map_grid = self.add_obstacle_buffer(map_grid)
+        path = self.a_star(temp_map_grid, (0, 49), (99, 99))
         if path:
             for p in path:
-                map_grid[p[0], p[1]] = 2
+                temp_map_grid[p[0], p[1]] = 2
             image = np.zeros((100, 100, 3), dtype=np.uint8)
-            image[map_grid == 0] = [0, 255, 0]  # Green for 0
-            image[map_grid == 1] = [0, 0, 255]  # Red for 1
-            image[map_grid == 2] = [255, 0, 0]  # Red for 1
+            image[temp_map_grid == 0] = [0, 255, 0]  # Green for 0
+            image[temp_map_grid == 1] = [0, 0, 255]  # Red for 1
+            image[temp_map_grid == 2] = [255, 0, 0]  # Red for 1
 
             enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
             # rotated_image = cv2.rotate(enlarged_image, cv2.ROTATE_90_CLOCKWISE)
@@ -101,6 +102,27 @@ class Map:
             x_str = np.array_repr(x).replace('\n', '').replace(' ', '').replace('array([', '').replace('])', '').replace('0','_').replace('1','@')
             print(x_str)
         self.distances = []
+    def add_obstacle_buffer(self, grid, radius=10):
+    # Get the shape of the grid
+        rows, cols = grid.shape
+
+        # Create a copy of the grid to modify
+        new_grid = np.copy(grid)
+
+        # Find all the positions where there are obstacles
+        obstacle_positions = np.argwhere(grid == 1)
+        
+        for obstacle in obstacle_positions:
+            x, y = obstacle
+            
+            # Iterate through all the cells within a square surrounding the obstacle
+            for i in range(max(0, x - radius), min(rows, x + radius + 1)):
+                for j in range(max(0, y - radius), min(cols, y + radius + 1)):
+                    # Calculate the Euclidean distance to the obstacle
+                    if np.sqrt((x - i) ** 2 + (y - j) ** 2) <= radius:
+                        new_grid[i, j] = 1  # Mark as obstacle
+
+        return new_grid
     def a_star(self, grid, start, goal):
         # Heuristic: Manhattan distance (L1 norm)
         def heuristic(start_coords, goal_coords):
