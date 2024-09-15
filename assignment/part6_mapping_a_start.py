@@ -61,29 +61,26 @@ class Map:
         global frame
         print('scanning')
         self.current_angle = -90
-        self.us_step = 2
+        self.us_step = 1
+        steps = 180
         grid_size = 100
         map_grid = np.zeros((grid_size, grid_size), dtype=int)
-        for _ in range(90):
+        for _ in range(steps):
             distance = pc4.get_distance_at(self.current_angle)
-            print(self.current_angle, distance)
             if distance > 0:
                 dx = int(distance * np.cos(np.radians(self.current_angle + 90 + self.angle_offset))) + 49
                 dy = int(distance * np.sin(np.radians(self.current_angle + 90 + self.angle_offset)))
                 if 0 <= dx < 100 and 0 <= dy < 100:
                     map_grid[dy, dx] = 1
-                temp_map_grid = map_grid#self.add_obstacle_buffer(map_grid, 10)
-                # Create and process the image with OpenCV
+                temp_map_grid = self.add_obstacle_buffer(map_grid, 7)
                 image = np.zeros((100, 100, 3), dtype=np.uint8)
                 image[temp_map_grid == 0] = [34, 139, 34]  # Green for 0
                 image[temp_map_grid == 1] = [0, 36, 255]  # Red for 1
 
                 enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
-
-                # Prepare the frame for streaming
                 frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
             self.current_angle += self.us_step
-        temp_map_grid =map_grid# self.add_obstacle_buffer(map_grid, 5)
+        temp_map_grid = self.add_obstacle_buffer(map_grid, 7)
         path = self.a_star(temp_map_grid, (0, 49), (99, 99))
         if path:
             for p in path:
