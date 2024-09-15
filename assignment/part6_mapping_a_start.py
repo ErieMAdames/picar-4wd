@@ -22,9 +22,11 @@ class SelfDrive:
     def __init__(self):
         print('starting')
     def go_to(self, x, y):
+        x_closest = min(x, 99)
+        y_closest = min(y, 99)
         map = self.scan()
         temp_map = self.add_obstacle_buffer(map)
-        path = self.a_star(temp_map, (0, 49), (y, x))
+        path = self.a_star(temp_map, (0, 49), (y_closest, x_closest))
         if path:
             for p in path:
                 map[p[0], p[1]] = 2
@@ -78,12 +80,19 @@ class SelfDrive:
                     self.turn_right()
                     self.go_distance(t[1])
             pc4.stop()
+        if x != x_closest or y != y_closest:
+            traveled_x = x_closest - 49
+            traveled_y = y_closest
+            new_dest_x = x - traveled_x
+            new_dest_y = y - traveled_y
+            if new_dest_x <= 2 and new_dest_y <= 2:
+                self.go_to(new_dest_x, new_dest_y)
     def create_frame(self, map):
         global frame
         temp_map = self.add_obstacle_buffer(map)
         image = np.zeros((100, 100, 3), dtype=np.uint8)
         image[temp_map == 0] = [34, 139, 34]  # Green for 0
-        image[temp_map == 1] = [0, 36, 255]  # Red for 1
+        image[temp_map == 1] = [0,  36, 255]  # Red for 1
         image[temp_map == 2] = [255, 0,   0]  # Blue for path
         enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
         frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
