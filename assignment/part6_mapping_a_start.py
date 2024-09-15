@@ -71,7 +71,7 @@ class Map:
                 
                 if 0 <= dx < 100 and 0 <= dy < 100:
                     map_grid[dy, dx] = 1
-                temp_map_grid = self.add_obstacle_buffer(map_grid)
+                temp_map_grid = self.add_obstacle_buffer(map_grid, 5)
                 # Create and process the image with OpenCV
                 image = np.zeros((100, 100, 3), dtype=np.uint8)
                 image[temp_map_grid == 0] = [0, 255, 0]  # Green for 0
@@ -94,7 +94,6 @@ class Map:
             image[temp_map_grid == 2] = [255, 0, 0]  # Red for 1
 
             enlarged_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_NEAREST)
-            # rotated_image = cv2.rotate(enlarged_image, cv2.ROTATE_90_CLOCKWISE)
 
             # Prepare the frame for streaming
             frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
