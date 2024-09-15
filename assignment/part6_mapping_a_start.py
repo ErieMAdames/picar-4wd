@@ -111,6 +111,7 @@ class SelfDrive:
             traveled_y = y_closest
             new_dest_x = x - traveled_x
             new_dest_y = y - traveled_y
+            print(str(new_dest_x) + ', ' + str(new_dest_y))
             if new_dest_x <= 2 and new_dest_y <= 2:
                 self.go_to(new_dest_x, new_dest_y)
     def create_frame(self, map):
