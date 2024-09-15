@@ -267,9 +267,9 @@ if __name__ == "__main__":
         # Create a Map object
         map_instance = Map()
 
-        map_instance.go_distance(1)
-        pc4.stop()
-        exit()
+        # map_instance.go_distance(1)
+        # pc4.stop()
+        # exit()
         # Create a thread for the Flask server
         flask_thread = threading.Thread(target=run_flask)
         flask_thread.start()
