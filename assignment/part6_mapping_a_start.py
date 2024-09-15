@@ -83,7 +83,7 @@ class Map:
                 # Prepare the frame for streaming
                 frame = cv2.flip(enlarged_image, 0)  # Flip the frame horizontally
             self.current_angle += self.us_step
-        temp_map_grid = self.add_obstacle_buffer(map_grid)
+        temp_map_grid = self.add_obstacle_buffer(map_grid, 5)
         path = self.a_star(temp_map_grid, (0, 49), (99, 99))
         if path:
             for p in path:
