@@ -127,11 +127,11 @@ class AvoidObjects():
 
     def turn_right(self,  angle=90, speed=30):
         pc4.turn_right(speed)
-        input()
+        time.sleep(.5)
         pc4.stop()
     def turn_left(self, angle=-90, speed=30):
         pc4.turn_left(speed)
-        input()
+        time.sleep(.5)
         pc4.stop()
 
 if __name__ == "__main__":
