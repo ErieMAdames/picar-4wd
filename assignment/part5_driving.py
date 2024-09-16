@@ -34,7 +34,7 @@ class AvoidObjects():
         print('starting')
         traveled = self.go_distance(10, True)
         if traveled < 1:
-            retrace_steps = self.avoid()
+            self.avoid()
             exit()
     # Variables to store encoder counts
     # Callback functions to increment counts
