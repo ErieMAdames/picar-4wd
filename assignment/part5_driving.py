@@ -36,15 +36,12 @@ class AvoidObjects():
         if traveled < 1:
             self.avoid()
             exit()
-    # Variables to store encoder counts
-    # Callback functions to increment counts
     def left_encoder_callback(self, channel):
         self.left_encoder_count += 1
 
     def right_encoder_callback(self, channel): 
         self.right_encoder_count += 1
 
-    # # Add event detection for rising edges
     def scan(self):
         self.current_angle = 90 if self.current_angle > 0 else -90
         self.us_step = -pc4.STEP if self.current_angle > 0 else pc4.STEP
@@ -100,14 +97,6 @@ class AvoidObjects():
         if dist < self.forward_dist:
             print('obstacle')
             return
-        # return ##[]
-    def retrace(self, retrace_steps):
-        print('retracing')
-        for step in reversed(retrace_steps):
-            if step[0] == 'b':
-                self.go_distance(step[1], False)
-            else:
-                self.turn(step[0], 90, self.speed)
                 
 
     def go_distance(self, dist, forward=True):
