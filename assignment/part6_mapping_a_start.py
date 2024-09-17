@@ -68,7 +68,7 @@ class SelfDrive:
                 travel_instructions.append((direction_name, steps))
             prev_dir = ''
             direction = 'n'
-            # exit()
+            return
             for t in travel_instructions:
                 # print('----------')
                 # print(t)
@@ -216,13 +216,13 @@ class SelfDrive:
     def turn_right(self):
         print('turnging right')
         pc4.turn_right(30)
-        input()
+        time.sleep(.65)
         pc4.stop()
 
     def turn_left(self):
         print('turnging left')
         pc4.turn_left(30)
-        input()
+        time.sleep(.65)
         pc4.stop()
     def go_distance(self, dist):
         print('go distance')
