@@ -68,11 +68,7 @@ class SelfDrive:
                 travel_instructions.append((direction_name, steps))
             prev_dir = ''
             direction = 'n'
-            return
             for t in travel_instructions:
-                # print('----------')
-                # print(t)
-                # print(direction)
                 if t[0] == 'up':
                     direction = 'n'
                     if prev_dir == 'left':
@@ -109,21 +105,16 @@ class SelfDrive:
                     prev_dir = 'right'
                     self.turn_right()
                     self.go_distance(t[1])
-                # print(direction)
-                # print('-------')
             if direction == 'e':
                 self.turn_left()
             if direction == 'w':
                 self.turn_right()
             pc4.stop()
-        # print(str(x) + ', ' + str(y))
-        # print(str(x_closest) + ', ' + str(y_closest))
         if x != x_closest or y != y_closest:
             traveled_x = x_closest - 49
             traveled_y = y_closest
             new_dest_x = x - traveled_x
             new_dest_y = y - traveled_y
-            # print(str(new_dest_x) + ', ' + str(new_dest_y))
             if new_dest_x > 2 or new_dest_y > 2:
                 self.go_to(new_dest_x, new_dest_y)
     def create_frame(self, map):
@@ -161,10 +152,8 @@ class SelfDrive:
                 for j in range(max(0, y - radius), min(cols, y + radius + 1)):
                     if np.sqrt((x - i) ** 2 + (y - j) ** 2) <= radius:
                         new_grid[i, j] = 1
-
         return new_grid
     def a_star(self, grid, start, goal):
-        # Heuristic: Manhattan distance (L1 norm)
         def heuristic(x1, y1, x2, y2):
             return abs(x1 - x2) + abs(y1 - y2)
         DIRECTIONS = {
@@ -180,18 +169,14 @@ class SelfDrive:
                 if 0 <= new_pos[0] < grid.shape[0] and 0 <= new_pos[1] < grid.shape[1] and grid[new_pos[0], new_pos[1]] == 0:
                     neighbors.append((new_pos, direction))
             return neighbors
-
         # A* Search
         open_set = []
         heappush(open_set, (0, start, None))  # (f_score, position, direction)
-        
-        came_from = {}  # To reconstruct the path
-        g_score = {start: 0}  # Movement cost from start to current position
-        f_score = {start: heuristic(start[0], start[1], goal[0], goal[1])}  # Total cost estimate (g + heuristic)
-
+        came_from = {}
+        g_score = {start: 0}
+        f_score = {start: heuristic(start[0], start[1], goal[0], goal[1])}
         while open_set:
             current_f_score, current, current_direction = heappop(open_set)
-            
             if current == goal:
                 path = []
                 while current in came_from:
@@ -203,12 +188,11 @@ class SelfDrive:
             for neighbor, direction in get_neighbors(current):
                 tentative_g_score = g_score[current] + 1
                 if current_direction is not None and current_direction != direction:
-                    tentative_g_score += 2  # Add penalty for turning (higher value = stronger preference for straight)
-
+                    tentative_g_score += 2  # Add penalty for turning to prefer straight lines
                 if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
                     came_from[neighbor] = (current, direction)
                     g_score[neighbor] = tentative_g_score
-                    # Add a small bias in the heuristic to prefer straight-line movement
+                    # Add bias in the heuristic to prefer straight-line movement
                     f_score[neighbor] = tentative_g_score + heuristic(neighbor[0], neighbor[1], goal[0], goal[1])
                     heappush(open_set, (f_score[neighbor], neighbor, direction))
         return None  # No path found
@@ -225,7 +209,6 @@ class SelfDrive:
         time.sleep(.65)
         pc4.stop()
     def go_distance(self, dist):
-        print('go distance')
         start = time.time()
         pause = 0
         if dist > 0:
@@ -233,23 +216,18 @@ class SelfDrive:
         else:
             pc4.backward(1)
         travel_time = abs(dist/100) * 4.2
-        print('----')
-        print(travel_time)
         elapsed_time = time.time() - start
         stop_detected = False
         stop_timer = 0
-        # print('forward dist: ' + str(dist) + ' cm | time ' + str(abs(dist/100) * 4.2) + ' seconds')
         while travel_time >= elapsed_time:
             image = self.picam2.capture_array("main")
             image = cv2.flip(image, 0)
             rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             input_tensor = vision.TensorImage.create_from_array(rgb_image)
             detection_result = self.detector.detect(input_tensor)
-
             # Check for stop sign detection
             for detection in detection_result.detections:
                 if detection.categories[0].index == 0 or (detection.categories[0].index == 12 and (detection.bounding_box.width >= 150 or detection.bounding_box.height >= 150)):
-                    print('STOP!!')
                     if not stop_detected:
                         stop_detected = True
                         stop_timer = time.time()  # Start the stop timer
@@ -269,11 +247,7 @@ class SelfDrive:
                     pc4.backward(1)
             if stop_detected:
                 continue
-            print(start, elapsed_time, travel_time)
             elapsed_time = time.time() - start
-        print(elapsed_time)
-        print(pause)
-        print(elapsed_time - pause)
         pc4.stop()
         time.sleep(.5)
 def generate_frames():
