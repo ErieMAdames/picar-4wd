@@ -25,6 +25,7 @@ np.set_printoptions(threshold=sys.maxsize)
 
 width, height = 3280, 2464
 low_res_width, low_res_height = 640, 480
+global_fps_max = 0
 class Map:
     base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
     detection_options = processor.DetectionOptions(max_results=1, score_threshold=0.5)  # Limit to 1 result for speed
@@ -57,14 +58,16 @@ class Map:
             # Calculate FPS
             new_frame_time = time.time()
             fps = 1 / (new_frame_time - prev_frame_time)
-            prev_frame_time = new_frame_time
+            global_fps_max = max(fps, global_fps_max)
+            print(global_fps_max)
+            # prev_frame_time = new_frame_time
 
-            # Display FPS on the frame
-            fps_text = 'FPS = {:.1f}'.format(fps)
-            image = cv2.resize(image, (low_res_width, low_res_height)) 
-            cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
-            frame = cv2.flip(image, 1)
-            pygame_frame = frame
+            # # Display FPS on the frame
+            # fps_text = 'FPS = {:.1f}'.format(fps)
+            # image = cv2.resize(image, (low_res_width, low_res_height)) 
+            # cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
+            # frame = cv2.flip(image, 1)
+            # pygame_frame = frame
 
         picam2.stop()
     def visualize(self, image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
