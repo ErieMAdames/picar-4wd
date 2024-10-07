@@ -35,7 +35,7 @@ class Map:
         print('Starting camera stream')
 
     def scan(self):
-        global frame, pygame_frame
+        global frame, pygame_frame, global_fps_max
         picam2 = Picamera2()
         config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (width, height)})
         picam2.align_configuration(config)
