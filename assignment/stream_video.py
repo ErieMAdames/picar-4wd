@@ -23,19 +23,18 @@ stop_event = threading.Event()
 
 np.set_printoptions(threshold=sys.maxsize)
 
-width, height = 3280, 2464
-low_res_width, low_res_height = 640, 480
-global_fps_max = 0
+width, height = 640, 480
 class Map:
-    base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=True, num_threads=4)
+    base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
     detection_options = processor.DetectionOptions(max_results=1, score_threshold=0.5)  # Limit to 1 result for speed
     options = vision.ObjectDetectorOptions(base_options=base_options, detection_options=detection_options)
     detector = vision.ObjectDetector.create_from_options(options)
     def __init__(self):
+        # pc4.forward(1)
         print('Starting camera stream')
 
     def scan(self):
-        global frame, pygame_frame, global_fps_max
+        global frame, pygame_frame
         picam2 = Picamera2()
         config = picam2.create_preview_configuration(main={"format":"RGB888", "size": (width, height)})
         picam2.align_configuration(config)
@@ -54,36 +53,34 @@ class Map:
             rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             input_tensor = vision.TensorImage.create_from_array(rgb_image)
             detection_result =  self.detector.detect(input_tensor)
-            # image = self.visualize(image, detection_result)
+            image = self.visualize(image, detection_result)
             # Calculate FPS
             new_frame_time = time.time()
             fps = 1 / (new_frame_time - prev_frame_time)
-            print(fps)
-            global_fps_max = max(fps, global_fps_max)
-            # prev_frame_time = new_frame_time
+            prev_frame_time = new_frame_time
 
-            # # Display FPS on the frame
-            fps_text = 'FPS = {:.1f}'.format(global_fps_max)
-            print(fps_text)
-            # image = cv2.resize(image, (low_res_width, low_res_height)) 
-            # cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
-            # frame = cv2.flip(image, 1)
-            # pygame_frame = frame
+            # Display FPS on the frame
+            fps_text = 'FPS = {:.1f}'.format(fps)
+            cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
+            image = cv2.flip(image, 1)
+            # Update global frames for Flask and Pygame
+            frame = cv2.flip(image, 1)
+            pygame_frame = image
 
         picam2.stop()
     def visualize(self, image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
         """Draws bounding boxes on the input image."""
         # Constants
-        _MARGIN = 10 * int(width / low_res_width)  # pixels
-        _ROW_SIZE = 10 * int(width / low_res_width)  # pixels
-        _FONT_SIZE = 2 * int(width / low_res_width)
-        _FONT_THICKNESS = 1 * int(width / low_res_width)
+        _MARGIN = 10  # pixels
+        _ROW_SIZE = 10  # pixels
+        _FONT_SIZE = 2
+        _FONT_THICKNESS = 1
         _TEXT_COLOR = (0, 0, 255)  # red
         for detection in detection_result.detections:
-            # if detection.categories[0].index == 12:
-            #     print("STOP!!!")
+            if detection.categories[0].index == 12:
+                print("STOP!!!")
             category = detection.categories[0]
-            # print(category)
+            print(category)
             category_name = category.category_name
             bbox = detection.bounding_box
             start_point = bbox.origin_x, bbox.origin_y
@@ -125,7 +122,7 @@ def run_flask():
 def run_pygame():
     global pygame_frame
     pygame.init()
-    screen = pygame.display.set_mode((low_res_width, low_res_height))  # Same resolution as the camera stream
+    screen = pygame.display.set_mode((width, height))  # Same resolution as the camera stream
     pygame.display.set_caption("Camera Stream")
     clock = pygame.time.Clock()
 
