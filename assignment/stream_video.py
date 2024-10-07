@@ -58,15 +58,15 @@ class Map:
             new_frame_time = time.time()
             fps = 1 / (new_frame_time - prev_frame_time)
             print(fps)
-            prev_frame_time = new_frame_time
+            # prev_frame_time = new_frame_time
 
-            # Display FPS on the frame
-            fps_text = 'FPS = {:.1f}'.format(fps)
-            cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
-            image = cv2.flip(image, 1)
-            # Update global frames for Flask and Pygame
-            frame = cv2.flip(image, 1)
-            pygame_frame = image
+            # # Display FPS on the frame
+            # fps_text = 'FPS = {:.1f}'.format(fps)
+            # cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
+            # image = cv2.flip(image, 1)
+            # # Update global frames for Flask and Pygame
+            # frame = cv2.flip(image, 1)
+            # pygame_frame = image
 
         picam2.stop()
     def visualize(self, image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
