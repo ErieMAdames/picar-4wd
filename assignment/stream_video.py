@@ -23,7 +23,8 @@ stop_event = threading.Event()
 
 np.set_printoptions(threshold=sys.maxsize)
 
-width, height = 1290, 960
+width, height = 3280, 2464
+low_res_width, low_res_height = 640, 480
 class Map:
     base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=True, num_threads=4)
     detection_options = processor.DetectionOptions(max_results=1, score_threshold=0.5)  # Limit to 1 result for speed
@@ -65,7 +66,7 @@ class Map:
             image = cv2.flip(image, 1)
             # Update global frames for Flask and Pygame
             frame = cv2.flip(image, 1)
-            pygame_frame = image
+            pygame_frame = cv2.resize(frame, (low_res_width, low_res_height)) 
 
         picam2.stop()
     def visualize(self, image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
