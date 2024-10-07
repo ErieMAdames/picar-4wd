@@ -66,6 +66,7 @@ class Map:
             cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
             image = cv2.flip(image, 1)
             # Update global frames for Flask and Pygame
+            frame = cv2.flip(image, 1)
             pygame_frame = frame
 
         picam2.stop()
