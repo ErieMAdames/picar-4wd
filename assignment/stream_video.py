@@ -58,7 +58,7 @@ class Map:
             new_frame_time = time.time()
             fps = 1 / (new_frame_time - prev_frame_time)
             print(fps)
-            # prev_frame_time = new_frame_time
+            prev_frame_time = new_frame_time
 
             # # Display FPS on the frame
             # fps_text = 'FPS = {:.1f}'.format(fps)
