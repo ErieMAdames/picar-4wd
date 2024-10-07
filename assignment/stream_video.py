@@ -11,7 +11,6 @@ from picamera2 import Picamera2
 from tflite_support.task import core
 from tflite_support.task import processor
 from tflite_support.task import vision
-import picar_4wd as pc4
 # Initialize the Flask app
 app = Flask(__name__)
 
@@ -24,7 +23,7 @@ stop_event = threading.Event()
 
 np.set_printoptions(threshold=sys.maxsize)
 
-width, height = 640, 480
+width, height = 3280, 2464
 class Map:
     base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
     detection_options = processor.DetectionOptions(max_results=1, score_threshold=0.5)  # Limit to 1 result for speed
@@ -64,9 +63,6 @@ class Map:
             fps_text = 'FPS = {:.1f}'.format(fps)
             cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
             image = cv2.flip(image, 1)
-            for detection in detection_result.detections:
-                if detection.categories[0].index == 12 and (detection.bounding_box.width >= 200 or detection.bounding_box.height >= 200):
-                    pc4.stop()
             # Update global frames for Flask and Pygame
             frame = cv2.flip(image, 1)
             pygame_frame = image
@@ -177,7 +173,6 @@ def main(stream_flask, display_pygame):
             shutdown_flask()
 
     finally:
-        pc4.stop()
         for thread in threads:
             thread.join()  # Wait for threads to finish
         print("Program exited gracefully.")
