@@ -25,12 +25,11 @@ np.set_printoptions(threshold=sys.maxsize)
 
 width, height = 640, 480
 class Map:
-    #base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=True, num_threads=4)
-    #detection_options = processor.DetectionOptions(max_results=4, score_threshold=0.5)  # Limit to 1 result for speed
-    #options = vision.ObjectDetectorOptions(base_options=base_options, detection_options=detection_options)
-    #detector = vision.ObjectDetector.create_from_options(options)
+    base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
+    detection_options = processor.DetectionOptions(max_results=4, score_threshold=0.5)  # Limit to 1 result for speed
+    options = vision.ObjectDetectorOptions(base_options=base_options, detection_options=detection_options)
+    detector = vision.ObjectDetector.create_from_options(options)
     def __init__(self):
-        # pc4.forward(1)
         print('Starting camera stream')
 
     def scan(self):
@@ -51,13 +50,12 @@ class Map:
             # Flip the image and convert to RGB
             image = cv2.flip(image, 0)
             rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-     #       input_tensor = vision.TensorImage.create_from_array(rgb_image)
-      #      detection_result =  self.detector.detect(input_tensor)
-       #     image = self.visualize(image, detection_result)
+            input_tensor = vision.TensorImage.create_from_array(rgb_image)
+            detection_result =  self.detector.detect(input_tensor)
+            image = self.visualize(image, detection_result)
             # Calculate FPS
             new_frame_time = time.time()
             fps = 1 / (new_frame_time - prev_frame_time)
-            print(fps)
             prev_frame_time = new_frame_time
 
             # # Display FPS on the frame
