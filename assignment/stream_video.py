@@ -72,10 +72,10 @@ class Map:
     def visualize(self, image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
         """Draws bounding boxes on the input image."""
         # Constants
-        _MARGIN = 10 * (width / low_res_width)  # pixels
-        _ROW_SIZE = 10 * (width / low_res_width)  # pixels
-        _FONT_SIZE = 2 * (width / low_res_width)
-        _FONT_THICKNESS = 1 * (width / low_res_width)
+        _MARGIN = 10 * int(width / low_res_width)  # pixels
+        _ROW_SIZE = 10 * int(width / low_res_width)  # pixels
+        _FONT_SIZE = 2 * int(width / low_res_width)
+        _FONT_THICKNESS = 1 * int(width / low_res_width)
         _TEXT_COLOR = (0, 0, 255)  # red
         for detection in detection_result.detections:
             # if detection.categories[0].index == 12:
