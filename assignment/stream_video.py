@@ -25,10 +25,10 @@ np.set_printoptions(threshold=sys.maxsize)
 
 width, height = 640, 480
 class Map:
-    base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
-    detection_options = processor.DetectionOptions(max_results=1, score_threshold=0.5)  # Limit to 1 result for speed
-    options = vision.ObjectDetectorOptions(base_options=base_options, detection_options=detection_options)
-    detector = vision.ObjectDetector.create_from_options(options)
+    #base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=True, num_threads=4)
+    #detection_options = processor.DetectionOptions(max_results=4, score_threshold=0.5)  # Limit to 1 result for speed
+    #options = vision.ObjectDetectorOptions(base_options=base_options, detection_options=detection_options)
+    #detector = vision.ObjectDetector.create_from_options(options)
     def __init__(self):
         # pc4.forward(1)
         print('Starting camera stream')
@@ -51,9 +51,9 @@ class Map:
             # Flip the image and convert to RGB
             image = cv2.flip(image, 0)
             rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            input_tensor = vision.TensorImage.create_from_array(rgb_image)
-            detection_result =  self.detector.detect(input_tensor)
-            image = self.visualize(image, detection_result)
+     #       input_tensor = vision.TensorImage.create_from_array(rgb_image)
+      #      detection_result =  self.detector.detect(input_tensor)
+       #     image = self.visualize(image, detection_result)
             # Calculate FPS
             new_frame_time = time.time()
             fps = 1 / (new_frame_time - prev_frame_time)
@@ -61,12 +61,12 @@ class Map:
             prev_frame_time = new_frame_time
 
             # # Display FPS on the frame
-            # fps_text = 'FPS = {:.1f}'.format(fps)
-            # cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
-            # image = cv2.flip(image, 1)
-            # # Update global frames for Flask and Pygame
-            # frame = cv2.flip(image, 1)
-            # pygame_frame = image
+            fps_text = 'FPS = {:.1f}'.format(fps)
+            cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
+            image = cv2.flip(image, 1)
+            # Update global frames for Flask and Pygame
+            frame = cv2.flip(image, 1)
+            pygame_frame = image
 
         picam2.stop()
     def visualize(self, image: np.ndarray, detection_result: processor.DetectionResult) -> np.ndarray:
