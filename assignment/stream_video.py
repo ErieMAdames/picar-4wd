@@ -123,7 +123,7 @@ def run_flask():
 def run_pygame():
     global pygame_frame
     pygame.init()
-    screen = pygame.display.set_mode((width, height))  # Same resolution as the camera stream
+    screen = pygame.display.set_mode((low_res_width, low_res_height))  # Same resolution as the camera stream
     pygame.display.set_caption("Camera Stream")
     clock = pygame.time.Clock()
 
