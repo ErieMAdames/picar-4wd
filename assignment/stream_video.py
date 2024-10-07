@@ -58,12 +58,13 @@ class Map:
             # Calculate FPS
             new_frame_time = time.time()
             fps = 1 / (new_frame_time - prev_frame_time)
+            print(fps)
             global_fps_max = max(fps, global_fps_max)
-            print(global_fps_max)
             # prev_frame_time = new_frame_time
 
             # # Display FPS on the frame
-            # fps_text = 'FPS = {:.1f}'.format(fps)
+            fps_text = 'FPS = {:.1f}'.format(global_fps_max)
+            print(fps_text)
             # image = cv2.resize(image, (low_res_width, low_res_height)) 
             # cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
             # frame = cv2.flip(image, 1)
