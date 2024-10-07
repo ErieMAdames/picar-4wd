@@ -26,12 +26,11 @@ np.set_printoptions(threshold=sys.maxsize)
 width, height = 3280, 2464
 low_res_width, low_res_height = 640, 480
 class Map:
-    base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=True, num_threads=4)
+    base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=False, num_threads=4)
     detection_options = processor.DetectionOptions(max_results=1, score_threshold=0.5)  # Limit to 1 result for speed
     options = vision.ObjectDetectorOptions(base_options=base_options, detection_options=detection_options)
     detector = vision.ObjectDetector.create_from_options(options)
     def __init__(self):
-        # pc4.forward(1)
         print('Starting camera stream')
 
     def scan(self):
