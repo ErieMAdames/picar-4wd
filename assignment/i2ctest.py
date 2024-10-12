@@ -24,41 +24,39 @@ class ICM20948:
     EXT_SENS_DATA_00 = 0x3B  # External sensor data (where magnetometer data will appear)
     
     def __init__(self):
-        self.i2c = I2C(self.ICM20948_ADDRESS)
+        self.i2c = I2C()
         self.initialize_sensor()
         self.initialize_magnetometer()
 
     def initialize_sensor(self):
         # Wake up the sensor (write 0x01 to PWR_MGMT_1)
-        self.i2c.write_reg(self.PWR_MGMT_1, 0x01)
+        self.i2c.mem_write(0x01, self.ICM20948_ADDRESS, self.PWR_MGMT_1)
         time.sleep(0.1)
         # Enable I2C master mode
-        self.i2c.write_reg(self.USER_CTRL, 0x20)  # Enable I2C master
-        self.i2c.write_reg(self.I2C_MST_CTRL, 0x0D)  # Set I2C master clock to 345.6 kHz
+        self.i2c.mem_write(0x20, self.ICM20948_ADDRESS, self.USER_CTRL)  # Enable I2C master
+        self.i2c.mem_write(0x0D, self.ICM20948_ADDRESS, self.I2C_MST_CTRL)  # Set I2C master clock to 345.6 kHz
 
     def initialize_magnetometer(self):
         # Setup magnetometer for continuous measurement mode
-        self.i2c.write_reg(self.I2C_SLV0_ADDR, self.MAG_ADDRESS | 0x80)  # Set slave 0 address to magnetometer (read mode)
-        self.i2c.write_reg(self.I2C_SLV0_REG, self.MAG_CNTL2)  # Set slave 0 register to MAG_CNTL2 (control 2)
-        self.i2c.write_reg(self.I2C_SLV0_CTRL, 0x81)  # Enable reading 1 byte from slave 0
-        self.i2c.write_reg(self.I2C_SLV0_REG, self.MAG_WIA2)  # Check who am I for magnetometer (WIA2)
-        mag_who_am_i = self.i2c.read(self.EXT_SENS_DATA_00, 1)
+        self.i2c.mem_write(self.MAG_ADDRESS | 0x80, self.ICM20948_ADDRESS, self.I2C_SLV0_ADDR)  # Set slave 0 address to magnetometer (read mode)
+        self.i2c.mem_write(self.MAG_CNTL2, self.ICM20948_ADDRESS, self.I2C_SLV0_REG)  # Set slave 0 register to MAG_CNTL2 (control 2)
+        self.i2c.mem_write(0x81, self.ICM20948_ADDRESS, self.I2C_SLV0_CTRL)  # Enable reading 1 byte from slave 0
+        mag_who_am_i = self.i2c.mem_read(1, self.ICM20948_ADDRESS, self.EXT_SENS_DATA_00)
         if mag_who_am_i[0] != 0x09:
             raise Exception("Magnetometer not detected.")
         # Set magnetometer to continuous measurement mode (0x08)
-        self.i2c.write_reg(self.I2C_SLV0_REG, self.MAG_CNTL2)
-        self.i2c.write_reg(self.I2C_SLV0_CTRL, 0x81)  # Write 1 byte to control register
-        self.i2c.write_reg(self.EXT_SENS_DATA_00, 0x08)
-    
+        self.i2c.mem_write(self.MAG_CNTL2, self.ICM20948_ADDRESS, self.I2C_SLV0_REG)
+        self.i2c.mem_write(0x08, self.ICM20948_ADDRESS, self.EXT_SENS_DATA_00)
+
     def read_accel_data(self):
-        accel_data = self.i2c.read(self.ACCEL_XOUT_H, 6)
+        accel_data = self.i2c.mem_read(6, self.ICM20948_ADDRESS, self.ACCEL_XOUT_H)
         accel_x = (accel_data[0] << 8) | accel_data[1]
         accel_y = (accel_data[2] << 8) | accel_data[3]
         accel_z = (accel_data[4] << 8) | accel_data[5]
         return {'x': accel_x, 'y': accel_y, 'z': accel_z}
 
     def read_gyro_data(self):
-        gyro_data = self.i2c.read(self.GYRO_XOUT_H, 6)
+        gyro_data = self.i2c.mem_read(6, self.ICM20948_ADDRESS, self.GYRO_XOUT_H)
         gyro_x = (gyro_data[0] << 8) | gyro_data[1]
         gyro_y = (gyro_data[2] << 8) | gyro_data[3]
         gyro_z = (gyro_data[4] << 8) | gyro_data[5]
@@ -66,11 +64,11 @@ class ICM20948:
 
     def read_magnetometer_data(self):
         # Read magnetometer data (6 bytes starting from MAG_XOUT_L)
-        self.i2c.write_reg(self.I2C_SLV0_ADDR, self.MAG_ADDRESS | 0x80)  # Set slave to magnetometer (read mode)
-        self.i2c.write_reg(self.I2C_SLV0_REG, self.MAG_XOUT_L)  # Set register to magnetometer data start
-        self.i2c.write_reg(self.I2C_SLV0_CTRL, 0x87)  # Enable reading 7 bytes from slave 0
+        self.i2c.mem_write(self.MAG_ADDRESS | 0x80, self.ICM20948_ADDRESS, self.I2C_SLV0_ADDR)  # Set slave to magnetometer (read mode)
+        self.i2c.mem_write(self.MAG_XOUT_L, self.ICM20948_ADDRESS, self.I2C_SLV0_REG)  # Set register to magnetometer data start
+        self.i2c.mem_write(0x87, self.ICM20948_ADDRESS, self.I2C_SLV0_CTRL)  # Enable reading 7 bytes from slave 0
         
-        mag_data = self.i2c.read(self.EXT_SENS_DATA_00, 7)  # Read 7 bytes from EXT_SENS_DATA_00
+        mag_data = self.i2c.mem_read(7, self.ICM20948_ADDRESS, self.EXT_SENS_DATA_00)  # Read 7 bytes from EXT_SENS_DATA_00
         if mag_data[0] & 0x01 == 0:  # Check if data is ready
             return None
 
@@ -80,7 +78,7 @@ class ICM20948:
         return {'x': mag_x, 'y': mag_y, 'z': mag_z}
 
     def who_am_i(self):
-        who_am_i = self.i2c.read(self.WHO_AM_I, 1)
+        who_am_i = self.i2c.mem_read(1, self.ICM20948_ADDRESS, self.WHO_AM_I)
         return who_am_i[0]
 
 # Example usage
