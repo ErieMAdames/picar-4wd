@@ -2,7 +2,7 @@ import time
 from picar_4wd.i2c import I2C
 
 class ICM20948:
-    ICM20948_ADDRESS = 0x68  # ICM20948 I2C address
+    ICM20948_ADDRESS = 0x69  # ICM20948 I2C address
     MAG_ADDRESS = 0x0C  # Magnetometer I2C address (AK09916)
 
     WHO_AM_I = 0x00  # Register to check the ICM20948 identity
