@@ -63,7 +63,6 @@ class Map:
 
             # Calculate center contrast
             contrast_value = self.calculate_center_contrast(image)
-            print(f"Center Contrast Value: {contrast_value}")
 
             # Draw a red square around the center square
             cv2.rectangle(image, (top_left_x, top_left_y), (bottom_right_x, bottom_right_y), (0, 0, 255), 2)
@@ -83,7 +82,7 @@ class Map:
             prev_frame_time = new_frame_time
 
             # # Display FPS on the frame
-            fps_text = 'FPS = {:.1f}'.format(fps)
+            fps_text = 'FPS = {:.1f}'.format(fps) + f"Center Contrast Value: {contrast_value}"
             cv2.putText(image, fps_text, (24, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
             image = cv2.flip(image, 1)
             # Update global frames for Flask and Pygame
