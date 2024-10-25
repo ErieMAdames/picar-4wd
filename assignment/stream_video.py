@@ -23,7 +23,7 @@ stop_event = threading.Event()
 
 np.set_printoptions(threshold=sys.maxsize)
 square_size_ = 20
-width, height = 1280 * 2, 960 * 2
+width, height = 1280, 960
 class Map:
     # base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=True, num_threads=4)
     # detection_options = processor.DetectionOptions(max_results=4, score_threshold=0.5)  # Limit to 1 result for speed
