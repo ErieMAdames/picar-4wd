@@ -67,7 +67,17 @@ class Map:
 
             # Draw a red square around the center square
             cv2.rectangle(image, (top_left_x, top_left_y), (bottom_right_x, bottom_right_y), (0, 0, 255), 2)
+            center_square = image[top_left_y:bottom_right_y, top_left_x:bottom_right_x]
 
+            # Resize the center square to 4x its original size
+            enlarged_center_square = cv2.resize(center_square, (square_size * 4, square_size * 4), interpolation=cv2.INTER_LINEAR)
+
+            # Define the top right corner position for overlay
+            top_right_y = 10  # 10 pixels padding from the top
+            top_right_x = width - (square_size * 4) - 10  # 10 pixels padding from the right
+
+            # Overlay the enlarged center square onto the top right corner of the frame
+            image[top_right_y:top_right_y + square_size * 4, top_right_x:top_right_x + square_size * 4] = enlarged_center_square
             new_frame_time = time.time()
             fps = 1 / (new_frame_time - prev_frame_time)
             prev_frame_time = new_frame_time
