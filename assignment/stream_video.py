@@ -82,6 +82,7 @@ class Map:
 
         picam2.stop()
     def calculate_center_contrast(self, image: np.ndarray) -> float:
+        blur = 9
         """Calculates the contrast of a central square region in the image using Laplacian variance."""
         center_x, center_y = width // 2, height // 2
         square_size = min(width, height) // square_size_  # Adjust size of the center square as needed
@@ -94,6 +95,7 @@ class Map:
 
         # Extract the center square region
         center_region = image[top_left_y:bottom_right_y, top_left_x:bottom_right_x]
+        center_region = cv2.medianBlur(center_region, blur)
 
         # Convert to grayscale
         gray_center = cv2.cvtColor(center_region, cv2.COLOR_RGB2GRAY)
