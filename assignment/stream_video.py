@@ -49,6 +49,7 @@ class Map:
 
             # Flip the image and convert to RGB
             image = cv2.flip(image, 0)
+            print(image.shape)
             # rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             # input_tensor = vision.TensorImage.create_from_array(rgb_image)
             # detection_result =  self.detector.detect(input_tensor)
