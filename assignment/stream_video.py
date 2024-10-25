@@ -22,7 +22,7 @@ pygame_frame = None
 stop_event = threading.Event()
 
 np.set_printoptions(threshold=sys.maxsize)
-square_size = 20
+square_size_ = 20
 width, height = 1280 * 2, 960 * 2
 class Map:
     # base_options = core.BaseOptions(file_name='efficientdet_lite0.tflite', use_coral=True, num_threads=4)
@@ -55,7 +55,7 @@ class Map:
             # image = self.visualize(image, detection_result)
             # Calculate FPS
             center_x, center_y = width // 2, height // 2
-            square_size = min(width, height) // square_size  # Adjust the size of the square if needed
+            square_size = min(width, height) // square_size_  # Adjust the size of the square if needed
             top_left_x = center_x - square_size // 2
             top_left_y = center_y - square_size // 2
             bottom_right_x = center_x + square_size // 2
@@ -84,7 +84,7 @@ class Map:
     def calculate_center_contrast(self, image: np.ndarray) -> float:
         """Calculates the contrast of a central square region in the image using Laplacian variance."""
         center_x, center_y = width // 2, height // 2
-        square_size = min(width, height) // square_size  # Adjust size of the center square as needed
+        square_size = min(width, height) // square_size_  # Adjust size of the center square as needed
 
         # Define the bounding box for the center square
         top_left_x = center_x - square_size // 2
