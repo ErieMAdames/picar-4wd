@@ -6,16 +6,19 @@ from picar_4wd.pwm import PWM
 import os
 
 # Setup your servos and initial angles
+servo0_angle_offset = 0
+servo1_angle_offset = -8
+servo2_angle_offset = 0
 servo0_angle = 0
-servo1_angle = -8
+servo1_angle = 0
 servo2_angle = 0
 servo0 = Servo(PWM("P0"))
 servo1 = Servo(PWM("P1"))
 servo2 = Servo(PWM("P2"))
 
-servo0.set_angle(0)
-servo1.set_angle(servo1_angle)
-servo2.set_angle(servo2_angle)
+servo0.set_angle(servo0_angle_offset)
+servo1.set_angle(servo1_angle_offset)
+servo2.set_angle(servo2_angle_offset)
 
 # Set ulimit for file descriptors
 os.system('ulimit -n 4096')
@@ -39,16 +42,16 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             if data != b"":
                 print(data)
                 if (data == b"up"):
-                    servo2_angle = max(servo2_angle - 2, -90)
+                    servo2_angle = max(servo2_angle - 2 + servo2_angle_offset, -90)
                     servo2.set_angle(servo2_angle)
                 elif (data == b"down"):
-                    servo2_angle = min(servo2_angle + 2, 90)
+                    servo2_angle = min(servo2_angle + 2 + servo2_angle_offset, 90)
                     servo2.set_angle(servo2_angle)
                 elif (data == b"left"):
-                    servo1_angle = min(servo1_angle + 2, 90)
+                    servo1_angle = min(servo1_angle + 2 + servo1_angle_offset, 90)
                     servo1.set_angle(servo1_angle)
                 elif (data == b"right"):
-                    servo1_angle = max(servo1_angle - 2, -90)
+                    servo1_angle = max(servo1_angle - 2 + servo1_angle_offset, -90)
                     servo1.set_angle(servo1_angle)
                 client.sendall(str.encode(json.dumps({
                     'data': data.decode("utf-8"),
