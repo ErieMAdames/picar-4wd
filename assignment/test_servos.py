@@ -1,9 +1,11 @@
-from picar_4wd.servo import Servo
-from picar_4wd.pwm import PWM
+import subprocess
 import socket
 import json
+from picar_4wd.servo import Servo
+from picar_4wd.pwm import PWM
+import os
 
-
+# Setup your servos and initial angles
 servo0_angle = 0
 servo1_angle = -8
 servo2_angle = 0
@@ -15,9 +17,15 @@ servo0.set_angle(0)
 servo1.set_angle(servo1_angle)
 servo2.set_angle(servo2_angle)
 
-import os
+# Set ulimit for file descriptors
+os.system('ulimit -n 4096')
 
-os.system('ulimit -n 4096') 
+# Start RTSP stream using ffmpeg
+ffmpeg_command = [
+    'ffmpeg', '-f', 'v4l2', '-i', '/dev/video0', '-preset', 'ultrafast',
+    '-f', 'rtsp', 'rtsp://192.168.86.46:8554/stream'
+]
+ffmpeg_process = subprocess.Popen(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 HOST = "192.168.86.46" # IP address of your Raspberry PI
 PORT = 65432
@@ -49,7 +57,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 }))) # Echo back to client
     except (KeyboardInterrupt, Exception) as e:
         print(e)
-        print("Closing socket")
+        print("Closing socket and terminating stream")
+        ffmpeg_process.terminate()  # Stop ffmpeg when done
+        ffmpeg_process.wait()  # Wait for ffmpeg to fully close
         client.close()
         s.close()
 socket.socket.close()
