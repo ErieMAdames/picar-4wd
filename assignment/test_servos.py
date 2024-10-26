@@ -5,13 +5,16 @@ import json
 import time
 
 
+servo0_angle = 0
+servo1_angle = -8
+servo2_angle = 0
 servo0 = Servo(PWM("P0"))
 servo1 = Servo(PWM("P1"))
 servo2 = Servo(PWM("P2"))
 
 servo0.set_angle(0)
-servo1.set_angle(0)
-servo2.set_angle(0)
+servo1.set_angle(servo1_angle)
+servo2.set_angle(servo2_angle)
 
 import os
 
@@ -19,9 +22,6 @@ os.system('ulimit -n 4096')
 
 HOST = "192.168.86.46" # IP address of your Raspberry PI
 PORT = 65432
-servo0_angle = 0
-servo1_angle = 0
-servo2_angle = 0
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
     s.listen()
@@ -32,16 +32,16 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             if data != b"":
                 print(data)
                 if (data == b"up"):
-                    servo1_angle += 1
+                    servo1_angle = min(servo1_angle + 2, 90)
                     servo1.set_angle(servo1_angle)
                 elif (data == b"down"):
-                    servo1_angle -= 1
+                    servo1_angle = max(servo1_angle - 2, -90)
                     servo1.set_angle(servo1_angle)
                 elif (data == b"left"):
-                    servo2_angle += 1
+                    servo2_angle = min(servo2_angle + 2, 90)
                     servo2.set_angle(servo2_angle)
                 elif (data == b"right"):
-                    servo2_angle -= 1
+                    servo2_angle = max(servo2_angle - 2, -90)
                     servo2.set_angle(servo2_angle)
                 client.sendall(str.encode(json.dumps({
                     'data': data.decode("utf-8"),
