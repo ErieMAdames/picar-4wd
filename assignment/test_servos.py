@@ -31,10 +31,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             data = client.recv(1024)
             if data != b"":
                 print(data)
-                if (data == b"up" or data == b"down"):
-                    if not moving:
-                        moving = True
-                        start_time = time.time()  # Start timing movement
                 if (data == b"up"):
                     servo1_angle += 1
                     servo1.set_angle(servo1_angle)
