@@ -23,12 +23,12 @@ servo2.set_angle(servo2_angle_offset)
 # Set ulimit for file descriptors
 os.system('ulimit -n 4096')
 
-# Start RTSP stream using ffmpeg
-ffmpeg_command = [
-    'ffmpeg', '-f', 'v4l2', '-i', '/dev/video0', '-preset', 'ultrafast',
-    '-f', 'rtsp', 'rtsp://192.168.86.46:8554/stream'
-]
-ffmpeg_process = subprocess.Popen(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+# # Start RTSP stream using ffmpeg
+# ffmpeg_command = [
+#     'ffmpeg', '-f', 'v4l2', '-i', '/dev/video0', '-preset', 'ultrafast',
+#     '-f', 'rtsp', 'rtsp://192.168.86.46:8554/stream'
+# ]
+# ffmpeg_process = subprocess.Popen(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 HOST = "192.168.86.46" # IP address of your Raspberry PI
 PORT = 65432
@@ -61,8 +61,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     except (KeyboardInterrupt, Exception) as e:
         print(e)
         print("Closing socket and terminating stream")
-        ffmpeg_process.terminate()  # Stop ffmpeg when done
-        ffmpeg_process.wait()  # Wait for ffmpeg to fully close
+        # ffmpeg_process.terminate()  # Stop ffmpeg when done
+        # ffmpeg_process.wait()  # Wait for ffmpeg to fully close
         client.close()
         s.close()
 socket.socket.close()
