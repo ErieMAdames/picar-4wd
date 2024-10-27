@@ -11,12 +11,11 @@ class RTSPServer(GstRtspServer.RTSPMediaFactory):
 Gst.init(None)
 
 server = GstRtspServer.RTSPServer()
+server.set_service("8554")
 factory = RTSPServer()
 factory.set_shared(True)
 server.get_mount_points().add_factory("/stream", factory)
 server.attach(None)
 
-print("RTSP stream available at rtsp://<your-pi-ip>:8554/stream")
-# loop = GObject.MainLoop()
 loop = GLib.MainLoop()
 loop.run()
