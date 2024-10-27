@@ -42,16 +42,16 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             if data != b"":
                 print(data)
                 if (data == b"up"):
-                    servo2_angle = max(servo2_angle - 2 + servo2_angle_offset, -90)
+                    servo2_angle = max(servo2_angle - 2, -90) + servo2_angle_offset
                     servo2.set_angle(servo2_angle)
                 elif (data == b"down"):
-                    servo2_angle = min(servo2_angle + 2 + servo2_angle_offset, 90)
+                    servo2_angle = min(servo2_angle + 2, 90) + servo2_angle_offset
                     servo2.set_angle(servo2_angle)
                 elif (data == b"left"):
-                    servo1_angle = max(servo1_angle - 2 + servo1_angle_offset, -90)
+                    servo1_angle = max(servo1_angle - 2, -90) + servo1_angle_offset
                     servo1.set_angle(servo1_angle)
                 elif (data == b"right"):
-                    servo1_angle = min(servo1_angle + 2 + servo1_angle_offset, +90)
+                    servo1_angle = min(servo1_angle + 2, 90) + servo1_angle_offset
                     servo1.set_angle(servo1_angle)
                 client.sendall(str.encode(json.dumps({
                     'data': data.decode("utf-8"),
