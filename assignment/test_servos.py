@@ -1,8 +1,8 @@
 import subprocess
 import socket
 import json
-from picar_4wd.servo import Servo
-from picar_4wd.pwm import PWM
+from servo import Servo
+from pwm import PWM
 import os
 
 # Setup your servos and initial angles
