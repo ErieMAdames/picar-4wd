@@ -26,7 +26,7 @@ os.system('ulimit -n 4096')
 # ]
 # ffmpeg_process = subprocess.Popen(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-HOST = "192.168.86.46" # IP address of your Raspberry PI
+HOST = "192.168.86.32" # IP address of your Raspberry PI
 PORT = 65432
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
