@@ -1,5 +1,5 @@
 from smbus2 import SMBus
-from .utils import soft_reset
+from utils import soft_reset
 import time
 
 class I2C(object):

@@ -1,5 +1,5 @@
 import smbus, math
-from .i2c import I2C
+from i2c import I2C
 
 class PWM(I2C):
     REG_CHN = 0x20

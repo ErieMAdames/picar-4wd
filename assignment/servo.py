@@ -1,4 +1,4 @@
-from .utils import mapping
+from utils import mapping
 
 class Servo():
     PERIOD = 4095
