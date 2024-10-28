@@ -8,17 +8,13 @@ import os
 # Setup your servos and initial angles
 servo0_angle_offset = 0
 servo1_angle_offset = -8
-servo2_angle_offset = 0
 servo0_angle = 0
-servo1_angle = 0
-servo2_angle = 0
+servo1_angle = 0 
 servo0 = Servo(PWM("P0"))
 servo1 = Servo(PWM("P1"))
-servo2 = Servo(PWM("P2"))
 
 servo0.set_angle(servo0_angle_offset)
-servo1.set_angle(servo1_angle_offset)
-servo2.set_angle(servo2_angle_offset)
+servo0.set_angle(servo0_angle_offset)\
 
 # Set ulimit for file descriptors
 os.system('ulimit -n 4096')
@@ -42,21 +38,21 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             if data != b"":
                 print(data)
                 if (data == b"up"):
-                    servo2_angle = max(servo2_angle - 2, -90)
-                    servo2.set_angle(servo2_angle + servo2_angle_offset)
-                elif (data == b"down"):
-                    servo2_angle = min(servo2_angle + 2 , 90)
-                    servo2.set_angle(servo2_angle + servo2_angle_offset)
-                elif (data == b"left"):
                     servo1_angle = max(servo1_angle - 2, -90)
                     servo1.set_angle(servo1_angle + servo1_angle_offset)
-                elif (data == b"right"):
-                    servo1_angle = min(servo1_angle + 2, 90)
+                elif (data == b"down"):
+                    servo1_angle = min(servo1_angle + 2 , 90)
                     servo1.set_angle(servo1_angle + servo1_angle_offset)
+                elif (data == b"left"):
+                    servo0_angle = max(servo0_angle - 2, -90)
+                    servo0.set_angle(servo0_angle + servo0_angle_offset)
+                elif (data == b"right"):
+                    servo0_angle = min(servo0_angle + 2, 90)
+                    servo0.set_angle(servo0_angle + servo0_angle_offset)
                 client.sendall(str.encode(json.dumps({
                     'data': data.decode("utf-8"),
-                    'servo1_angle': servo1_angle,
-                    'servo2_angle': servo2_angle
+                    'servo0_angle': servo0_angle,
+                    'servo1_angle': servo1_angle
                 }))) # Echo back to client
     except (KeyboardInterrupt, Exception) as e:
         print(e)
